@@ -1,0 +1,88 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/prisma/client"
+}
+
+enum Residency {
+  TW
+  OTHER
+}
+
+enum KycStatus {
+  DRAFT
+  PENDING
+  APPROVED
+  REJECTED
+  NEEDS_MORE_INFO
+  EXPIRED
+}
+
+enum DocType {
+  TW_ID_FRONT
+  TW_ID_BACK
+  TW_SECOND_NHI
+  TW_SECOND_DL
+  TW_SECOND_RC
+  TW_SECOND_PASSPORT
+  OTHER_PASSPORT
+}
+
+model Applicant {
+  id              String      @id @default(cuid())
+  whmcsClientId   Int
+  email           String
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  latestSession   KycSession?
+  latestSessionId String?
+}
+
+model KycSession {
+  id          String     @id @default(cuid())
+  applicant   Applicant  @relation(fields: [applicantId], references: [id])
+  applicantId String     @unique
+  status      KycStatus  @default(DRAFT)
+  residency   Residency?
+  issuedAt    DateTime   @default(now())
+  expiresAt   DateTime
+  consumedAt  DateTime?
+  tokenSalt   String
+  tokenHash   String // SHA-256(token + salt)
+  decision    Decision?
+  documents   Document[]
+}
+
+model Document {
+  id         String     @id @default(cuid())
+  session    KycSession @relation(fields: [sessionId], references: [id])
+  sessionId  String
+  type       DocType
+  objectKey  String // S3/R2 路徑
+  mime       String
+  bytes      Int
+  sha256     String
+  uploadedAt DateTime   @default(now())
+}
+
+model Decision {
+  id        String     @id @default(cuid())
+  session   KycSession @relation(fields: [sessionId], references: [id])
+  sessionId String     @unique
+  status    KycStatus
+  reason    String?
+  decidedBy String? // admin user id/email
+  decidedAt DateTime   @default(now())
+}
+
+model WebhookLog {
+  id         String   @id @default(cuid())
+  target     String
+  payload    Json
+  statusCode Int
+  createdAt  DateTime @default(now())
+}
