@@ -34,10 +34,15 @@ export type Document = $Result.DefaultSelection<Prisma.$DocumentPayload>
  */
 export type Decision = $Result.DefaultSelection<Prisma.$DecisionPayload>
 /**
- * Model WebhookLog
+ * Model AuditLog
  * 
  */
-export type WebhookLog = $Result.DefaultSelection<Prisma.$WebhookLogPayload>
+export type AuditLog = $Result.DefaultSelection<Prisma.$AuditLogPayload>
+/**
+ * Model OutboundWebhookLog
+ * 
+ */
+export type OutboundWebhookLog = $Result.DefaultSelection<Prisma.$OutboundWebhookLogPayload>
 
 /**
  * Enums
@@ -75,6 +80,27 @@ export const DocType: {
 
 export type DocType = (typeof DocType)[keyof typeof DocType]
 
+
+export const Severity: {
+  INFO: 'INFO',
+  WARN: 'WARN',
+  ERROR: 'ERROR',
+  SECURITY: 'SECURITY'
+};
+
+export type Severity = (typeof Severity)[keyof typeof Severity]
+
+
+export const ActorType: {
+  SYSTEM: 'SYSTEM',
+  USER: 'USER',
+  ADMIN: 'ADMIN',
+  WHMCS: 'WHMCS',
+  CRON: 'CRON'
+};
+
+export type ActorType = (typeof ActorType)[keyof typeof ActorType]
+
 }
 
 export type Residency = $Enums.Residency
@@ -88,6 +114,14 @@ export const KycStatus: typeof $Enums.KycStatus
 export type DocType = $Enums.DocType
 
 export const DocType: typeof $Enums.DocType
+
+export type Severity = $Enums.Severity
+
+export const Severity: typeof $Enums.Severity
+
+export type ActorType = $Enums.ActorType
+
+export const ActorType: typeof $Enums.ActorType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -108,8 +142,6 @@ export class PrismaClient<
   const U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
   ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs
 > {
-  [x: string]: any;
-  auditLog: any;
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
 
     /**
@@ -250,14 +282,24 @@ export class PrismaClient<
   get decision(): Prisma.DecisionDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.webhookLog`: Exposes CRUD operations for the **WebhookLog** model.
+   * `prisma.auditLog`: Exposes CRUD operations for the **AuditLog** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more WebhookLogs
-    * const webhookLogs = await prisma.webhookLog.findMany()
+    * // Fetch zero or more AuditLogs
+    * const auditLogs = await prisma.auditLog.findMany()
     * ```
     */
-  get webhookLog(): Prisma.WebhookLogDelegate<ExtArgs, ClientOptions>;
+  get auditLog(): Prisma.AuditLogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.outboundWebhookLog`: Exposes CRUD operations for the **OutboundWebhookLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OutboundWebhookLogs
+    * const outboundWebhookLogs = await prisma.outboundWebhookLog.findMany()
+    * ```
+    */
+  get outboundWebhookLog(): Prisma.OutboundWebhookLogDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -702,7 +744,8 @@ export namespace Prisma {
     KycSession: 'KycSession',
     Document: 'Document',
     Decision: 'Decision',
-    WebhookLog: 'WebhookLog'
+    AuditLog: 'AuditLog',
+    OutboundWebhookLog: 'OutboundWebhookLog'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -721,7 +764,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "applicant" | "kycSession" | "document" | "decision" | "webhookLog"
+      modelProps: "applicant" | "kycSession" | "document" | "decision" | "auditLog" | "outboundWebhookLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1021,77 +1064,151 @@ export namespace Prisma {
           }
         }
       }
-      WebhookLog: {
-        payload: Prisma.$WebhookLogPayload<ExtArgs>
-        fields: Prisma.WebhookLogFieldRefs
+      AuditLog: {
+        payload: Prisma.$AuditLogPayload<ExtArgs>
+        fields: Prisma.AuditLogFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.WebhookLogFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WebhookLogPayload> | null
+            args: Prisma.AuditLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.WebhookLogFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WebhookLogPayload>
+            args: Prisma.AuditLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
           }
           findFirst: {
-            args: Prisma.WebhookLogFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WebhookLogPayload> | null
+            args: Prisma.AuditLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.WebhookLogFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WebhookLogPayload>
+            args: Prisma.AuditLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
           }
           findMany: {
-            args: Prisma.WebhookLogFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WebhookLogPayload>[]
+            args: Prisma.AuditLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>[]
           }
           create: {
-            args: Prisma.WebhookLogCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WebhookLogPayload>
+            args: Prisma.AuditLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
           }
           createMany: {
-            args: Prisma.WebhookLogCreateManyArgs<ExtArgs>
+            args: Prisma.AuditLogCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.WebhookLogCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WebhookLogPayload>[]
+            args: Prisma.AuditLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>[]
           }
           delete: {
-            args: Prisma.WebhookLogDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WebhookLogPayload>
+            args: Prisma.AuditLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
           }
           update: {
-            args: Prisma.WebhookLogUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WebhookLogPayload>
+            args: Prisma.AuditLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
           }
           deleteMany: {
-            args: Prisma.WebhookLogDeleteManyArgs<ExtArgs>
+            args: Prisma.AuditLogDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.WebhookLogUpdateManyArgs<ExtArgs>
+            args: Prisma.AuditLogUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.WebhookLogUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WebhookLogPayload>[]
+            args: Prisma.AuditLogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>[]
           }
           upsert: {
-            args: Prisma.WebhookLogUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WebhookLogPayload>
+            args: Prisma.AuditLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
           }
           aggregate: {
-            args: Prisma.WebhookLogAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateWebhookLog>
+            args: Prisma.AuditLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAuditLog>
           }
           groupBy: {
-            args: Prisma.WebhookLogGroupByArgs<ExtArgs>
-            result: $Utils.Optional<WebhookLogGroupByOutputType>[]
+            args: Prisma.AuditLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AuditLogGroupByOutputType>[]
           }
           count: {
-            args: Prisma.WebhookLogCountArgs<ExtArgs>
-            result: $Utils.Optional<WebhookLogCountAggregateOutputType> | number
+            args: Prisma.AuditLogCountArgs<ExtArgs>
+            result: $Utils.Optional<AuditLogCountAggregateOutputType> | number
+          }
+        }
+      }
+      OutboundWebhookLog: {
+        payload: Prisma.$OutboundWebhookLogPayload<ExtArgs>
+        fields: Prisma.OutboundWebhookLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OutboundWebhookLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutboundWebhookLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OutboundWebhookLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutboundWebhookLogPayload>
+          }
+          findFirst: {
+            args: Prisma.OutboundWebhookLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutboundWebhookLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OutboundWebhookLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutboundWebhookLogPayload>
+          }
+          findMany: {
+            args: Prisma.OutboundWebhookLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutboundWebhookLogPayload>[]
+          }
+          create: {
+            args: Prisma.OutboundWebhookLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutboundWebhookLogPayload>
+          }
+          createMany: {
+            args: Prisma.OutboundWebhookLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OutboundWebhookLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutboundWebhookLogPayload>[]
+          }
+          delete: {
+            args: Prisma.OutboundWebhookLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutboundWebhookLogPayload>
+          }
+          update: {
+            args: Prisma.OutboundWebhookLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutboundWebhookLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.OutboundWebhookLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OutboundWebhookLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OutboundWebhookLogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutboundWebhookLogPayload>[]
+          }
+          upsert: {
+            args: Prisma.OutboundWebhookLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutboundWebhookLogPayload>
+          }
+          aggregate: {
+            args: Prisma.OutboundWebhookLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOutboundWebhookLog>
+          }
+          groupBy: {
+            args: Prisma.OutboundWebhookLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OutboundWebhookLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OutboundWebhookLogCountArgs<ExtArgs>
+            result: $Utils.Optional<OutboundWebhookLogCountAggregateOutputType> | number
           }
         }
       }
@@ -1191,7 +1308,8 @@ export namespace Prisma {
     kycSession?: KycSessionOmit
     document?: DocumentOmit
     decision?: DecisionOmit
-    webhookLog?: WebhookLogOmit
+    auditLog?: AuditLogOmit
+    outboundWebhookLog?: OutboundWebhookLogOmit
   }
 
   /* Types for Logging */
@@ -1268,15 +1386,50 @@ export namespace Prisma {
 
 
   /**
+   * Count Type ApplicantCountOutputType
+   */
+
+  export type ApplicantCountOutputType = {
+    sessions: number
+  }
+
+  export type ApplicantCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sessions?: boolean | ApplicantCountOutputTypeCountSessionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ApplicantCountOutputType without action
+   */
+  export type ApplicantCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApplicantCountOutputType
+     */
+    select?: ApplicantCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ApplicantCountOutputType without action
+   */
+  export type ApplicantCountOutputTypeCountSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KycSessionWhereInput
+  }
+
+
+  /**
    * Count Type KycSessionCountOutputType
    */
 
   export type KycSessionCountOutputType = {
     documents: number
+    decisions: number
+    auditLogs: number
   }
 
   export type KycSessionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     documents?: boolean | KycSessionCountOutputTypeCountDocumentsArgs
+    decisions?: boolean | KycSessionCountOutputTypeCountDecisionsArgs
+    auditLogs?: boolean | KycSessionCountOutputTypeCountAuditLogsArgs
   }
 
   // Custom InputTypes
@@ -1295,6 +1448,20 @@ export namespace Prisma {
    */
   export type KycSessionCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DocumentWhereInput
+  }
+
+  /**
+   * KycSessionCountOutputType without action
+   */
+  export type KycSessionCountOutputTypeCountDecisionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DecisionWhereInput
+  }
+
+  /**
+   * KycSessionCountOutputType without action
+   */
+  export type KycSessionCountOutputTypeCountAuditLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AuditLogWhereInput
   }
 
 
@@ -1324,28 +1491,31 @@ export namespace Prisma {
 
   export type ApplicantMinAggregateOutputType = {
     id: string | null
-    whmcsClientId: number | null
-    email: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    whmcsClientId: number | null
+    email: string | null
+    residency: $Enums.Residency | null
     latestSessionId: string | null
   }
 
   export type ApplicantMaxAggregateOutputType = {
     id: string | null
-    whmcsClientId: number | null
-    email: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    whmcsClientId: number | null
+    email: string | null
+    residency: $Enums.Residency | null
     latestSessionId: string | null
   }
 
   export type ApplicantCountAggregateOutputType = {
     id: number
-    whmcsClientId: number
-    email: number
     createdAt: number
     updatedAt: number
+    whmcsClientId: number
+    email: number
+    residency: number
     latestSessionId: number
     _all: number
   }
@@ -1361,28 +1531,31 @@ export namespace Prisma {
 
   export type ApplicantMinAggregateInputType = {
     id?: true
-    whmcsClientId?: true
-    email?: true
     createdAt?: true
     updatedAt?: true
+    whmcsClientId?: true
+    email?: true
+    residency?: true
     latestSessionId?: true
   }
 
   export type ApplicantMaxAggregateInputType = {
     id?: true
-    whmcsClientId?: true
-    email?: true
     createdAt?: true
     updatedAt?: true
+    whmcsClientId?: true
+    email?: true
+    residency?: true
     latestSessionId?: true
   }
 
   export type ApplicantCountAggregateInputType = {
     id?: true
-    whmcsClientId?: true
-    email?: true
     createdAt?: true
     updatedAt?: true
+    whmcsClientId?: true
+    email?: true
+    residency?: true
     latestSessionId?: true
     _all?: true
   }
@@ -1475,10 +1648,11 @@ export namespace Prisma {
 
   export type ApplicantGroupByOutputType = {
     id: string
-    whmcsClientId: number
-    email: string
     createdAt: Date
     updatedAt: Date
+    whmcsClientId: number
+    email: string
+    residency: $Enums.Residency | null
     latestSessionId: string | null
     _count: ApplicantCountAggregateOutputType | null
     _avg: ApplicantAvgAggregateOutputType | null
@@ -1503,59 +1677,75 @@ export namespace Prisma {
 
   export type ApplicantSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    whmcsClientId?: boolean
-    email?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    whmcsClientId?: boolean
+    email?: boolean
+    residency?: boolean
     latestSessionId?: boolean
     latestSession?: boolean | Applicant$latestSessionArgs<ExtArgs>
+    sessions?: boolean | Applicant$sessionsArgs<ExtArgs>
+    _count?: boolean | ApplicantCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["applicant"]>
 
   export type ApplicantSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    whmcsClientId?: boolean
-    email?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    whmcsClientId?: boolean
+    email?: boolean
+    residency?: boolean
     latestSessionId?: boolean
+    latestSession?: boolean | Applicant$latestSessionArgs<ExtArgs>
   }, ExtArgs["result"]["applicant"]>
 
   export type ApplicantSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    whmcsClientId?: boolean
-    email?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    whmcsClientId?: boolean
+    email?: boolean
+    residency?: boolean
     latestSessionId?: boolean
+    latestSession?: boolean | Applicant$latestSessionArgs<ExtArgs>
   }, ExtArgs["result"]["applicant"]>
 
   export type ApplicantSelectScalar = {
     id?: boolean
-    whmcsClientId?: boolean
-    email?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    whmcsClientId?: boolean
+    email?: boolean
+    residency?: boolean
     latestSessionId?: boolean
   }
 
-  export type ApplicantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "whmcsClientId" | "email" | "createdAt" | "updatedAt" | "latestSessionId", ExtArgs["result"]["applicant"]>
+  export type ApplicantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "whmcsClientId" | "email" | "residency" | "latestSessionId", ExtArgs["result"]["applicant"]>
   export type ApplicantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     latestSession?: boolean | Applicant$latestSessionArgs<ExtArgs>
+    sessions?: boolean | Applicant$sessionsArgs<ExtArgs>
+    _count?: boolean | ApplicantCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type ApplicantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type ApplicantIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ApplicantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    latestSession?: boolean | Applicant$latestSessionArgs<ExtArgs>
+  }
+  export type ApplicantIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    latestSession?: boolean | Applicant$latestSessionArgs<ExtArgs>
+  }
 
   export type $ApplicantPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Applicant"
     objects: {
       latestSession: Prisma.$KycSessionPayload<ExtArgs> | null
+      sessions: Prisma.$KycSessionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      whmcsClientId: number
-      email: string
       createdAt: Date
       updatedAt: Date
+      whmcsClientId: number
+      email: string
+      residency: $Enums.Residency | null
       latestSessionId: string | null
     }, ExtArgs["result"]["applicant"]>
     composites: {}
@@ -1952,6 +2142,7 @@ export namespace Prisma {
   export interface Prisma__ApplicantClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     latestSession<T extends Applicant$latestSessionArgs<ExtArgs> = {}>(args?: Subset<T, Applicant$latestSessionArgs<ExtArgs>>): Prisma__KycSessionClient<$Result.GetResult<Prisma.$KycSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    sessions<T extends Applicant$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, Applicant$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KycSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1982,10 +2173,11 @@ export namespace Prisma {
    */
   interface ApplicantFieldRefs {
     readonly id: FieldRef<"Applicant", 'String'>
-    readonly whmcsClientId: FieldRef<"Applicant", 'Int'>
-    readonly email: FieldRef<"Applicant", 'String'>
     readonly createdAt: FieldRef<"Applicant", 'DateTime'>
     readonly updatedAt: FieldRef<"Applicant", 'DateTime'>
+    readonly whmcsClientId: FieldRef<"Applicant", 'Int'>
+    readonly email: FieldRef<"Applicant", 'String'>
+    readonly residency: FieldRef<"Applicant", 'Residency'>
     readonly latestSessionId: FieldRef<"Applicant", 'String'>
   }
     
@@ -2236,6 +2428,10 @@ export namespace Prisma {
      */
     data: ApplicantCreateManyInput | ApplicantCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApplicantIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -2306,6 +2502,10 @@ export namespace Prisma {
      * Limit how many Applicants to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApplicantIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -2394,6 +2594,30 @@ export namespace Prisma {
   }
 
   /**
+   * Applicant.sessions
+   */
+  export type Applicant$sessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KycSession
+     */
+    select?: KycSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KycSession
+     */
+    omit?: KycSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KycSessionInclude<ExtArgs> | null
+    where?: KycSessionWhereInput
+    orderBy?: KycSessionOrderByWithRelationInput | KycSessionOrderByWithRelationInput[]
+    cursor?: KycSessionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: KycSessionScalarFieldEnum | KycSessionScalarFieldEnum[]
+  }
+
+  /**
    * Applicant without action
    */
   export type ApplicantDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2424,76 +2648,82 @@ export namespace Prisma {
 
   export type KycSessionMinAggregateOutputType = {
     id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
     applicantId: string | null
-    status: $Enums.KycStatus | null
-    residency: $Enums.Residency | null
-    issuedAt: Date | null
-    expiresAt: Date | null
-    consumedAt: Date | null
     tokenSalt: string | null
     tokenHash: string | null
+    expiresAt: Date | null
+    consumedAt: Date | null
+    status: $Enums.KycStatus | null
+    residency: $Enums.Residency | null
   }
 
   export type KycSessionMaxAggregateOutputType = {
     id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
     applicantId: string | null
-    status: $Enums.KycStatus | null
-    residency: $Enums.Residency | null
-    issuedAt: Date | null
-    expiresAt: Date | null
-    consumedAt: Date | null
     tokenSalt: string | null
     tokenHash: string | null
+    expiresAt: Date | null
+    consumedAt: Date | null
+    status: $Enums.KycStatus | null
+    residency: $Enums.Residency | null
   }
 
   export type KycSessionCountAggregateOutputType = {
     id: number
+    createdAt: number
+    updatedAt: number
     applicantId: number
-    status: number
-    residency: number
-    issuedAt: number
-    expiresAt: number
-    consumedAt: number
     tokenSalt: number
     tokenHash: number
+    expiresAt: number
+    consumedAt: number
+    status: number
+    residency: number
     _all: number
   }
 
 
   export type KycSessionMinAggregateInputType = {
     id?: true
+    createdAt?: true
+    updatedAt?: true
     applicantId?: true
-    status?: true
-    residency?: true
-    issuedAt?: true
-    expiresAt?: true
-    consumedAt?: true
     tokenSalt?: true
     tokenHash?: true
+    expiresAt?: true
+    consumedAt?: true
+    status?: true
+    residency?: true
   }
 
   export type KycSessionMaxAggregateInputType = {
     id?: true
+    createdAt?: true
+    updatedAt?: true
     applicantId?: true
-    status?: true
-    residency?: true
-    issuedAt?: true
-    expiresAt?: true
-    consumedAt?: true
     tokenSalt?: true
     tokenHash?: true
+    expiresAt?: true
+    consumedAt?: true
+    status?: true
+    residency?: true
   }
 
   export type KycSessionCountAggregateInputType = {
     id?: true
+    createdAt?: true
+    updatedAt?: true
     applicantId?: true
-    status?: true
-    residency?: true
-    issuedAt?: true
-    expiresAt?: true
-    consumedAt?: true
     tokenSalt?: true
     tokenHash?: true
+    expiresAt?: true
+    consumedAt?: true
+    status?: true
+    residency?: true
     _all?: true
   }
 
@@ -2571,14 +2801,15 @@ export namespace Prisma {
 
   export type KycSessionGroupByOutputType = {
     id: string
+    createdAt: Date
+    updatedAt: Date
     applicantId: string
-    status: $Enums.KycStatus
-    residency: $Enums.Residency | null
-    issuedAt: Date
-    expiresAt: Date
-    consumedAt: Date | null
     tokenSalt: string
     tokenHash: string
+    expiresAt: Date
+    consumedAt: Date | null
+    status: $Enums.KycStatus
+    residency: $Enums.Residency | null
     _count: KycSessionCountAggregateOutputType | null
     _min: KycSessionMinAggregateOutputType | null
     _max: KycSessionMaxAggregateOutputType | null
@@ -2600,63 +2831,71 @@ export namespace Prisma {
 
   export type KycSessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     applicantId?: boolean
-    status?: boolean
-    residency?: boolean
-    issuedAt?: boolean
-    expiresAt?: boolean
-    consumedAt?: boolean
     tokenSalt?: boolean
     tokenHash?: boolean
+    expiresAt?: boolean
+    consumedAt?: boolean
+    status?: boolean
+    residency?: boolean
     applicant?: boolean | ApplicantDefaultArgs<ExtArgs>
-    decision?: boolean | KycSession$decisionArgs<ExtArgs>
     documents?: boolean | KycSession$documentsArgs<ExtArgs>
+    decisions?: boolean | KycSession$decisionsArgs<ExtArgs>
+    auditLogs?: boolean | KycSession$auditLogsArgs<ExtArgs>
+    latestFor?: boolean | KycSession$latestForArgs<ExtArgs>
     _count?: boolean | KycSessionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["kycSession"]>
 
   export type KycSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     applicantId?: boolean
-    status?: boolean
-    residency?: boolean
-    issuedAt?: boolean
-    expiresAt?: boolean
-    consumedAt?: boolean
     tokenSalt?: boolean
     tokenHash?: boolean
+    expiresAt?: boolean
+    consumedAt?: boolean
+    status?: boolean
+    residency?: boolean
     applicant?: boolean | ApplicantDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["kycSession"]>
 
   export type KycSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     applicantId?: boolean
-    status?: boolean
-    residency?: boolean
-    issuedAt?: boolean
-    expiresAt?: boolean
-    consumedAt?: boolean
     tokenSalt?: boolean
     tokenHash?: boolean
+    expiresAt?: boolean
+    consumedAt?: boolean
+    status?: boolean
+    residency?: boolean
     applicant?: boolean | ApplicantDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["kycSession"]>
 
   export type KycSessionSelectScalar = {
     id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     applicantId?: boolean
-    status?: boolean
-    residency?: boolean
-    issuedAt?: boolean
-    expiresAt?: boolean
-    consumedAt?: boolean
     tokenSalt?: boolean
     tokenHash?: boolean
+    expiresAt?: boolean
+    consumedAt?: boolean
+    status?: boolean
+    residency?: boolean
   }
 
-  export type KycSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "applicantId" | "status" | "residency" | "issuedAt" | "expiresAt" | "consumedAt" | "tokenSalt" | "tokenHash", ExtArgs["result"]["kycSession"]>
+  export type KycSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "applicantId" | "tokenSalt" | "tokenHash" | "expiresAt" | "consumedAt" | "status" | "residency", ExtArgs["result"]["kycSession"]>
   export type KycSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     applicant?: boolean | ApplicantDefaultArgs<ExtArgs>
-    decision?: boolean | KycSession$decisionArgs<ExtArgs>
     documents?: boolean | KycSession$documentsArgs<ExtArgs>
+    decisions?: boolean | KycSession$decisionsArgs<ExtArgs>
+    auditLogs?: boolean | KycSession$auditLogsArgs<ExtArgs>
+    latestFor?: boolean | KycSession$latestForArgs<ExtArgs>
     _count?: boolean | KycSessionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type KycSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2670,19 +2909,22 @@ export namespace Prisma {
     name: "KycSession"
     objects: {
       applicant: Prisma.$ApplicantPayload<ExtArgs>
-      decision: Prisma.$DecisionPayload<ExtArgs> | null
       documents: Prisma.$DocumentPayload<ExtArgs>[]
+      decisions: Prisma.$DecisionPayload<ExtArgs>[]
+      auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
+      latestFor: Prisma.$ApplicantPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      createdAt: Date
+      updatedAt: Date
       applicantId: string
-      status: $Enums.KycStatus
-      residency: $Enums.Residency | null
-      issuedAt: Date
-      expiresAt: Date
-      consumedAt: Date | null
       tokenSalt: string
       tokenHash: string
+      expiresAt: Date
+      consumedAt: Date | null
+      status: $Enums.KycStatus
+      residency: $Enums.Residency | null
     }, ExtArgs["result"]["kycSession"]>
     composites: {}
   }
@@ -3078,8 +3320,10 @@ export namespace Prisma {
   export interface Prisma__KycSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     applicant<T extends ApplicantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ApplicantDefaultArgs<ExtArgs>>): Prisma__ApplicantClient<$Result.GetResult<Prisma.$ApplicantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    decision<T extends KycSession$decisionArgs<ExtArgs> = {}>(args?: Subset<T, KycSession$decisionArgs<ExtArgs>>): Prisma__DecisionClient<$Result.GetResult<Prisma.$DecisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     documents<T extends KycSession$documentsArgs<ExtArgs> = {}>(args?: Subset<T, KycSession$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    decisions<T extends KycSession$decisionsArgs<ExtArgs> = {}>(args?: Subset<T, KycSession$decisionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DecisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    auditLogs<T extends KycSession$auditLogsArgs<ExtArgs> = {}>(args?: Subset<T, KycSession$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    latestFor<T extends KycSession$latestForArgs<ExtArgs> = {}>(args?: Subset<T, KycSession$latestForArgs<ExtArgs>>): Prisma__ApplicantClient<$Result.GetResult<Prisma.$ApplicantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3110,14 +3354,15 @@ export namespace Prisma {
    */
   interface KycSessionFieldRefs {
     readonly id: FieldRef<"KycSession", 'String'>
+    readonly createdAt: FieldRef<"KycSession", 'DateTime'>
+    readonly updatedAt: FieldRef<"KycSession", 'DateTime'>
     readonly applicantId: FieldRef<"KycSession", 'String'>
-    readonly status: FieldRef<"KycSession", 'KycStatus'>
-    readonly residency: FieldRef<"KycSession", 'Residency'>
-    readonly issuedAt: FieldRef<"KycSession", 'DateTime'>
-    readonly expiresAt: FieldRef<"KycSession", 'DateTime'>
-    readonly consumedAt: FieldRef<"KycSession", 'DateTime'>
     readonly tokenSalt: FieldRef<"KycSession", 'String'>
     readonly tokenHash: FieldRef<"KycSession", 'String'>
+    readonly expiresAt: FieldRef<"KycSession", 'DateTime'>
+    readonly consumedAt: FieldRef<"KycSession", 'DateTime'>
+    readonly status: FieldRef<"KycSession", 'KycStatus'>
+    readonly residency: FieldRef<"KycSession", 'Residency'>
   }
     
 
@@ -3514,25 +3759,6 @@ export namespace Prisma {
   }
 
   /**
-   * KycSession.decision
-   */
-  export type KycSession$decisionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Decision
-     */
-    select?: DecisionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Decision
-     */
-    omit?: DecisionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DecisionInclude<ExtArgs> | null
-    where?: DecisionWhereInput
-  }
-
-  /**
    * KycSession.documents
    */
   export type KycSession$documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3554,6 +3780,73 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: DocumentScalarFieldEnum | DocumentScalarFieldEnum[]
+  }
+
+  /**
+   * KycSession.decisions
+   */
+  export type KycSession$decisionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Decision
+     */
+    select?: DecisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Decision
+     */
+    omit?: DecisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DecisionInclude<ExtArgs> | null
+    where?: DecisionWhereInput
+    orderBy?: DecisionOrderByWithRelationInput | DecisionOrderByWithRelationInput[]
+    cursor?: DecisionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DecisionScalarFieldEnum | DecisionScalarFieldEnum[]
+  }
+
+  /**
+   * KycSession.auditLogs
+   */
+  export type KycSession$auditLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    where?: AuditLogWhereInput
+    orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
+    cursor?: AuditLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AuditLogScalarFieldEnum | AuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * KycSession.latestFor
+   */
+  export type KycSession$latestForArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Applicant
+     */
+    select?: ApplicantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Applicant
+     */
+    omit?: ApplicantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApplicantInclude<ExtArgs> | null
+    where?: ApplicantWhereInput
   }
 
   /**
@@ -3597,35 +3890,35 @@ export namespace Prisma {
 
   export type DocumentMinAggregateOutputType = {
     id: string | null
+    uploadedAt: Date | null
     sessionId: string | null
     type: $Enums.DocType | null
     objectKey: string | null
     mime: string | null
     bytes: number | null
     sha256: string | null
-    uploadedAt: Date | null
   }
 
   export type DocumentMaxAggregateOutputType = {
     id: string | null
+    uploadedAt: Date | null
     sessionId: string | null
     type: $Enums.DocType | null
     objectKey: string | null
     mime: string | null
     bytes: number | null
     sha256: string | null
-    uploadedAt: Date | null
   }
 
   export type DocumentCountAggregateOutputType = {
     id: number
+    uploadedAt: number
     sessionId: number
     type: number
     objectKey: number
     mime: number
     bytes: number
     sha256: number
-    uploadedAt: number
     _all: number
   }
 
@@ -3640,35 +3933,35 @@ export namespace Prisma {
 
   export type DocumentMinAggregateInputType = {
     id?: true
+    uploadedAt?: true
     sessionId?: true
     type?: true
     objectKey?: true
     mime?: true
     bytes?: true
     sha256?: true
-    uploadedAt?: true
   }
 
   export type DocumentMaxAggregateInputType = {
     id?: true
+    uploadedAt?: true
     sessionId?: true
     type?: true
     objectKey?: true
     mime?: true
     bytes?: true
     sha256?: true
-    uploadedAt?: true
   }
 
   export type DocumentCountAggregateInputType = {
     id?: true
+    uploadedAt?: true
     sessionId?: true
     type?: true
     objectKey?: true
     mime?: true
     bytes?: true
     sha256?: true
-    uploadedAt?: true
     _all?: true
   }
 
@@ -3760,13 +4053,13 @@ export namespace Prisma {
 
   export type DocumentGroupByOutputType = {
     id: string
+    uploadedAt: Date
     sessionId: string
     type: $Enums.DocType
     objectKey: string
     mime: string
     bytes: number
     sha256: string
-    uploadedAt: Date
     _count: DocumentCountAggregateOutputType | null
     _avg: DocumentAvgAggregateOutputType | null
     _sum: DocumentSumAggregateOutputType | null
@@ -3790,52 +4083,52 @@ export namespace Prisma {
 
   export type DocumentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    uploadedAt?: boolean
     sessionId?: boolean
     type?: boolean
     objectKey?: boolean
     mime?: boolean
     bytes?: boolean
     sha256?: boolean
-    uploadedAt?: boolean
     session?: boolean | KycSessionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["document"]>
 
   export type DocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    uploadedAt?: boolean
     sessionId?: boolean
     type?: boolean
     objectKey?: boolean
     mime?: boolean
     bytes?: boolean
     sha256?: boolean
-    uploadedAt?: boolean
     session?: boolean | KycSessionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["document"]>
 
   export type DocumentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    uploadedAt?: boolean
     sessionId?: boolean
     type?: boolean
     objectKey?: boolean
     mime?: boolean
     bytes?: boolean
     sha256?: boolean
-    uploadedAt?: boolean
     session?: boolean | KycSessionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["document"]>
 
   export type DocumentSelectScalar = {
     id?: boolean
+    uploadedAt?: boolean
     sessionId?: boolean
     type?: boolean
     objectKey?: boolean
     mime?: boolean
     bytes?: boolean
     sha256?: boolean
-    uploadedAt?: boolean
   }
 
-  export type DocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionId" | "type" | "objectKey" | "mime" | "bytes" | "sha256" | "uploadedAt", ExtArgs["result"]["document"]>
+  export type DocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uploadedAt" | "sessionId" | "type" | "objectKey" | "mime" | "bytes" | "sha256", ExtArgs["result"]["document"]>
   export type DocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     session?: boolean | KycSessionDefaultArgs<ExtArgs>
   }
@@ -3853,13 +4146,13 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      uploadedAt: Date
       sessionId: string
       type: $Enums.DocType
       objectKey: string
       mime: string
       bytes: number
       sha256: string
-      uploadedAt: Date
     }, ExtArgs["result"]["document"]>
     composites: {}
   }
@@ -4285,13 +4578,13 @@ export namespace Prisma {
    */
   interface DocumentFieldRefs {
     readonly id: FieldRef<"Document", 'String'>
+    readonly uploadedAt: FieldRef<"Document", 'DateTime'>
     readonly sessionId: FieldRef<"Document", 'String'>
     readonly type: FieldRef<"Document", 'DocType'>
     readonly objectKey: FieldRef<"Document", 'String'>
     readonly mime: FieldRef<"Document", 'String'>
     readonly bytes: FieldRef<"Document", 'Int'>
     readonly sha256: FieldRef<"Document", 'String'>
-    readonly uploadedAt: FieldRef<"Document", 'DateTime'>
   }
     
 
@@ -4718,58 +5011,58 @@ export namespace Prisma {
 
   export type DecisionMinAggregateOutputType = {
     id: string | null
+    createdAt: Date | null
     sessionId: string | null
     status: $Enums.KycStatus | null
     reason: string | null
     decidedBy: string | null
-    decidedAt: Date | null
   }
 
   export type DecisionMaxAggregateOutputType = {
     id: string | null
+    createdAt: Date | null
     sessionId: string | null
     status: $Enums.KycStatus | null
     reason: string | null
     decidedBy: string | null
-    decidedAt: Date | null
   }
 
   export type DecisionCountAggregateOutputType = {
     id: number
+    createdAt: number
     sessionId: number
     status: number
     reason: number
     decidedBy: number
-    decidedAt: number
     _all: number
   }
 
 
   export type DecisionMinAggregateInputType = {
     id?: true
+    createdAt?: true
     sessionId?: true
     status?: true
     reason?: true
     decidedBy?: true
-    decidedAt?: true
   }
 
   export type DecisionMaxAggregateInputType = {
     id?: true
+    createdAt?: true
     sessionId?: true
     status?: true
     reason?: true
     decidedBy?: true
-    decidedAt?: true
   }
 
   export type DecisionCountAggregateInputType = {
     id?: true
+    createdAt?: true
     sessionId?: true
     status?: true
     reason?: true
     decidedBy?: true
-    decidedAt?: true
     _all?: true
   }
 
@@ -4847,11 +5140,11 @@ export namespace Prisma {
 
   export type DecisionGroupByOutputType = {
     id: string
+    createdAt: Date
     sessionId: string
     status: $Enums.KycStatus
     reason: string | null
-    decidedBy: string | null
-    decidedAt: Date
+    decidedBy: string
     _count: DecisionCountAggregateOutputType | null
     _min: DecisionMinAggregateOutputType | null
     _max: DecisionMaxAggregateOutputType | null
@@ -4873,44 +5166,44 @@ export namespace Prisma {
 
   export type DecisionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    createdAt?: boolean
     sessionId?: boolean
     status?: boolean
     reason?: boolean
     decidedBy?: boolean
-    decidedAt?: boolean
     session?: boolean | KycSessionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["decision"]>
 
   export type DecisionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    createdAt?: boolean
     sessionId?: boolean
     status?: boolean
     reason?: boolean
     decidedBy?: boolean
-    decidedAt?: boolean
     session?: boolean | KycSessionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["decision"]>
 
   export type DecisionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    createdAt?: boolean
     sessionId?: boolean
     status?: boolean
     reason?: boolean
     decidedBy?: boolean
-    decidedAt?: boolean
     session?: boolean | KycSessionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["decision"]>
 
   export type DecisionSelectScalar = {
     id?: boolean
+    createdAt?: boolean
     sessionId?: boolean
     status?: boolean
     reason?: boolean
     decidedBy?: boolean
-    decidedAt?: boolean
   }
 
-  export type DecisionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionId" | "status" | "reason" | "decidedBy" | "decidedAt", ExtArgs["result"]["decision"]>
+  export type DecisionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "sessionId" | "status" | "reason" | "decidedBy", ExtArgs["result"]["decision"]>
   export type DecisionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     session?: boolean | KycSessionDefaultArgs<ExtArgs>
   }
@@ -4928,11 +5221,11 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      createdAt: Date
       sessionId: string
       status: $Enums.KycStatus
       reason: string | null
-      decidedBy: string | null
-      decidedAt: Date
+      decidedBy: string
     }, ExtArgs["result"]["decision"]>
     composites: {}
   }
@@ -5358,11 +5651,11 @@ export namespace Prisma {
    */
   interface DecisionFieldRefs {
     readonly id: FieldRef<"Decision", 'String'>
+    readonly createdAt: FieldRef<"Decision", 'DateTime'>
     readonly sessionId: FieldRef<"Decision", 'String'>
     readonly status: FieldRef<"Decision", 'KycStatus'>
     readonly reason: FieldRef<"Decision", 'String'>
     readonly decidedBy: FieldRef<"Decision", 'String'>
-    readonly decidedAt: FieldRef<"Decision", 'DateTime'>
   }
     
 
@@ -5778,366 +6071,488 @@ export namespace Prisma {
 
 
   /**
-   * Model WebhookLog
+   * Model AuditLog
    */
 
-  export type AggregateWebhookLog = {
-    _count: WebhookLogCountAggregateOutputType | null
-    _avg: WebhookLogAvgAggregateOutputType | null
-    _sum: WebhookLogSumAggregateOutputType | null
-    _min: WebhookLogMinAggregateOutputType | null
-    _max: WebhookLogMaxAggregateOutputType | null
+  export type AggregateAuditLog = {
+    _count: AuditLogCountAggregateOutputType | null
+    _avg: AuditLogAvgAggregateOutputType | null
+    _sum: AuditLogSumAggregateOutputType | null
+    _min: AuditLogMinAggregateOutputType | null
+    _max: AuditLogMaxAggregateOutputType | null
   }
 
-  export type WebhookLogAvgAggregateOutputType = {
-    statusCode: number | null
+  export type AuditLogAvgAggregateOutputType = {
+    whmcsClientId: number | null
   }
 
-  export type WebhookLogSumAggregateOutputType = {
-    statusCode: number | null
+  export type AuditLogSumAggregateOutputType = {
+    whmcsClientId: number | null
   }
 
-  export type WebhookLogMinAggregateOutputType = {
+  export type AuditLogMinAggregateOutputType = {
     id: string | null
-    target: string | null
-    statusCode: number | null
     createdAt: Date | null
+    event: string | null
+    severity: $Enums.Severity | null
+    message: string | null
+    correlationId: string | null
+    ip: string | null
+    ua: string | null
+    actorType: $Enums.ActorType | null
+    actorId: string | null
+    whmcsClientId: number | null
+    applicantId: string | null
+    sessionId: string | null
   }
 
-  export type WebhookLogMaxAggregateOutputType = {
+  export type AuditLogMaxAggregateOutputType = {
     id: string | null
-    target: string | null
-    statusCode: number | null
     createdAt: Date | null
+    event: string | null
+    severity: $Enums.Severity | null
+    message: string | null
+    correlationId: string | null
+    ip: string | null
+    ua: string | null
+    actorType: $Enums.ActorType | null
+    actorId: string | null
+    whmcsClientId: number | null
+    applicantId: string | null
+    sessionId: string | null
   }
 
-  export type WebhookLogCountAggregateOutputType = {
+  export type AuditLogCountAggregateOutputType = {
     id: number
-    target: number
-    payload: number
-    statusCode: number
     createdAt: number
+    event: number
+    severity: number
+    message: number
+    data: number
+    correlationId: number
+    ip: number
+    ua: number
+    actorType: number
+    actorId: number
+    whmcsClientId: number
+    applicantId: number
+    sessionId: number
     _all: number
   }
 
 
-  export type WebhookLogAvgAggregateInputType = {
-    statusCode?: true
+  export type AuditLogAvgAggregateInputType = {
+    whmcsClientId?: true
   }
 
-  export type WebhookLogSumAggregateInputType = {
-    statusCode?: true
+  export type AuditLogSumAggregateInputType = {
+    whmcsClientId?: true
   }
 
-  export type WebhookLogMinAggregateInputType = {
+  export type AuditLogMinAggregateInputType = {
     id?: true
-    target?: true
-    statusCode?: true
     createdAt?: true
+    event?: true
+    severity?: true
+    message?: true
+    correlationId?: true
+    ip?: true
+    ua?: true
+    actorType?: true
+    actorId?: true
+    whmcsClientId?: true
+    applicantId?: true
+    sessionId?: true
   }
 
-  export type WebhookLogMaxAggregateInputType = {
+  export type AuditLogMaxAggregateInputType = {
     id?: true
-    target?: true
-    statusCode?: true
     createdAt?: true
+    event?: true
+    severity?: true
+    message?: true
+    correlationId?: true
+    ip?: true
+    ua?: true
+    actorType?: true
+    actorId?: true
+    whmcsClientId?: true
+    applicantId?: true
+    sessionId?: true
   }
 
-  export type WebhookLogCountAggregateInputType = {
+  export type AuditLogCountAggregateInputType = {
     id?: true
-    target?: true
-    payload?: true
-    statusCode?: true
     createdAt?: true
+    event?: true
+    severity?: true
+    message?: true
+    data?: true
+    correlationId?: true
+    ip?: true
+    ua?: true
+    actorType?: true
+    actorId?: true
+    whmcsClientId?: true
+    applicantId?: true
+    sessionId?: true
     _all?: true
   }
 
-  export type WebhookLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AuditLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which WebhookLog to aggregate.
+     * Filter which AuditLog to aggregate.
      */
-    where?: WebhookLogWhereInput
+    where?: AuditLogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of WebhookLogs to fetch.
+     * Determine the order of AuditLogs to fetch.
      */
-    orderBy?: WebhookLogOrderByWithRelationInput | WebhookLogOrderByWithRelationInput[]
+    orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: WebhookLogWhereUniqueInput
+    cursor?: AuditLogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` WebhookLogs from the position of the cursor.
+     * Take `±n` AuditLogs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` WebhookLogs.
+     * Skip the first `n` AuditLogs.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned WebhookLogs
+     * Count returned AuditLogs
     **/
-    _count?: true | WebhookLogCountAggregateInputType
+    _count?: true | AuditLogCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: WebhookLogAvgAggregateInputType
+    _avg?: AuditLogAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: WebhookLogSumAggregateInputType
+    _sum?: AuditLogSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: WebhookLogMinAggregateInputType
+    _min?: AuditLogMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: WebhookLogMaxAggregateInputType
+    _max?: AuditLogMaxAggregateInputType
   }
 
-  export type GetWebhookLogAggregateType<T extends WebhookLogAggregateArgs> = {
-        [P in keyof T & keyof AggregateWebhookLog]: P extends '_count' | 'count'
+  export type GetAuditLogAggregateType<T extends AuditLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateAuditLog]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateWebhookLog[P]>
-      : GetScalarType<T[P], AggregateWebhookLog[P]>
+        : GetScalarType<T[P], AggregateAuditLog[P]>
+      : GetScalarType<T[P], AggregateAuditLog[P]>
   }
 
 
 
 
-  export type WebhookLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: WebhookLogWhereInput
-    orderBy?: WebhookLogOrderByWithAggregationInput | WebhookLogOrderByWithAggregationInput[]
-    by: WebhookLogScalarFieldEnum[] | WebhookLogScalarFieldEnum
-    having?: WebhookLogScalarWhereWithAggregatesInput
+  export type AuditLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AuditLogWhereInput
+    orderBy?: AuditLogOrderByWithAggregationInput | AuditLogOrderByWithAggregationInput[]
+    by: AuditLogScalarFieldEnum[] | AuditLogScalarFieldEnum
+    having?: AuditLogScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: WebhookLogCountAggregateInputType | true
-    _avg?: WebhookLogAvgAggregateInputType
-    _sum?: WebhookLogSumAggregateInputType
-    _min?: WebhookLogMinAggregateInputType
-    _max?: WebhookLogMaxAggregateInputType
+    _count?: AuditLogCountAggregateInputType | true
+    _avg?: AuditLogAvgAggregateInputType
+    _sum?: AuditLogSumAggregateInputType
+    _min?: AuditLogMinAggregateInputType
+    _max?: AuditLogMaxAggregateInputType
   }
 
-  export type WebhookLogGroupByOutputType = {
+  export type AuditLogGroupByOutputType = {
     id: string
-    target: string
-    payload: JsonValue
-    statusCode: number
     createdAt: Date
-    _count: WebhookLogCountAggregateOutputType | null
-    _avg: WebhookLogAvgAggregateOutputType | null
-    _sum: WebhookLogSumAggregateOutputType | null
-    _min: WebhookLogMinAggregateOutputType | null
-    _max: WebhookLogMaxAggregateOutputType | null
+    event: string
+    severity: $Enums.Severity
+    message: string | null
+    data: JsonValue | null
+    correlationId: string | null
+    ip: string | null
+    ua: string | null
+    actorType: $Enums.ActorType
+    actorId: string | null
+    whmcsClientId: number | null
+    applicantId: string | null
+    sessionId: string | null
+    _count: AuditLogCountAggregateOutputType | null
+    _avg: AuditLogAvgAggregateOutputType | null
+    _sum: AuditLogSumAggregateOutputType | null
+    _min: AuditLogMinAggregateOutputType | null
+    _max: AuditLogMaxAggregateOutputType | null
   }
 
-  type GetWebhookLogGroupByPayload<T extends WebhookLogGroupByArgs> = Prisma.PrismaPromise<
+  type GetAuditLogGroupByPayload<T extends AuditLogGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<WebhookLogGroupByOutputType, T['by']> &
+      PickEnumerable<AuditLogGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof WebhookLogGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof AuditLogGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], WebhookLogGroupByOutputType[P]>
-            : GetScalarType<T[P], WebhookLogGroupByOutputType[P]>
+              : GetScalarType<T[P], AuditLogGroupByOutputType[P]>
+            : GetScalarType<T[P], AuditLogGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type WebhookLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type AuditLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    target?: boolean
-    payload?: boolean
-    statusCode?: boolean
     createdAt?: boolean
-  }, ExtArgs["result"]["webhookLog"]>
+    event?: boolean
+    severity?: boolean
+    message?: boolean
+    data?: boolean
+    correlationId?: boolean
+    ip?: boolean
+    ua?: boolean
+    actorType?: boolean
+    actorId?: boolean
+    whmcsClientId?: boolean
+    applicantId?: boolean
+    sessionId?: boolean
+    session?: boolean | AuditLog$sessionArgs<ExtArgs>
+  }, ExtArgs["result"]["auditLog"]>
 
-  export type WebhookLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type AuditLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    target?: boolean
-    payload?: boolean
-    statusCode?: boolean
     createdAt?: boolean
-  }, ExtArgs["result"]["webhookLog"]>
+    event?: boolean
+    severity?: boolean
+    message?: boolean
+    data?: boolean
+    correlationId?: boolean
+    ip?: boolean
+    ua?: boolean
+    actorType?: boolean
+    actorId?: boolean
+    whmcsClientId?: boolean
+    applicantId?: boolean
+    sessionId?: boolean
+    session?: boolean | AuditLog$sessionArgs<ExtArgs>
+  }, ExtArgs["result"]["auditLog"]>
 
-  export type WebhookLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type AuditLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    target?: boolean
-    payload?: boolean
-    statusCode?: boolean
     createdAt?: boolean
-  }, ExtArgs["result"]["webhookLog"]>
+    event?: boolean
+    severity?: boolean
+    message?: boolean
+    data?: boolean
+    correlationId?: boolean
+    ip?: boolean
+    ua?: boolean
+    actorType?: boolean
+    actorId?: boolean
+    whmcsClientId?: boolean
+    applicantId?: boolean
+    sessionId?: boolean
+    session?: boolean | AuditLog$sessionArgs<ExtArgs>
+  }, ExtArgs["result"]["auditLog"]>
 
-  export type WebhookLogSelectScalar = {
+  export type AuditLogSelectScalar = {
     id?: boolean
-    target?: boolean
-    payload?: boolean
-    statusCode?: boolean
     createdAt?: boolean
+    event?: boolean
+    severity?: boolean
+    message?: boolean
+    data?: boolean
+    correlationId?: boolean
+    ip?: boolean
+    ua?: boolean
+    actorType?: boolean
+    actorId?: boolean
+    whmcsClientId?: boolean
+    applicantId?: boolean
+    sessionId?: boolean
   }
 
-  export type WebhookLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "target" | "payload" | "statusCode" | "createdAt", ExtArgs["result"]["webhookLog"]>
+  export type AuditLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "event" | "severity" | "message" | "data" | "correlationId" | "ip" | "ua" | "actorType" | "actorId" | "whmcsClientId" | "applicantId" | "sessionId", ExtArgs["result"]["auditLog"]>
+  export type AuditLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    session?: boolean | AuditLog$sessionArgs<ExtArgs>
+  }
+  export type AuditLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    session?: boolean | AuditLog$sessionArgs<ExtArgs>
+  }
+  export type AuditLogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    session?: boolean | AuditLog$sessionArgs<ExtArgs>
+  }
 
-  export type $WebhookLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "WebhookLog"
-    objects: {}
+  export type $AuditLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AuditLog"
+    objects: {
+      session: Prisma.$KycSessionPayload<ExtArgs> | null
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      target: string
-      payload: Prisma.JsonValue
-      statusCode: number
       createdAt: Date
-    }, ExtArgs["result"]["webhookLog"]>
+      event: string
+      severity: $Enums.Severity
+      message: string | null
+      data: Prisma.JsonValue | null
+      correlationId: string | null
+      ip: string | null
+      ua: string | null
+      actorType: $Enums.ActorType
+      actorId: string | null
+      whmcsClientId: number | null
+      applicantId: string | null
+      sessionId: string | null
+    }, ExtArgs["result"]["auditLog"]>
     composites: {}
   }
 
-  type WebhookLogGetPayload<S extends boolean | null | undefined | WebhookLogDefaultArgs> = $Result.GetResult<Prisma.$WebhookLogPayload, S>
+  type AuditLogGetPayload<S extends boolean | null | undefined | AuditLogDefaultArgs> = $Result.GetResult<Prisma.$AuditLogPayload, S>
 
-  type WebhookLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<WebhookLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: WebhookLogCountAggregateInputType | true
+  type AuditLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AuditLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AuditLogCountAggregateInputType | true
     }
 
-  export interface WebhookLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WebhookLog'], meta: { name: 'WebhookLog' } }
+  export interface AuditLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AuditLog'], meta: { name: 'AuditLog' } }
     /**
-     * Find zero or one WebhookLog that matches the filter.
-     * @param {WebhookLogFindUniqueArgs} args - Arguments to find a WebhookLog
+     * Find zero or one AuditLog that matches the filter.
+     * @param {AuditLogFindUniqueArgs} args - Arguments to find a AuditLog
      * @example
-     * // Get one WebhookLog
-     * const webhookLog = await prisma.webhookLog.findUnique({
+     * // Get one AuditLog
+     * const auditLog = await prisma.auditLog.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends WebhookLogFindUniqueArgs>(args: SelectSubset<T, WebhookLogFindUniqueArgs<ExtArgs>>): Prisma__WebhookLogClient<$Result.GetResult<Prisma.$WebhookLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends AuditLogFindUniqueArgs>(args: SelectSubset<T, AuditLogFindUniqueArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one WebhookLog that matches the filter or throw an error with `error.code='P2025'`
+     * Find one AuditLog that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {WebhookLogFindUniqueOrThrowArgs} args - Arguments to find a WebhookLog
+     * @param {AuditLogFindUniqueOrThrowArgs} args - Arguments to find a AuditLog
      * @example
-     * // Get one WebhookLog
-     * const webhookLog = await prisma.webhookLog.findUniqueOrThrow({
+     * // Get one AuditLog
+     * const auditLog = await prisma.auditLog.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends WebhookLogFindUniqueOrThrowArgs>(args: SelectSubset<T, WebhookLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WebhookLogClient<$Result.GetResult<Prisma.$WebhookLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends AuditLogFindUniqueOrThrowArgs>(args: SelectSubset<T, AuditLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first WebhookLog that matches the filter.
+     * Find the first AuditLog that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {WebhookLogFindFirstArgs} args - Arguments to find a WebhookLog
+     * @param {AuditLogFindFirstArgs} args - Arguments to find a AuditLog
      * @example
-     * // Get one WebhookLog
-     * const webhookLog = await prisma.webhookLog.findFirst({
+     * // Get one AuditLog
+     * const auditLog = await prisma.auditLog.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends WebhookLogFindFirstArgs>(args?: SelectSubset<T, WebhookLogFindFirstArgs<ExtArgs>>): Prisma__WebhookLogClient<$Result.GetResult<Prisma.$WebhookLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends AuditLogFindFirstArgs>(args?: SelectSubset<T, AuditLogFindFirstArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first WebhookLog that matches the filter or
+     * Find the first AuditLog that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {WebhookLogFindFirstOrThrowArgs} args - Arguments to find a WebhookLog
+     * @param {AuditLogFindFirstOrThrowArgs} args - Arguments to find a AuditLog
      * @example
-     * // Get one WebhookLog
-     * const webhookLog = await prisma.webhookLog.findFirstOrThrow({
+     * // Get one AuditLog
+     * const auditLog = await prisma.auditLog.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends WebhookLogFindFirstOrThrowArgs>(args?: SelectSubset<T, WebhookLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__WebhookLogClient<$Result.GetResult<Prisma.$WebhookLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends AuditLogFindFirstOrThrowArgs>(args?: SelectSubset<T, AuditLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more WebhookLogs that matches the filter.
+     * Find zero or more AuditLogs that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {WebhookLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {AuditLogFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all WebhookLogs
-     * const webhookLogs = await prisma.webhookLog.findMany()
+     * // Get all AuditLogs
+     * const auditLogs = await prisma.auditLog.findMany()
      * 
-     * // Get first 10 WebhookLogs
-     * const webhookLogs = await prisma.webhookLog.findMany({ take: 10 })
+     * // Get first 10 AuditLogs
+     * const auditLogs = await prisma.auditLog.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const webhookLogWithIdOnly = await prisma.webhookLog.findMany({ select: { id: true } })
+     * const auditLogWithIdOnly = await prisma.auditLog.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends WebhookLogFindManyArgs>(args?: SelectSubset<T, WebhookLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebhookLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends AuditLogFindManyArgs>(args?: SelectSubset<T, AuditLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a WebhookLog.
-     * @param {WebhookLogCreateArgs} args - Arguments to create a WebhookLog.
+     * Create a AuditLog.
+     * @param {AuditLogCreateArgs} args - Arguments to create a AuditLog.
      * @example
-     * // Create one WebhookLog
-     * const WebhookLog = await prisma.webhookLog.create({
+     * // Create one AuditLog
+     * const AuditLog = await prisma.auditLog.create({
      *   data: {
-     *     // ... data to create a WebhookLog
+     *     // ... data to create a AuditLog
      *   }
      * })
      * 
      */
-    create<T extends WebhookLogCreateArgs>(args: SelectSubset<T, WebhookLogCreateArgs<ExtArgs>>): Prisma__WebhookLogClient<$Result.GetResult<Prisma.$WebhookLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends AuditLogCreateArgs>(args: SelectSubset<T, AuditLogCreateArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many WebhookLogs.
-     * @param {WebhookLogCreateManyArgs} args - Arguments to create many WebhookLogs.
+     * Create many AuditLogs.
+     * @param {AuditLogCreateManyArgs} args - Arguments to create many AuditLogs.
      * @example
-     * // Create many WebhookLogs
-     * const webhookLog = await prisma.webhookLog.createMany({
+     * // Create many AuditLogs
+     * const auditLog = await prisma.auditLog.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends WebhookLogCreateManyArgs>(args?: SelectSubset<T, WebhookLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends AuditLogCreateManyArgs>(args?: SelectSubset<T, AuditLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many WebhookLogs and returns the data saved in the database.
-     * @param {WebhookLogCreateManyAndReturnArgs} args - Arguments to create many WebhookLogs.
+     * Create many AuditLogs and returns the data saved in the database.
+     * @param {AuditLogCreateManyAndReturnArgs} args - Arguments to create many AuditLogs.
      * @example
-     * // Create many WebhookLogs
-     * const webhookLog = await prisma.webhookLog.createManyAndReturn({
+     * // Create many AuditLogs
+     * const auditLog = await prisma.auditLog.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many WebhookLogs and only return the `id`
-     * const webhookLogWithIdOnly = await prisma.webhookLog.createManyAndReturn({
+     * // Create many AuditLogs and only return the `id`
+     * const auditLogWithIdOnly = await prisma.auditLog.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -6147,28 +6562,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends WebhookLogCreateManyAndReturnArgs>(args?: SelectSubset<T, WebhookLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebhookLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends AuditLogCreateManyAndReturnArgs>(args?: SelectSubset<T, AuditLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a WebhookLog.
-     * @param {WebhookLogDeleteArgs} args - Arguments to delete one WebhookLog.
+     * Delete a AuditLog.
+     * @param {AuditLogDeleteArgs} args - Arguments to delete one AuditLog.
      * @example
-     * // Delete one WebhookLog
-     * const WebhookLog = await prisma.webhookLog.delete({
+     * // Delete one AuditLog
+     * const AuditLog = await prisma.auditLog.delete({
      *   where: {
-     *     // ... filter to delete one WebhookLog
+     *     // ... filter to delete one AuditLog
      *   }
      * })
      * 
      */
-    delete<T extends WebhookLogDeleteArgs>(args: SelectSubset<T, WebhookLogDeleteArgs<ExtArgs>>): Prisma__WebhookLogClient<$Result.GetResult<Prisma.$WebhookLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends AuditLogDeleteArgs>(args: SelectSubset<T, AuditLogDeleteArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one WebhookLog.
-     * @param {WebhookLogUpdateArgs} args - Arguments to update one WebhookLog.
+     * Update one AuditLog.
+     * @param {AuditLogUpdateArgs} args - Arguments to update one AuditLog.
      * @example
-     * // Update one WebhookLog
-     * const webhookLog = await prisma.webhookLog.update({
+     * // Update one AuditLog
+     * const auditLog = await prisma.auditLog.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -6178,30 +6593,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends WebhookLogUpdateArgs>(args: SelectSubset<T, WebhookLogUpdateArgs<ExtArgs>>): Prisma__WebhookLogClient<$Result.GetResult<Prisma.$WebhookLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends AuditLogUpdateArgs>(args: SelectSubset<T, AuditLogUpdateArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more WebhookLogs.
-     * @param {WebhookLogDeleteManyArgs} args - Arguments to filter WebhookLogs to delete.
+     * Delete zero or more AuditLogs.
+     * @param {AuditLogDeleteManyArgs} args - Arguments to filter AuditLogs to delete.
      * @example
-     * // Delete a few WebhookLogs
-     * const { count } = await prisma.webhookLog.deleteMany({
+     * // Delete a few AuditLogs
+     * const { count } = await prisma.auditLog.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends WebhookLogDeleteManyArgs>(args?: SelectSubset<T, WebhookLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends AuditLogDeleteManyArgs>(args?: SelectSubset<T, AuditLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more WebhookLogs.
+     * Update zero or more AuditLogs.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {WebhookLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {AuditLogUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many WebhookLogs
-     * const webhookLog = await prisma.webhookLog.updateMany({
+     * // Update many AuditLogs
+     * const auditLog = await prisma.auditLog.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -6211,14 +6626,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends WebhookLogUpdateManyArgs>(args: SelectSubset<T, WebhookLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends AuditLogUpdateManyArgs>(args: SelectSubset<T, AuditLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more WebhookLogs and returns the data updated in the database.
-     * @param {WebhookLogUpdateManyAndReturnArgs} args - Arguments to update many WebhookLogs.
+     * Update zero or more AuditLogs and returns the data updated in the database.
+     * @param {AuditLogUpdateManyAndReturnArgs} args - Arguments to update many AuditLogs.
      * @example
-     * // Update many WebhookLogs
-     * const webhookLog = await prisma.webhookLog.updateManyAndReturn({
+     * // Update many AuditLogs
+     * const auditLog = await prisma.auditLog.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -6227,8 +6642,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more WebhookLogs and only return the `id`
-     * const webhookLogWithIdOnly = await prisma.webhookLog.updateManyAndReturn({
+     * // Update zero or more AuditLogs and only return the `id`
+     * const auditLogWithIdOnly = await prisma.auditLog.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -6241,56 +6656,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends WebhookLogUpdateManyAndReturnArgs>(args: SelectSubset<T, WebhookLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebhookLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends AuditLogUpdateManyAndReturnArgs>(args: SelectSubset<T, AuditLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one WebhookLog.
-     * @param {WebhookLogUpsertArgs} args - Arguments to update or create a WebhookLog.
+     * Create or update one AuditLog.
+     * @param {AuditLogUpsertArgs} args - Arguments to update or create a AuditLog.
      * @example
-     * // Update or create a WebhookLog
-     * const webhookLog = await prisma.webhookLog.upsert({
+     * // Update or create a AuditLog
+     * const auditLog = await prisma.auditLog.upsert({
      *   create: {
-     *     // ... data to create a WebhookLog
+     *     // ... data to create a AuditLog
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the WebhookLog we want to update
+     *     // ... the filter for the AuditLog we want to update
      *   }
      * })
      */
-    upsert<T extends WebhookLogUpsertArgs>(args: SelectSubset<T, WebhookLogUpsertArgs<ExtArgs>>): Prisma__WebhookLogClient<$Result.GetResult<Prisma.$WebhookLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends AuditLogUpsertArgs>(args: SelectSubset<T, AuditLogUpsertArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of WebhookLogs.
+     * Count the number of AuditLogs.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {WebhookLogCountArgs} args - Arguments to filter WebhookLogs to count.
+     * @param {AuditLogCountArgs} args - Arguments to filter AuditLogs to count.
      * @example
-     * // Count the number of WebhookLogs
-     * const count = await prisma.webhookLog.count({
+     * // Count the number of AuditLogs
+     * const count = await prisma.auditLog.count({
      *   where: {
-     *     // ... the filter for the WebhookLogs we want to count
+     *     // ... the filter for the AuditLogs we want to count
      *   }
      * })
     **/
-    count<T extends WebhookLogCountArgs>(
-      args?: Subset<T, WebhookLogCountArgs>,
+    count<T extends AuditLogCountArgs>(
+      args?: Subset<T, AuditLogCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], WebhookLogCountAggregateOutputType>
+          : GetScalarType<T['select'], AuditLogCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a WebhookLog.
+     * Allows you to perform aggregations operations on a AuditLog.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {WebhookLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {AuditLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -6310,13 +6725,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends WebhookLogAggregateArgs>(args: Subset<T, WebhookLogAggregateArgs>): Prisma.PrismaPromise<GetWebhookLogAggregateType<T>>
+    aggregate<T extends AuditLogAggregateArgs>(args: Subset<T, AuditLogAggregateArgs>): Prisma.PrismaPromise<GetAuditLogAggregateType<T>>
 
     /**
-     * Group by WebhookLog.
+     * Group by AuditLog.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {WebhookLogGroupByArgs} args - Group by arguments.
+     * @param {AuditLogGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -6331,14 +6746,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends WebhookLogGroupByArgs,
+      T extends AuditLogGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: WebhookLogGroupByArgs['orderBy'] }
-        : { orderBy?: WebhookLogGroupByArgs['orderBy'] },
+        ? { orderBy: AuditLogGroupByArgs['orderBy'] }
+        : { orderBy?: AuditLogGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -6387,20 +6802,1214 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, WebhookLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWebhookLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, AuditLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAuditLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the WebhookLog model
+   * Fields of the AuditLog model
    */
-  readonly fields: WebhookLogFieldRefs;
+  readonly fields: AuditLogFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for WebhookLog.
+   * The delegate class that acts as a "Promise-like" for AuditLog.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__WebhookLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__AuditLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    session<T extends AuditLog$sessionArgs<ExtArgs> = {}>(args?: Subset<T, AuditLog$sessionArgs<ExtArgs>>): Prisma__KycSessionClient<$Result.GetResult<Prisma.$KycSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AuditLog model
+   */
+  interface AuditLogFieldRefs {
+    readonly id: FieldRef<"AuditLog", 'String'>
+    readonly createdAt: FieldRef<"AuditLog", 'DateTime'>
+    readonly event: FieldRef<"AuditLog", 'String'>
+    readonly severity: FieldRef<"AuditLog", 'Severity'>
+    readonly message: FieldRef<"AuditLog", 'String'>
+    readonly data: FieldRef<"AuditLog", 'Json'>
+    readonly correlationId: FieldRef<"AuditLog", 'String'>
+    readonly ip: FieldRef<"AuditLog", 'String'>
+    readonly ua: FieldRef<"AuditLog", 'String'>
+    readonly actorType: FieldRef<"AuditLog", 'ActorType'>
+    readonly actorId: FieldRef<"AuditLog", 'String'>
+    readonly whmcsClientId: FieldRef<"AuditLog", 'Int'>
+    readonly applicantId: FieldRef<"AuditLog", 'String'>
+    readonly sessionId: FieldRef<"AuditLog", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AuditLog findUnique
+   */
+  export type AuditLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * Filter, which AuditLog to fetch.
+     */
+    where: AuditLogWhereUniqueInput
+  }
+
+  /**
+   * AuditLog findUniqueOrThrow
+   */
+  export type AuditLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * Filter, which AuditLog to fetch.
+     */
+    where: AuditLogWhereUniqueInput
+  }
+
+  /**
+   * AuditLog findFirst
+   */
+  export type AuditLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * Filter, which AuditLog to fetch.
+     */
+    where?: AuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AuditLogs to fetch.
+     */
+    orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AuditLogs.
+     */
+    cursor?: AuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AuditLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AuditLogs.
+     */
+    distinct?: AuditLogScalarFieldEnum | AuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * AuditLog findFirstOrThrow
+   */
+  export type AuditLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * Filter, which AuditLog to fetch.
+     */
+    where?: AuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AuditLogs to fetch.
+     */
+    orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AuditLogs.
+     */
+    cursor?: AuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AuditLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AuditLogs.
+     */
+    distinct?: AuditLogScalarFieldEnum | AuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * AuditLog findMany
+   */
+  export type AuditLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * Filter, which AuditLogs to fetch.
+     */
+    where?: AuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AuditLogs to fetch.
+     */
+    orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AuditLogs.
+     */
+    cursor?: AuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AuditLogs.
+     */
+    skip?: number
+    distinct?: AuditLogScalarFieldEnum | AuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * AuditLog create
+   */
+  export type AuditLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AuditLog.
+     */
+    data: XOR<AuditLogCreateInput, AuditLogUncheckedCreateInput>
+  }
+
+  /**
+   * AuditLog createMany
+   */
+  export type AuditLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AuditLogs.
+     */
+    data: AuditLogCreateManyInput | AuditLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AuditLog createManyAndReturn
+   */
+  export type AuditLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * The data used to create many AuditLogs.
+     */
+    data: AuditLogCreateManyInput | AuditLogCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AuditLog update
+   */
+  export type AuditLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AuditLog.
+     */
+    data: XOR<AuditLogUpdateInput, AuditLogUncheckedUpdateInput>
+    /**
+     * Choose, which AuditLog to update.
+     */
+    where: AuditLogWhereUniqueInput
+  }
+
+  /**
+   * AuditLog updateMany
+   */
+  export type AuditLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AuditLogs.
+     */
+    data: XOR<AuditLogUpdateManyMutationInput, AuditLogUncheckedUpdateManyInput>
+    /**
+     * Filter which AuditLogs to update
+     */
+    where?: AuditLogWhereInput
+    /**
+     * Limit how many AuditLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AuditLog updateManyAndReturn
+   */
+  export type AuditLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * The data used to update AuditLogs.
+     */
+    data: XOR<AuditLogUpdateManyMutationInput, AuditLogUncheckedUpdateManyInput>
+    /**
+     * Filter which AuditLogs to update
+     */
+    where?: AuditLogWhereInput
+    /**
+     * Limit how many AuditLogs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AuditLog upsert
+   */
+  export type AuditLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AuditLog to update in case it exists.
+     */
+    where: AuditLogWhereUniqueInput
+    /**
+     * In case the AuditLog found by the `where` argument doesn't exist, create a new AuditLog with this data.
+     */
+    create: XOR<AuditLogCreateInput, AuditLogUncheckedCreateInput>
+    /**
+     * In case the AuditLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AuditLogUpdateInput, AuditLogUncheckedUpdateInput>
+  }
+
+  /**
+   * AuditLog delete
+   */
+  export type AuditLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * Filter which AuditLog to delete.
+     */
+    where: AuditLogWhereUniqueInput
+  }
+
+  /**
+   * AuditLog deleteMany
+   */
+  export type AuditLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AuditLogs to delete
+     */
+    where?: AuditLogWhereInput
+    /**
+     * Limit how many AuditLogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AuditLog.session
+   */
+  export type AuditLog$sessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KycSession
+     */
+    select?: KycSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KycSession
+     */
+    omit?: KycSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KycSessionInclude<ExtArgs> | null
+    where?: KycSessionWhereInput
+  }
+
+  /**
+   * AuditLog without action
+   */
+  export type AuditLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model OutboundWebhookLog
+   */
+
+  export type AggregateOutboundWebhookLog = {
+    _count: OutboundWebhookLogCountAggregateOutputType | null
+    _avg: OutboundWebhookLogAvgAggregateOutputType | null
+    _sum: OutboundWebhookLogSumAggregateOutputType | null
+    _min: OutboundWebhookLogMinAggregateOutputType | null
+    _max: OutboundWebhookLogMaxAggregateOutputType | null
+  }
+
+  export type OutboundWebhookLogAvgAggregateOutputType = {
+    statusCode: number | null
+    attempt: number | null
+    maxAttempts: number | null
+  }
+
+  export type OutboundWebhookLogSumAggregateOutputType = {
+    statusCode: number | null
+    attempt: number | null
+    maxAttempts: number | null
+  }
+
+  export type OutboundWebhookLogMinAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    kind: string | null
+    targetUrl: string | null
+    event: string | null
+    statusCode: number | null
+    responseBody: string | null
+    error: string | null
+    attempt: number | null
+    maxAttempts: number | null
+    nextAttemptAt: Date | null
+  }
+
+  export type OutboundWebhookLogMaxAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    kind: string | null
+    targetUrl: string | null
+    event: string | null
+    statusCode: number | null
+    responseBody: string | null
+    error: string | null
+    attempt: number | null
+    maxAttempts: number | null
+    nextAttemptAt: Date | null
+  }
+
+  export type OutboundWebhookLogCountAggregateOutputType = {
+    id: number
+    createdAt: number
+    kind: number
+    targetUrl: number
+    event: number
+    payload: number
+    statusCode: number
+    responseBody: number
+    error: number
+    attempt: number
+    maxAttempts: number
+    nextAttemptAt: number
+    _all: number
+  }
+
+
+  export type OutboundWebhookLogAvgAggregateInputType = {
+    statusCode?: true
+    attempt?: true
+    maxAttempts?: true
+  }
+
+  export type OutboundWebhookLogSumAggregateInputType = {
+    statusCode?: true
+    attempt?: true
+    maxAttempts?: true
+  }
+
+  export type OutboundWebhookLogMinAggregateInputType = {
+    id?: true
+    createdAt?: true
+    kind?: true
+    targetUrl?: true
+    event?: true
+    statusCode?: true
+    responseBody?: true
+    error?: true
+    attempt?: true
+    maxAttempts?: true
+    nextAttemptAt?: true
+  }
+
+  export type OutboundWebhookLogMaxAggregateInputType = {
+    id?: true
+    createdAt?: true
+    kind?: true
+    targetUrl?: true
+    event?: true
+    statusCode?: true
+    responseBody?: true
+    error?: true
+    attempt?: true
+    maxAttempts?: true
+    nextAttemptAt?: true
+  }
+
+  export type OutboundWebhookLogCountAggregateInputType = {
+    id?: true
+    createdAt?: true
+    kind?: true
+    targetUrl?: true
+    event?: true
+    payload?: true
+    statusCode?: true
+    responseBody?: true
+    error?: true
+    attempt?: true
+    maxAttempts?: true
+    nextAttemptAt?: true
+    _all?: true
+  }
+
+  export type OutboundWebhookLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OutboundWebhookLog to aggregate.
+     */
+    where?: OutboundWebhookLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OutboundWebhookLogs to fetch.
+     */
+    orderBy?: OutboundWebhookLogOrderByWithRelationInput | OutboundWebhookLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OutboundWebhookLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OutboundWebhookLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OutboundWebhookLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OutboundWebhookLogs
+    **/
+    _count?: true | OutboundWebhookLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: OutboundWebhookLogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: OutboundWebhookLogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OutboundWebhookLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OutboundWebhookLogMaxAggregateInputType
+  }
+
+  export type GetOutboundWebhookLogAggregateType<T extends OutboundWebhookLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateOutboundWebhookLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOutboundWebhookLog[P]>
+      : GetScalarType<T[P], AggregateOutboundWebhookLog[P]>
+  }
+
+
+
+
+  export type OutboundWebhookLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OutboundWebhookLogWhereInput
+    orderBy?: OutboundWebhookLogOrderByWithAggregationInput | OutboundWebhookLogOrderByWithAggregationInput[]
+    by: OutboundWebhookLogScalarFieldEnum[] | OutboundWebhookLogScalarFieldEnum
+    having?: OutboundWebhookLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OutboundWebhookLogCountAggregateInputType | true
+    _avg?: OutboundWebhookLogAvgAggregateInputType
+    _sum?: OutboundWebhookLogSumAggregateInputType
+    _min?: OutboundWebhookLogMinAggregateInputType
+    _max?: OutboundWebhookLogMaxAggregateInputType
+  }
+
+  export type OutboundWebhookLogGroupByOutputType = {
+    id: string
+    createdAt: Date
+    kind: string
+    targetUrl: string
+    event: string
+    payload: JsonValue
+    statusCode: number | null
+    responseBody: string | null
+    error: string | null
+    attempt: number
+    maxAttempts: number
+    nextAttemptAt: Date | null
+    _count: OutboundWebhookLogCountAggregateOutputType | null
+    _avg: OutboundWebhookLogAvgAggregateOutputType | null
+    _sum: OutboundWebhookLogSumAggregateOutputType | null
+    _min: OutboundWebhookLogMinAggregateOutputType | null
+    _max: OutboundWebhookLogMaxAggregateOutputType | null
+  }
+
+  type GetOutboundWebhookLogGroupByPayload<T extends OutboundWebhookLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OutboundWebhookLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OutboundWebhookLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OutboundWebhookLogGroupByOutputType[P]>
+            : GetScalarType<T[P], OutboundWebhookLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OutboundWebhookLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    kind?: boolean
+    targetUrl?: boolean
+    event?: boolean
+    payload?: boolean
+    statusCode?: boolean
+    responseBody?: boolean
+    error?: boolean
+    attempt?: boolean
+    maxAttempts?: boolean
+    nextAttemptAt?: boolean
+  }, ExtArgs["result"]["outboundWebhookLog"]>
+
+  export type OutboundWebhookLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    kind?: boolean
+    targetUrl?: boolean
+    event?: boolean
+    payload?: boolean
+    statusCode?: boolean
+    responseBody?: boolean
+    error?: boolean
+    attempt?: boolean
+    maxAttempts?: boolean
+    nextAttemptAt?: boolean
+  }, ExtArgs["result"]["outboundWebhookLog"]>
+
+  export type OutboundWebhookLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    kind?: boolean
+    targetUrl?: boolean
+    event?: boolean
+    payload?: boolean
+    statusCode?: boolean
+    responseBody?: boolean
+    error?: boolean
+    attempt?: boolean
+    maxAttempts?: boolean
+    nextAttemptAt?: boolean
+  }, ExtArgs["result"]["outboundWebhookLog"]>
+
+  export type OutboundWebhookLogSelectScalar = {
+    id?: boolean
+    createdAt?: boolean
+    kind?: boolean
+    targetUrl?: boolean
+    event?: boolean
+    payload?: boolean
+    statusCode?: boolean
+    responseBody?: boolean
+    error?: boolean
+    attempt?: boolean
+    maxAttempts?: boolean
+    nextAttemptAt?: boolean
+  }
+
+  export type OutboundWebhookLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "kind" | "targetUrl" | "event" | "payload" | "statusCode" | "responseBody" | "error" | "attempt" | "maxAttempts" | "nextAttemptAt", ExtArgs["result"]["outboundWebhookLog"]>
+
+  export type $OutboundWebhookLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OutboundWebhookLog"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      createdAt: Date
+      kind: string
+      targetUrl: string
+      event: string
+      payload: Prisma.JsonValue
+      statusCode: number | null
+      responseBody: string | null
+      error: string | null
+      attempt: number
+      maxAttempts: number
+      nextAttemptAt: Date | null
+    }, ExtArgs["result"]["outboundWebhookLog"]>
+    composites: {}
+  }
+
+  type OutboundWebhookLogGetPayload<S extends boolean | null | undefined | OutboundWebhookLogDefaultArgs> = $Result.GetResult<Prisma.$OutboundWebhookLogPayload, S>
+
+  type OutboundWebhookLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OutboundWebhookLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OutboundWebhookLogCountAggregateInputType | true
+    }
+
+  export interface OutboundWebhookLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OutboundWebhookLog'], meta: { name: 'OutboundWebhookLog' } }
+    /**
+     * Find zero or one OutboundWebhookLog that matches the filter.
+     * @param {OutboundWebhookLogFindUniqueArgs} args - Arguments to find a OutboundWebhookLog
+     * @example
+     * // Get one OutboundWebhookLog
+     * const outboundWebhookLog = await prisma.outboundWebhookLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OutboundWebhookLogFindUniqueArgs>(args: SelectSubset<T, OutboundWebhookLogFindUniqueArgs<ExtArgs>>): Prisma__OutboundWebhookLogClient<$Result.GetResult<Prisma.$OutboundWebhookLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OutboundWebhookLog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OutboundWebhookLogFindUniqueOrThrowArgs} args - Arguments to find a OutboundWebhookLog
+     * @example
+     * // Get one OutboundWebhookLog
+     * const outboundWebhookLog = await prisma.outboundWebhookLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OutboundWebhookLogFindUniqueOrThrowArgs>(args: SelectSubset<T, OutboundWebhookLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OutboundWebhookLogClient<$Result.GetResult<Prisma.$OutboundWebhookLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OutboundWebhookLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OutboundWebhookLogFindFirstArgs} args - Arguments to find a OutboundWebhookLog
+     * @example
+     * // Get one OutboundWebhookLog
+     * const outboundWebhookLog = await prisma.outboundWebhookLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OutboundWebhookLogFindFirstArgs>(args?: SelectSubset<T, OutboundWebhookLogFindFirstArgs<ExtArgs>>): Prisma__OutboundWebhookLogClient<$Result.GetResult<Prisma.$OutboundWebhookLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OutboundWebhookLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OutboundWebhookLogFindFirstOrThrowArgs} args - Arguments to find a OutboundWebhookLog
+     * @example
+     * // Get one OutboundWebhookLog
+     * const outboundWebhookLog = await prisma.outboundWebhookLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OutboundWebhookLogFindFirstOrThrowArgs>(args?: SelectSubset<T, OutboundWebhookLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__OutboundWebhookLogClient<$Result.GetResult<Prisma.$OutboundWebhookLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OutboundWebhookLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OutboundWebhookLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OutboundWebhookLogs
+     * const outboundWebhookLogs = await prisma.outboundWebhookLog.findMany()
+     * 
+     * // Get first 10 OutboundWebhookLogs
+     * const outboundWebhookLogs = await prisma.outboundWebhookLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const outboundWebhookLogWithIdOnly = await prisma.outboundWebhookLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OutboundWebhookLogFindManyArgs>(args?: SelectSubset<T, OutboundWebhookLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutboundWebhookLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OutboundWebhookLog.
+     * @param {OutboundWebhookLogCreateArgs} args - Arguments to create a OutboundWebhookLog.
+     * @example
+     * // Create one OutboundWebhookLog
+     * const OutboundWebhookLog = await prisma.outboundWebhookLog.create({
+     *   data: {
+     *     // ... data to create a OutboundWebhookLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends OutboundWebhookLogCreateArgs>(args: SelectSubset<T, OutboundWebhookLogCreateArgs<ExtArgs>>): Prisma__OutboundWebhookLogClient<$Result.GetResult<Prisma.$OutboundWebhookLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OutboundWebhookLogs.
+     * @param {OutboundWebhookLogCreateManyArgs} args - Arguments to create many OutboundWebhookLogs.
+     * @example
+     * // Create many OutboundWebhookLogs
+     * const outboundWebhookLog = await prisma.outboundWebhookLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OutboundWebhookLogCreateManyArgs>(args?: SelectSubset<T, OutboundWebhookLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OutboundWebhookLogs and returns the data saved in the database.
+     * @param {OutboundWebhookLogCreateManyAndReturnArgs} args - Arguments to create many OutboundWebhookLogs.
+     * @example
+     * // Create many OutboundWebhookLogs
+     * const outboundWebhookLog = await prisma.outboundWebhookLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OutboundWebhookLogs and only return the `id`
+     * const outboundWebhookLogWithIdOnly = await prisma.outboundWebhookLog.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OutboundWebhookLogCreateManyAndReturnArgs>(args?: SelectSubset<T, OutboundWebhookLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutboundWebhookLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OutboundWebhookLog.
+     * @param {OutboundWebhookLogDeleteArgs} args - Arguments to delete one OutboundWebhookLog.
+     * @example
+     * // Delete one OutboundWebhookLog
+     * const OutboundWebhookLog = await prisma.outboundWebhookLog.delete({
+     *   where: {
+     *     // ... filter to delete one OutboundWebhookLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OutboundWebhookLogDeleteArgs>(args: SelectSubset<T, OutboundWebhookLogDeleteArgs<ExtArgs>>): Prisma__OutboundWebhookLogClient<$Result.GetResult<Prisma.$OutboundWebhookLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OutboundWebhookLog.
+     * @param {OutboundWebhookLogUpdateArgs} args - Arguments to update one OutboundWebhookLog.
+     * @example
+     * // Update one OutboundWebhookLog
+     * const outboundWebhookLog = await prisma.outboundWebhookLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OutboundWebhookLogUpdateArgs>(args: SelectSubset<T, OutboundWebhookLogUpdateArgs<ExtArgs>>): Prisma__OutboundWebhookLogClient<$Result.GetResult<Prisma.$OutboundWebhookLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OutboundWebhookLogs.
+     * @param {OutboundWebhookLogDeleteManyArgs} args - Arguments to filter OutboundWebhookLogs to delete.
+     * @example
+     * // Delete a few OutboundWebhookLogs
+     * const { count } = await prisma.outboundWebhookLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OutboundWebhookLogDeleteManyArgs>(args?: SelectSubset<T, OutboundWebhookLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OutboundWebhookLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OutboundWebhookLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OutboundWebhookLogs
+     * const outboundWebhookLog = await prisma.outboundWebhookLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OutboundWebhookLogUpdateManyArgs>(args: SelectSubset<T, OutboundWebhookLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OutboundWebhookLogs and returns the data updated in the database.
+     * @param {OutboundWebhookLogUpdateManyAndReturnArgs} args - Arguments to update many OutboundWebhookLogs.
+     * @example
+     * // Update many OutboundWebhookLogs
+     * const outboundWebhookLog = await prisma.outboundWebhookLog.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OutboundWebhookLogs and only return the `id`
+     * const outboundWebhookLogWithIdOnly = await prisma.outboundWebhookLog.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OutboundWebhookLogUpdateManyAndReturnArgs>(args: SelectSubset<T, OutboundWebhookLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutboundWebhookLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OutboundWebhookLog.
+     * @param {OutboundWebhookLogUpsertArgs} args - Arguments to update or create a OutboundWebhookLog.
+     * @example
+     * // Update or create a OutboundWebhookLog
+     * const outboundWebhookLog = await prisma.outboundWebhookLog.upsert({
+     *   create: {
+     *     // ... data to create a OutboundWebhookLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OutboundWebhookLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OutboundWebhookLogUpsertArgs>(args: SelectSubset<T, OutboundWebhookLogUpsertArgs<ExtArgs>>): Prisma__OutboundWebhookLogClient<$Result.GetResult<Prisma.$OutboundWebhookLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OutboundWebhookLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OutboundWebhookLogCountArgs} args - Arguments to filter OutboundWebhookLogs to count.
+     * @example
+     * // Count the number of OutboundWebhookLogs
+     * const count = await prisma.outboundWebhookLog.count({
+     *   where: {
+     *     // ... the filter for the OutboundWebhookLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends OutboundWebhookLogCountArgs>(
+      args?: Subset<T, OutboundWebhookLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OutboundWebhookLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OutboundWebhookLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OutboundWebhookLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OutboundWebhookLogAggregateArgs>(args: Subset<T, OutboundWebhookLogAggregateArgs>): Prisma.PrismaPromise<GetOutboundWebhookLogAggregateType<T>>
+
+    /**
+     * Group by OutboundWebhookLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OutboundWebhookLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OutboundWebhookLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OutboundWebhookLogGroupByArgs['orderBy'] }
+        : { orderBy?: OutboundWebhookLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OutboundWebhookLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOutboundWebhookLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OutboundWebhookLog model
+   */
+  readonly fields: OutboundWebhookLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OutboundWebhookLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OutboundWebhookLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6428,377 +8037,384 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the WebhookLog model
+   * Fields of the OutboundWebhookLog model
    */
-  interface WebhookLogFieldRefs {
-    readonly id: FieldRef<"WebhookLog", 'String'>
-    readonly target: FieldRef<"WebhookLog", 'String'>
-    readonly payload: FieldRef<"WebhookLog", 'Json'>
-    readonly statusCode: FieldRef<"WebhookLog", 'Int'>
-    readonly createdAt: FieldRef<"WebhookLog", 'DateTime'>
+  interface OutboundWebhookLogFieldRefs {
+    readonly id: FieldRef<"OutboundWebhookLog", 'String'>
+    readonly createdAt: FieldRef<"OutboundWebhookLog", 'DateTime'>
+    readonly kind: FieldRef<"OutboundWebhookLog", 'String'>
+    readonly targetUrl: FieldRef<"OutboundWebhookLog", 'String'>
+    readonly event: FieldRef<"OutboundWebhookLog", 'String'>
+    readonly payload: FieldRef<"OutboundWebhookLog", 'Json'>
+    readonly statusCode: FieldRef<"OutboundWebhookLog", 'Int'>
+    readonly responseBody: FieldRef<"OutboundWebhookLog", 'String'>
+    readonly error: FieldRef<"OutboundWebhookLog", 'String'>
+    readonly attempt: FieldRef<"OutboundWebhookLog", 'Int'>
+    readonly maxAttempts: FieldRef<"OutboundWebhookLog", 'Int'>
+    readonly nextAttemptAt: FieldRef<"OutboundWebhookLog", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * WebhookLog findUnique
+   * OutboundWebhookLog findUnique
    */
-  export type WebhookLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OutboundWebhookLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the WebhookLog
+     * Select specific fields to fetch from the OutboundWebhookLog
      */
-    select?: WebhookLogSelect<ExtArgs> | null
+    select?: OutboundWebhookLogSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the WebhookLog
+     * Omit specific fields from the OutboundWebhookLog
      */
-    omit?: WebhookLogOmit<ExtArgs> | null
+    omit?: OutboundWebhookLogOmit<ExtArgs> | null
     /**
-     * Filter, which WebhookLog to fetch.
+     * Filter, which OutboundWebhookLog to fetch.
      */
-    where: WebhookLogWhereUniqueInput
+    where: OutboundWebhookLogWhereUniqueInput
   }
 
   /**
-   * WebhookLog findUniqueOrThrow
+   * OutboundWebhookLog findUniqueOrThrow
    */
-  export type WebhookLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OutboundWebhookLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the WebhookLog
+     * Select specific fields to fetch from the OutboundWebhookLog
      */
-    select?: WebhookLogSelect<ExtArgs> | null
+    select?: OutboundWebhookLogSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the WebhookLog
+     * Omit specific fields from the OutboundWebhookLog
      */
-    omit?: WebhookLogOmit<ExtArgs> | null
+    omit?: OutboundWebhookLogOmit<ExtArgs> | null
     /**
-     * Filter, which WebhookLog to fetch.
+     * Filter, which OutboundWebhookLog to fetch.
      */
-    where: WebhookLogWhereUniqueInput
+    where: OutboundWebhookLogWhereUniqueInput
   }
 
   /**
-   * WebhookLog findFirst
+   * OutboundWebhookLog findFirst
    */
-  export type WebhookLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OutboundWebhookLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the WebhookLog
+     * Select specific fields to fetch from the OutboundWebhookLog
      */
-    select?: WebhookLogSelect<ExtArgs> | null
+    select?: OutboundWebhookLogSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the WebhookLog
+     * Omit specific fields from the OutboundWebhookLog
      */
-    omit?: WebhookLogOmit<ExtArgs> | null
+    omit?: OutboundWebhookLogOmit<ExtArgs> | null
     /**
-     * Filter, which WebhookLog to fetch.
+     * Filter, which OutboundWebhookLog to fetch.
      */
-    where?: WebhookLogWhereInput
+    where?: OutboundWebhookLogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of WebhookLogs to fetch.
+     * Determine the order of OutboundWebhookLogs to fetch.
      */
-    orderBy?: WebhookLogOrderByWithRelationInput | WebhookLogOrderByWithRelationInput[]
+    orderBy?: OutboundWebhookLogOrderByWithRelationInput | OutboundWebhookLogOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for WebhookLogs.
+     * Sets the position for searching for OutboundWebhookLogs.
      */
-    cursor?: WebhookLogWhereUniqueInput
+    cursor?: OutboundWebhookLogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` WebhookLogs from the position of the cursor.
+     * Take `±n` OutboundWebhookLogs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` WebhookLogs.
+     * Skip the first `n` OutboundWebhookLogs.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of WebhookLogs.
+     * Filter by unique combinations of OutboundWebhookLogs.
      */
-    distinct?: WebhookLogScalarFieldEnum | WebhookLogScalarFieldEnum[]
+    distinct?: OutboundWebhookLogScalarFieldEnum | OutboundWebhookLogScalarFieldEnum[]
   }
 
   /**
-   * WebhookLog findFirstOrThrow
+   * OutboundWebhookLog findFirstOrThrow
    */
-  export type WebhookLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OutboundWebhookLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the WebhookLog
+     * Select specific fields to fetch from the OutboundWebhookLog
      */
-    select?: WebhookLogSelect<ExtArgs> | null
+    select?: OutboundWebhookLogSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the WebhookLog
+     * Omit specific fields from the OutboundWebhookLog
      */
-    omit?: WebhookLogOmit<ExtArgs> | null
+    omit?: OutboundWebhookLogOmit<ExtArgs> | null
     /**
-     * Filter, which WebhookLog to fetch.
+     * Filter, which OutboundWebhookLog to fetch.
      */
-    where?: WebhookLogWhereInput
+    where?: OutboundWebhookLogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of WebhookLogs to fetch.
+     * Determine the order of OutboundWebhookLogs to fetch.
      */
-    orderBy?: WebhookLogOrderByWithRelationInput | WebhookLogOrderByWithRelationInput[]
+    orderBy?: OutboundWebhookLogOrderByWithRelationInput | OutboundWebhookLogOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for WebhookLogs.
+     * Sets the position for searching for OutboundWebhookLogs.
      */
-    cursor?: WebhookLogWhereUniqueInput
+    cursor?: OutboundWebhookLogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` WebhookLogs from the position of the cursor.
+     * Take `±n` OutboundWebhookLogs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` WebhookLogs.
+     * Skip the first `n` OutboundWebhookLogs.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of WebhookLogs.
+     * Filter by unique combinations of OutboundWebhookLogs.
      */
-    distinct?: WebhookLogScalarFieldEnum | WebhookLogScalarFieldEnum[]
+    distinct?: OutboundWebhookLogScalarFieldEnum | OutboundWebhookLogScalarFieldEnum[]
   }
 
   /**
-   * WebhookLog findMany
+   * OutboundWebhookLog findMany
    */
-  export type WebhookLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OutboundWebhookLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the WebhookLog
+     * Select specific fields to fetch from the OutboundWebhookLog
      */
-    select?: WebhookLogSelect<ExtArgs> | null
+    select?: OutboundWebhookLogSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the WebhookLog
+     * Omit specific fields from the OutboundWebhookLog
      */
-    omit?: WebhookLogOmit<ExtArgs> | null
+    omit?: OutboundWebhookLogOmit<ExtArgs> | null
     /**
-     * Filter, which WebhookLogs to fetch.
+     * Filter, which OutboundWebhookLogs to fetch.
      */
-    where?: WebhookLogWhereInput
+    where?: OutboundWebhookLogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of WebhookLogs to fetch.
+     * Determine the order of OutboundWebhookLogs to fetch.
      */
-    orderBy?: WebhookLogOrderByWithRelationInput | WebhookLogOrderByWithRelationInput[]
+    orderBy?: OutboundWebhookLogOrderByWithRelationInput | OutboundWebhookLogOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing WebhookLogs.
+     * Sets the position for listing OutboundWebhookLogs.
      */
-    cursor?: WebhookLogWhereUniqueInput
+    cursor?: OutboundWebhookLogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` WebhookLogs from the position of the cursor.
+     * Take `±n` OutboundWebhookLogs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` WebhookLogs.
+     * Skip the first `n` OutboundWebhookLogs.
      */
     skip?: number
-    distinct?: WebhookLogScalarFieldEnum | WebhookLogScalarFieldEnum[]
+    distinct?: OutboundWebhookLogScalarFieldEnum | OutboundWebhookLogScalarFieldEnum[]
   }
 
   /**
-   * WebhookLog create
+   * OutboundWebhookLog create
    */
-  export type WebhookLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OutboundWebhookLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the WebhookLog
+     * Select specific fields to fetch from the OutboundWebhookLog
      */
-    select?: WebhookLogSelect<ExtArgs> | null
+    select?: OutboundWebhookLogSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the WebhookLog
+     * Omit specific fields from the OutboundWebhookLog
      */
-    omit?: WebhookLogOmit<ExtArgs> | null
+    omit?: OutboundWebhookLogOmit<ExtArgs> | null
     /**
-     * The data needed to create a WebhookLog.
+     * The data needed to create a OutboundWebhookLog.
      */
-    data: XOR<WebhookLogCreateInput, WebhookLogUncheckedCreateInput>
+    data: XOR<OutboundWebhookLogCreateInput, OutboundWebhookLogUncheckedCreateInput>
   }
 
   /**
-   * WebhookLog createMany
+   * OutboundWebhookLog createMany
    */
-  export type WebhookLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OutboundWebhookLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many WebhookLogs.
+     * The data used to create many OutboundWebhookLogs.
      */
-    data: WebhookLogCreateManyInput | WebhookLogCreateManyInput[]
+    data: OutboundWebhookLogCreateManyInput | OutboundWebhookLogCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * WebhookLog createManyAndReturn
+   * OutboundWebhookLog createManyAndReturn
    */
-  export type WebhookLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OutboundWebhookLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the WebhookLog
+     * Select specific fields to fetch from the OutboundWebhookLog
      */
-    select?: WebhookLogSelectCreateManyAndReturn<ExtArgs> | null
+    select?: OutboundWebhookLogSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the WebhookLog
+     * Omit specific fields from the OutboundWebhookLog
      */
-    omit?: WebhookLogOmit<ExtArgs> | null
+    omit?: OutboundWebhookLogOmit<ExtArgs> | null
     /**
-     * The data used to create many WebhookLogs.
+     * The data used to create many OutboundWebhookLogs.
      */
-    data: WebhookLogCreateManyInput | WebhookLogCreateManyInput[]
+    data: OutboundWebhookLogCreateManyInput | OutboundWebhookLogCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * WebhookLog update
+   * OutboundWebhookLog update
    */
-  export type WebhookLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OutboundWebhookLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the WebhookLog
+     * Select specific fields to fetch from the OutboundWebhookLog
      */
-    select?: WebhookLogSelect<ExtArgs> | null
+    select?: OutboundWebhookLogSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the WebhookLog
+     * Omit specific fields from the OutboundWebhookLog
      */
-    omit?: WebhookLogOmit<ExtArgs> | null
+    omit?: OutboundWebhookLogOmit<ExtArgs> | null
     /**
-     * The data needed to update a WebhookLog.
+     * The data needed to update a OutboundWebhookLog.
      */
-    data: XOR<WebhookLogUpdateInput, WebhookLogUncheckedUpdateInput>
+    data: XOR<OutboundWebhookLogUpdateInput, OutboundWebhookLogUncheckedUpdateInput>
     /**
-     * Choose, which WebhookLog to update.
+     * Choose, which OutboundWebhookLog to update.
      */
-    where: WebhookLogWhereUniqueInput
+    where: OutboundWebhookLogWhereUniqueInput
   }
 
   /**
-   * WebhookLog updateMany
+   * OutboundWebhookLog updateMany
    */
-  export type WebhookLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OutboundWebhookLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update WebhookLogs.
+     * The data used to update OutboundWebhookLogs.
      */
-    data: XOR<WebhookLogUpdateManyMutationInput, WebhookLogUncheckedUpdateManyInput>
+    data: XOR<OutboundWebhookLogUpdateManyMutationInput, OutboundWebhookLogUncheckedUpdateManyInput>
     /**
-     * Filter which WebhookLogs to update
+     * Filter which OutboundWebhookLogs to update
      */
-    where?: WebhookLogWhereInput
+    where?: OutboundWebhookLogWhereInput
     /**
-     * Limit how many WebhookLogs to update.
+     * Limit how many OutboundWebhookLogs to update.
      */
     limit?: number
   }
 
   /**
-   * WebhookLog updateManyAndReturn
+   * OutboundWebhookLog updateManyAndReturn
    */
-  export type WebhookLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OutboundWebhookLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the WebhookLog
+     * Select specific fields to fetch from the OutboundWebhookLog
      */
-    select?: WebhookLogSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: OutboundWebhookLogSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the WebhookLog
+     * Omit specific fields from the OutboundWebhookLog
      */
-    omit?: WebhookLogOmit<ExtArgs> | null
+    omit?: OutboundWebhookLogOmit<ExtArgs> | null
     /**
-     * The data used to update WebhookLogs.
+     * The data used to update OutboundWebhookLogs.
      */
-    data: XOR<WebhookLogUpdateManyMutationInput, WebhookLogUncheckedUpdateManyInput>
+    data: XOR<OutboundWebhookLogUpdateManyMutationInput, OutboundWebhookLogUncheckedUpdateManyInput>
     /**
-     * Filter which WebhookLogs to update
+     * Filter which OutboundWebhookLogs to update
      */
-    where?: WebhookLogWhereInput
+    where?: OutboundWebhookLogWhereInput
     /**
-     * Limit how many WebhookLogs to update.
+     * Limit how many OutboundWebhookLogs to update.
      */
     limit?: number
   }
 
   /**
-   * WebhookLog upsert
+   * OutboundWebhookLog upsert
    */
-  export type WebhookLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OutboundWebhookLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the WebhookLog
+     * Select specific fields to fetch from the OutboundWebhookLog
      */
-    select?: WebhookLogSelect<ExtArgs> | null
+    select?: OutboundWebhookLogSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the WebhookLog
+     * Omit specific fields from the OutboundWebhookLog
      */
-    omit?: WebhookLogOmit<ExtArgs> | null
+    omit?: OutboundWebhookLogOmit<ExtArgs> | null
     /**
-     * The filter to search for the WebhookLog to update in case it exists.
+     * The filter to search for the OutboundWebhookLog to update in case it exists.
      */
-    where: WebhookLogWhereUniqueInput
+    where: OutboundWebhookLogWhereUniqueInput
     /**
-     * In case the WebhookLog found by the `where` argument doesn't exist, create a new WebhookLog with this data.
+     * In case the OutboundWebhookLog found by the `where` argument doesn't exist, create a new OutboundWebhookLog with this data.
      */
-    create: XOR<WebhookLogCreateInput, WebhookLogUncheckedCreateInput>
+    create: XOR<OutboundWebhookLogCreateInput, OutboundWebhookLogUncheckedCreateInput>
     /**
-     * In case the WebhookLog was found with the provided `where` argument, update it with this data.
+     * In case the OutboundWebhookLog was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<WebhookLogUpdateInput, WebhookLogUncheckedUpdateInput>
+    update: XOR<OutboundWebhookLogUpdateInput, OutboundWebhookLogUncheckedUpdateInput>
   }
 
   /**
-   * WebhookLog delete
+   * OutboundWebhookLog delete
    */
-  export type WebhookLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OutboundWebhookLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the WebhookLog
+     * Select specific fields to fetch from the OutboundWebhookLog
      */
-    select?: WebhookLogSelect<ExtArgs> | null
+    select?: OutboundWebhookLogSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the WebhookLog
+     * Omit specific fields from the OutboundWebhookLog
      */
-    omit?: WebhookLogOmit<ExtArgs> | null
+    omit?: OutboundWebhookLogOmit<ExtArgs> | null
     /**
-     * Filter which WebhookLog to delete.
+     * Filter which OutboundWebhookLog to delete.
      */
-    where: WebhookLogWhereUniqueInput
+    where: OutboundWebhookLogWhereUniqueInput
   }
 
   /**
-   * WebhookLog deleteMany
+   * OutboundWebhookLog deleteMany
    */
-  export type WebhookLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OutboundWebhookLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which WebhookLogs to delete
+     * Filter which OutboundWebhookLogs to delete
      */
-    where?: WebhookLogWhereInput
+    where?: OutboundWebhookLogWhereInput
     /**
-     * Limit how many WebhookLogs to delete.
+     * Limit how many OutboundWebhookLogs to delete.
      */
     limit?: number
   }
 
   /**
-   * WebhookLog without action
+   * OutboundWebhookLog without action
    */
-  export type WebhookLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OutboundWebhookLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the WebhookLog
+     * Select specific fields to fetch from the OutboundWebhookLog
      */
-    select?: WebhookLogSelect<ExtArgs> | null
+    select?: OutboundWebhookLogSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the WebhookLog
+     * Omit specific fields from the OutboundWebhookLog
      */
-    omit?: WebhookLogOmit<ExtArgs> | null
+    omit?: OutboundWebhookLogOmit<ExtArgs> | null
   }
 
 
@@ -6818,10 +8434,11 @@ export namespace Prisma {
 
   export const ApplicantScalarFieldEnum: {
     id: 'id',
-    whmcsClientId: 'whmcsClientId',
-    email: 'email',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
+    whmcsClientId: 'whmcsClientId',
+    email: 'email',
+    residency: 'residency',
     latestSessionId: 'latestSessionId'
   };
 
@@ -6830,14 +8447,15 @@ export namespace Prisma {
 
   export const KycSessionScalarFieldEnum: {
     id: 'id',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
     applicantId: 'applicantId',
-    status: 'status',
-    residency: 'residency',
-    issuedAt: 'issuedAt',
+    tokenSalt: 'tokenSalt',
+    tokenHash: 'tokenHash',
     expiresAt: 'expiresAt',
     consumedAt: 'consumedAt',
-    tokenSalt: 'tokenSalt',
-    tokenHash: 'tokenHash'
+    status: 'status',
+    residency: 'residency'
   };
 
   export type KycSessionScalarFieldEnum = (typeof KycSessionScalarFieldEnum)[keyof typeof KycSessionScalarFieldEnum]
@@ -6845,13 +8463,13 @@ export namespace Prisma {
 
   export const DocumentScalarFieldEnum: {
     id: 'id',
+    uploadedAt: 'uploadedAt',
     sessionId: 'sessionId',
     type: 'type',
     objectKey: 'objectKey',
     mime: 'mime',
     bytes: 'bytes',
-    sha256: 'sha256',
-    uploadedAt: 'uploadedAt'
+    sha256: 'sha256'
   };
 
   export type DocumentScalarFieldEnum = (typeof DocumentScalarFieldEnum)[keyof typeof DocumentScalarFieldEnum]
@@ -6859,25 +8477,52 @@ export namespace Prisma {
 
   export const DecisionScalarFieldEnum: {
     id: 'id',
+    createdAt: 'createdAt',
     sessionId: 'sessionId',
     status: 'status',
     reason: 'reason',
-    decidedBy: 'decidedBy',
-    decidedAt: 'decidedAt'
+    decidedBy: 'decidedBy'
   };
 
   export type DecisionScalarFieldEnum = (typeof DecisionScalarFieldEnum)[keyof typeof DecisionScalarFieldEnum]
 
 
-  export const WebhookLogScalarFieldEnum: {
+  export const AuditLogScalarFieldEnum: {
     id: 'id',
-    target: 'target',
-    payload: 'payload',
-    statusCode: 'statusCode',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    event: 'event',
+    severity: 'severity',
+    message: 'message',
+    data: 'data',
+    correlationId: 'correlationId',
+    ip: 'ip',
+    ua: 'ua',
+    actorType: 'actorType',
+    actorId: 'actorId',
+    whmcsClientId: 'whmcsClientId',
+    applicantId: 'applicantId',
+    sessionId: 'sessionId'
   };
 
-  export type WebhookLogScalarFieldEnum = (typeof WebhookLogScalarFieldEnum)[keyof typeof WebhookLogScalarFieldEnum]
+  export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+  export const OutboundWebhookLogScalarFieldEnum: {
+    id: 'id',
+    createdAt: 'createdAt',
+    kind: 'kind',
+    targetUrl: 'targetUrl',
+    event: 'event',
+    payload: 'payload',
+    statusCode: 'statusCode',
+    responseBody: 'responseBody',
+    error: 'error',
+    attempt: 'attempt',
+    maxAttempts: 'maxAttempts',
+    nextAttemptAt: 'nextAttemptAt'
+  };
+
+  export type OutboundWebhookLogScalarFieldEnum = (typeof OutboundWebhookLogScalarFieldEnum)[keyof typeof OutboundWebhookLogScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -6886,6 +8531,14 @@ export namespace Prisma {
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
   export const JsonNullValueInput: {
@@ -6940,20 +8593,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -6968,16 +8607,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'KycStatus'
+   * Reference to a field of type 'Int'
    */
-  export type EnumKycStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KycStatus'>
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
     
 
 
   /**
-   * Reference to a field of type 'KycStatus[]'
+   * Reference to a field of type 'Int[]'
    */
-  export type ListEnumKycStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KycStatus[]'>
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -6996,6 +8635,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'KycStatus'
+   */
+  export type EnumKycStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KycStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'KycStatus[]'
+   */
+  export type ListEnumKycStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KycStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'DocType'
    */
   export type EnumDocTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DocType'>
@@ -7010,6 +8663,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Severity'
+   */
+  export type EnumSeverityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Severity'>
+    
+
+
+  /**
+   * Reference to a field of type 'Severity[]'
+   */
+  export type ListEnumSeverityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Severity[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Json'
    */
   export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -7020,6 +8687,20 @@ export namespace Prisma {
    * Reference to a field of type 'QueryMode'
    */
   export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'ActorType'
+   */
+  export type EnumActorTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ActorType'>
+    
+
+
+  /**
+   * Reference to a field of type 'ActorType[]'
+   */
+  export type ListEnumActorTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ActorType[]'>
     
 
 
@@ -7045,43 +8726,50 @@ export namespace Prisma {
     OR?: ApplicantWhereInput[]
     NOT?: ApplicantWhereInput | ApplicantWhereInput[]
     id?: StringFilter<"Applicant"> | string
-    whmcsClientId?: IntFilter<"Applicant"> | number
-    email?: StringFilter<"Applicant"> | string
     createdAt?: DateTimeFilter<"Applicant"> | Date | string
     updatedAt?: DateTimeFilter<"Applicant"> | Date | string
+    whmcsClientId?: IntFilter<"Applicant"> | number
+    email?: StringFilter<"Applicant"> | string
+    residency?: EnumResidencyNullableFilter<"Applicant"> | $Enums.Residency | null
     latestSessionId?: StringNullableFilter<"Applicant"> | string | null
     latestSession?: XOR<KycSessionNullableScalarRelationFilter, KycSessionWhereInput> | null
+    sessions?: KycSessionListRelationFilter
   }
 
   export type ApplicantOrderByWithRelationInput = {
     id?: SortOrder
-    whmcsClientId?: SortOrder
-    email?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    whmcsClientId?: SortOrder
+    email?: SortOrder
+    residency?: SortOrderInput | SortOrder
     latestSessionId?: SortOrderInput | SortOrder
     latestSession?: KycSessionOrderByWithRelationInput
+    sessions?: KycSessionOrderByRelationAggregateInput
   }
 
   export type ApplicantWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    whmcsClientId?: number
+    latestSessionId?: string
     AND?: ApplicantWhereInput | ApplicantWhereInput[]
     OR?: ApplicantWhereInput[]
     NOT?: ApplicantWhereInput | ApplicantWhereInput[]
-    whmcsClientId?: IntFilter<"Applicant"> | number
-    email?: StringFilter<"Applicant"> | string
     createdAt?: DateTimeFilter<"Applicant"> | Date | string
     updatedAt?: DateTimeFilter<"Applicant"> | Date | string
-    latestSessionId?: StringNullableFilter<"Applicant"> | string | null
+    email?: StringFilter<"Applicant"> | string
+    residency?: EnumResidencyNullableFilter<"Applicant"> | $Enums.Residency | null
     latestSession?: XOR<KycSessionNullableScalarRelationFilter, KycSessionWhereInput> | null
-  }, "id">
+    sessions?: KycSessionListRelationFilter
+  }, "id" | "whmcsClientId" | "latestSessionId">
 
   export type ApplicantOrderByWithAggregationInput = {
     id?: SortOrder
-    whmcsClientId?: SortOrder
-    email?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    whmcsClientId?: SortOrder
+    email?: SortOrder
+    residency?: SortOrderInput | SortOrder
     latestSessionId?: SortOrderInput | SortOrder
     _count?: ApplicantCountOrderByAggregateInput
     _avg?: ApplicantAvgOrderByAggregateInput
@@ -7095,10 +8783,11 @@ export namespace Prisma {
     OR?: ApplicantScalarWhereWithAggregatesInput[]
     NOT?: ApplicantScalarWhereWithAggregatesInput | ApplicantScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Applicant"> | string
-    whmcsClientId?: IntWithAggregatesFilter<"Applicant"> | number
-    email?: StringWithAggregatesFilter<"Applicant"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Applicant"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Applicant"> | Date | string
+    whmcsClientId?: IntWithAggregatesFilter<"Applicant"> | number
+    email?: StringWithAggregatesFilter<"Applicant"> | string
+    residency?: EnumResidencyNullableWithAggregatesFilter<"Applicant"> | $Enums.Residency | null
     latestSessionId?: StringNullableWithAggregatesFilter<"Applicant"> | string | null
   }
 
@@ -7107,62 +8796,72 @@ export namespace Prisma {
     OR?: KycSessionWhereInput[]
     NOT?: KycSessionWhereInput | KycSessionWhereInput[]
     id?: StringFilter<"KycSession"> | string
+    createdAt?: DateTimeFilter<"KycSession"> | Date | string
+    updatedAt?: DateTimeFilter<"KycSession"> | Date | string
     applicantId?: StringFilter<"KycSession"> | string
-    status?: EnumKycStatusFilter<"KycSession"> | $Enums.KycStatus
-    residency?: EnumResidencyNullableFilter<"KycSession"> | $Enums.Residency | null
-    issuedAt?: DateTimeFilter<"KycSession"> | Date | string
-    expiresAt?: DateTimeFilter<"KycSession"> | Date | string
-    consumedAt?: DateTimeNullableFilter<"KycSession"> | Date | string | null
     tokenSalt?: StringFilter<"KycSession"> | string
     tokenHash?: StringFilter<"KycSession"> | string
+    expiresAt?: DateTimeFilter<"KycSession"> | Date | string
+    consumedAt?: DateTimeNullableFilter<"KycSession"> | Date | string | null
+    status?: EnumKycStatusFilter<"KycSession"> | $Enums.KycStatus
+    residency?: EnumResidencyNullableFilter<"KycSession"> | $Enums.Residency | null
     applicant?: XOR<ApplicantScalarRelationFilter, ApplicantWhereInput>
-    decision?: XOR<DecisionNullableScalarRelationFilter, DecisionWhereInput> | null
     documents?: DocumentListRelationFilter
+    decisions?: DecisionListRelationFilter
+    auditLogs?: AuditLogListRelationFilter
+    latestFor?: XOR<ApplicantNullableScalarRelationFilter, ApplicantWhereInput> | null
   }
 
   export type KycSessionOrderByWithRelationInput = {
     id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     applicantId?: SortOrder
-    status?: SortOrder
-    residency?: SortOrderInput | SortOrder
-    issuedAt?: SortOrder
-    expiresAt?: SortOrder
-    consumedAt?: SortOrderInput | SortOrder
     tokenSalt?: SortOrder
     tokenHash?: SortOrder
+    expiresAt?: SortOrder
+    consumedAt?: SortOrderInput | SortOrder
+    status?: SortOrder
+    residency?: SortOrderInput | SortOrder
     applicant?: ApplicantOrderByWithRelationInput
-    decision?: DecisionOrderByWithRelationInput
     documents?: DocumentOrderByRelationAggregateInput
+    decisions?: DecisionOrderByRelationAggregateInput
+    auditLogs?: AuditLogOrderByRelationAggregateInput
+    latestFor?: ApplicantOrderByWithRelationInput
   }
 
   export type KycSessionWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    applicantId?: string
     AND?: KycSessionWhereInput | KycSessionWhereInput[]
     OR?: KycSessionWhereInput[]
     NOT?: KycSessionWhereInput | KycSessionWhereInput[]
-    status?: EnumKycStatusFilter<"KycSession"> | $Enums.KycStatus
-    residency?: EnumResidencyNullableFilter<"KycSession"> | $Enums.Residency | null
-    issuedAt?: DateTimeFilter<"KycSession"> | Date | string
-    expiresAt?: DateTimeFilter<"KycSession"> | Date | string
-    consumedAt?: DateTimeNullableFilter<"KycSession"> | Date | string | null
+    createdAt?: DateTimeFilter<"KycSession"> | Date | string
+    updatedAt?: DateTimeFilter<"KycSession"> | Date | string
+    applicantId?: StringFilter<"KycSession"> | string
     tokenSalt?: StringFilter<"KycSession"> | string
     tokenHash?: StringFilter<"KycSession"> | string
+    expiresAt?: DateTimeFilter<"KycSession"> | Date | string
+    consumedAt?: DateTimeNullableFilter<"KycSession"> | Date | string | null
+    status?: EnumKycStatusFilter<"KycSession"> | $Enums.KycStatus
+    residency?: EnumResidencyNullableFilter<"KycSession"> | $Enums.Residency | null
     applicant?: XOR<ApplicantScalarRelationFilter, ApplicantWhereInput>
-    decision?: XOR<DecisionNullableScalarRelationFilter, DecisionWhereInput> | null
     documents?: DocumentListRelationFilter
-  }, "id" | "applicantId">
+    decisions?: DecisionListRelationFilter
+    auditLogs?: AuditLogListRelationFilter
+    latestFor?: XOR<ApplicantNullableScalarRelationFilter, ApplicantWhereInput> | null
+  }, "id">
 
   export type KycSessionOrderByWithAggregationInput = {
     id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     applicantId?: SortOrder
-    status?: SortOrder
-    residency?: SortOrderInput | SortOrder
-    issuedAt?: SortOrder
-    expiresAt?: SortOrder
-    consumedAt?: SortOrderInput | SortOrder
     tokenSalt?: SortOrder
     tokenHash?: SortOrder
+    expiresAt?: SortOrder
+    consumedAt?: SortOrderInput | SortOrder
+    status?: SortOrder
+    residency?: SortOrderInput | SortOrder
     _count?: KycSessionCountOrderByAggregateInput
     _max?: KycSessionMaxOrderByAggregateInput
     _min?: KycSessionMinOrderByAggregateInput
@@ -7173,14 +8872,15 @@ export namespace Prisma {
     OR?: KycSessionScalarWhereWithAggregatesInput[]
     NOT?: KycSessionScalarWhereWithAggregatesInput | KycSessionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"KycSession"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"KycSession"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"KycSession"> | Date | string
     applicantId?: StringWithAggregatesFilter<"KycSession"> | string
-    status?: EnumKycStatusWithAggregatesFilter<"KycSession"> | $Enums.KycStatus
-    residency?: EnumResidencyNullableWithAggregatesFilter<"KycSession"> | $Enums.Residency | null
-    issuedAt?: DateTimeWithAggregatesFilter<"KycSession"> | Date | string
-    expiresAt?: DateTimeWithAggregatesFilter<"KycSession"> | Date | string
-    consumedAt?: DateTimeNullableWithAggregatesFilter<"KycSession"> | Date | string | null
     tokenSalt?: StringWithAggregatesFilter<"KycSession"> | string
     tokenHash?: StringWithAggregatesFilter<"KycSession"> | string
+    expiresAt?: DateTimeWithAggregatesFilter<"KycSession"> | Date | string
+    consumedAt?: DateTimeNullableWithAggregatesFilter<"KycSession"> | Date | string | null
+    status?: EnumKycStatusWithAggregatesFilter<"KycSession"> | $Enums.KycStatus
+    residency?: EnumResidencyNullableWithAggregatesFilter<"KycSession"> | $Enums.Residency | null
   }
 
   export type DocumentWhereInput = {
@@ -7188,25 +8888,25 @@ export namespace Prisma {
     OR?: DocumentWhereInput[]
     NOT?: DocumentWhereInput | DocumentWhereInput[]
     id?: StringFilter<"Document"> | string
+    uploadedAt?: DateTimeFilter<"Document"> | Date | string
     sessionId?: StringFilter<"Document"> | string
     type?: EnumDocTypeFilter<"Document"> | $Enums.DocType
     objectKey?: StringFilter<"Document"> | string
     mime?: StringFilter<"Document"> | string
     bytes?: IntFilter<"Document"> | number
     sha256?: StringFilter<"Document"> | string
-    uploadedAt?: DateTimeFilter<"Document"> | Date | string
     session?: XOR<KycSessionScalarRelationFilter, KycSessionWhereInput>
   }
 
   export type DocumentOrderByWithRelationInput = {
     id?: SortOrder
+    uploadedAt?: SortOrder
     sessionId?: SortOrder
     type?: SortOrder
     objectKey?: SortOrder
     mime?: SortOrder
     bytes?: SortOrder
     sha256?: SortOrder
-    uploadedAt?: SortOrder
     session?: KycSessionOrderByWithRelationInput
   }
 
@@ -7215,25 +8915,25 @@ export namespace Prisma {
     AND?: DocumentWhereInput | DocumentWhereInput[]
     OR?: DocumentWhereInput[]
     NOT?: DocumentWhereInput | DocumentWhereInput[]
+    uploadedAt?: DateTimeFilter<"Document"> | Date | string
     sessionId?: StringFilter<"Document"> | string
     type?: EnumDocTypeFilter<"Document"> | $Enums.DocType
     objectKey?: StringFilter<"Document"> | string
     mime?: StringFilter<"Document"> | string
     bytes?: IntFilter<"Document"> | number
     sha256?: StringFilter<"Document"> | string
-    uploadedAt?: DateTimeFilter<"Document"> | Date | string
     session?: XOR<KycSessionScalarRelationFilter, KycSessionWhereInput>
   }, "id">
 
   export type DocumentOrderByWithAggregationInput = {
     id?: SortOrder
+    uploadedAt?: SortOrder
     sessionId?: SortOrder
     type?: SortOrder
     objectKey?: SortOrder
     mime?: SortOrder
     bytes?: SortOrder
     sha256?: SortOrder
-    uploadedAt?: SortOrder
     _count?: DocumentCountOrderByAggregateInput
     _avg?: DocumentAvgOrderByAggregateInput
     _max?: DocumentMaxOrderByAggregateInput
@@ -7246,13 +8946,13 @@ export namespace Prisma {
     OR?: DocumentScalarWhereWithAggregatesInput[]
     NOT?: DocumentScalarWhereWithAggregatesInput | DocumentScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Document"> | string
+    uploadedAt?: DateTimeWithAggregatesFilter<"Document"> | Date | string
     sessionId?: StringWithAggregatesFilter<"Document"> | string
     type?: EnumDocTypeWithAggregatesFilter<"Document"> | $Enums.DocType
     objectKey?: StringWithAggregatesFilter<"Document"> | string
     mime?: StringWithAggregatesFilter<"Document"> | string
     bytes?: IntWithAggregatesFilter<"Document"> | number
     sha256?: StringWithAggregatesFilter<"Document"> | string
-    uploadedAt?: DateTimeWithAggregatesFilter<"Document"> | Date | string
   }
 
   export type DecisionWhereInput = {
@@ -7260,44 +8960,44 @@ export namespace Prisma {
     OR?: DecisionWhereInput[]
     NOT?: DecisionWhereInput | DecisionWhereInput[]
     id?: StringFilter<"Decision"> | string
+    createdAt?: DateTimeFilter<"Decision"> | Date | string
     sessionId?: StringFilter<"Decision"> | string
     status?: EnumKycStatusFilter<"Decision"> | $Enums.KycStatus
     reason?: StringNullableFilter<"Decision"> | string | null
-    decidedBy?: StringNullableFilter<"Decision"> | string | null
-    decidedAt?: DateTimeFilter<"Decision"> | Date | string
+    decidedBy?: StringFilter<"Decision"> | string
     session?: XOR<KycSessionScalarRelationFilter, KycSessionWhereInput>
   }
 
   export type DecisionOrderByWithRelationInput = {
     id?: SortOrder
+    createdAt?: SortOrder
     sessionId?: SortOrder
     status?: SortOrder
     reason?: SortOrderInput | SortOrder
-    decidedBy?: SortOrderInput | SortOrder
-    decidedAt?: SortOrder
+    decidedBy?: SortOrder
     session?: KycSessionOrderByWithRelationInput
   }
 
   export type DecisionWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    sessionId?: string
     AND?: DecisionWhereInput | DecisionWhereInput[]
     OR?: DecisionWhereInput[]
     NOT?: DecisionWhereInput | DecisionWhereInput[]
+    createdAt?: DateTimeFilter<"Decision"> | Date | string
+    sessionId?: StringFilter<"Decision"> | string
     status?: EnumKycStatusFilter<"Decision"> | $Enums.KycStatus
     reason?: StringNullableFilter<"Decision"> | string | null
-    decidedBy?: StringNullableFilter<"Decision"> | string | null
-    decidedAt?: DateTimeFilter<"Decision"> | Date | string
+    decidedBy?: StringFilter<"Decision"> | string
     session?: XOR<KycSessionScalarRelationFilter, KycSessionWhereInput>
-  }, "id" | "sessionId">
+  }, "id">
 
   export type DecisionOrderByWithAggregationInput = {
     id?: SortOrder
+    createdAt?: SortOrder
     sessionId?: SortOrder
     status?: SortOrder
     reason?: SortOrderInput | SortOrder
-    decidedBy?: SortOrderInput | SortOrder
-    decidedAt?: SortOrder
+    decidedBy?: SortOrder
     _count?: DecisionCountOrderByAggregateInput
     _max?: DecisionMaxOrderByAggregateInput
     _min?: DecisionMinOrderByAggregateInput
@@ -7308,417 +9008,742 @@ export namespace Prisma {
     OR?: DecisionScalarWhereWithAggregatesInput[]
     NOT?: DecisionScalarWhereWithAggregatesInput | DecisionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Decision"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Decision"> | Date | string
     sessionId?: StringWithAggregatesFilter<"Decision"> | string
     status?: EnumKycStatusWithAggregatesFilter<"Decision"> | $Enums.KycStatus
     reason?: StringNullableWithAggregatesFilter<"Decision"> | string | null
-    decidedBy?: StringNullableWithAggregatesFilter<"Decision"> | string | null
-    decidedAt?: DateTimeWithAggregatesFilter<"Decision"> | Date | string
+    decidedBy?: StringWithAggregatesFilter<"Decision"> | string
   }
 
-  export type WebhookLogWhereInput = {
-    AND?: WebhookLogWhereInput | WebhookLogWhereInput[]
-    OR?: WebhookLogWhereInput[]
-    NOT?: WebhookLogWhereInput | WebhookLogWhereInput[]
-    id?: StringFilter<"WebhookLog"> | string
-    target?: StringFilter<"WebhookLog"> | string
-    payload?: JsonFilter<"WebhookLog">
-    statusCode?: IntFilter<"WebhookLog"> | number
-    createdAt?: DateTimeFilter<"WebhookLog"> | Date | string
+  export type AuditLogWhereInput = {
+    AND?: AuditLogWhereInput | AuditLogWhereInput[]
+    OR?: AuditLogWhereInput[]
+    NOT?: AuditLogWhereInput | AuditLogWhereInput[]
+    id?: StringFilter<"AuditLog"> | string
+    createdAt?: DateTimeFilter<"AuditLog"> | Date | string
+    event?: StringFilter<"AuditLog"> | string
+    severity?: EnumSeverityFilter<"AuditLog"> | $Enums.Severity
+    message?: StringNullableFilter<"AuditLog"> | string | null
+    data?: JsonNullableFilter<"AuditLog">
+    correlationId?: StringNullableFilter<"AuditLog"> | string | null
+    ip?: StringNullableFilter<"AuditLog"> | string | null
+    ua?: StringNullableFilter<"AuditLog"> | string | null
+    actorType?: EnumActorTypeFilter<"AuditLog"> | $Enums.ActorType
+    actorId?: StringNullableFilter<"AuditLog"> | string | null
+    whmcsClientId?: IntNullableFilter<"AuditLog"> | number | null
+    applicantId?: StringNullableFilter<"AuditLog"> | string | null
+    sessionId?: StringNullableFilter<"AuditLog"> | string | null
+    session?: XOR<KycSessionNullableScalarRelationFilter, KycSessionWhereInput> | null
   }
 
-  export type WebhookLogOrderByWithRelationInput = {
+  export type AuditLogOrderByWithRelationInput = {
     id?: SortOrder
-    target?: SortOrder
-    payload?: SortOrder
-    statusCode?: SortOrder
     createdAt?: SortOrder
+    event?: SortOrder
+    severity?: SortOrder
+    message?: SortOrderInput | SortOrder
+    data?: SortOrderInput | SortOrder
+    correlationId?: SortOrderInput | SortOrder
+    ip?: SortOrderInput | SortOrder
+    ua?: SortOrderInput | SortOrder
+    actorType?: SortOrder
+    actorId?: SortOrderInput | SortOrder
+    whmcsClientId?: SortOrderInput | SortOrder
+    applicantId?: SortOrderInput | SortOrder
+    sessionId?: SortOrderInput | SortOrder
+    session?: KycSessionOrderByWithRelationInput
   }
 
-  export type WebhookLogWhereUniqueInput = Prisma.AtLeast<{
+  export type AuditLogWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    AND?: WebhookLogWhereInput | WebhookLogWhereInput[]
-    OR?: WebhookLogWhereInput[]
-    NOT?: WebhookLogWhereInput | WebhookLogWhereInput[]
-    target?: StringFilter<"WebhookLog"> | string
-    payload?: JsonFilter<"WebhookLog">
-    statusCode?: IntFilter<"WebhookLog"> | number
-    createdAt?: DateTimeFilter<"WebhookLog"> | Date | string
+    AND?: AuditLogWhereInput | AuditLogWhereInput[]
+    OR?: AuditLogWhereInput[]
+    NOT?: AuditLogWhereInput | AuditLogWhereInput[]
+    createdAt?: DateTimeFilter<"AuditLog"> | Date | string
+    event?: StringFilter<"AuditLog"> | string
+    severity?: EnumSeverityFilter<"AuditLog"> | $Enums.Severity
+    message?: StringNullableFilter<"AuditLog"> | string | null
+    data?: JsonNullableFilter<"AuditLog">
+    correlationId?: StringNullableFilter<"AuditLog"> | string | null
+    ip?: StringNullableFilter<"AuditLog"> | string | null
+    ua?: StringNullableFilter<"AuditLog"> | string | null
+    actorType?: EnumActorTypeFilter<"AuditLog"> | $Enums.ActorType
+    actorId?: StringNullableFilter<"AuditLog"> | string | null
+    whmcsClientId?: IntNullableFilter<"AuditLog"> | number | null
+    applicantId?: StringNullableFilter<"AuditLog"> | string | null
+    sessionId?: StringNullableFilter<"AuditLog"> | string | null
+    session?: XOR<KycSessionNullableScalarRelationFilter, KycSessionWhereInput> | null
   }, "id">
 
-  export type WebhookLogOrderByWithAggregationInput = {
+  export type AuditLogOrderByWithAggregationInput = {
     id?: SortOrder
-    target?: SortOrder
-    payload?: SortOrder
-    statusCode?: SortOrder
     createdAt?: SortOrder
-    _count?: WebhookLogCountOrderByAggregateInput
-    _avg?: WebhookLogAvgOrderByAggregateInput
-    _max?: WebhookLogMaxOrderByAggregateInput
-    _min?: WebhookLogMinOrderByAggregateInput
-    _sum?: WebhookLogSumOrderByAggregateInput
+    event?: SortOrder
+    severity?: SortOrder
+    message?: SortOrderInput | SortOrder
+    data?: SortOrderInput | SortOrder
+    correlationId?: SortOrderInput | SortOrder
+    ip?: SortOrderInput | SortOrder
+    ua?: SortOrderInput | SortOrder
+    actorType?: SortOrder
+    actorId?: SortOrderInput | SortOrder
+    whmcsClientId?: SortOrderInput | SortOrder
+    applicantId?: SortOrderInput | SortOrder
+    sessionId?: SortOrderInput | SortOrder
+    _count?: AuditLogCountOrderByAggregateInput
+    _avg?: AuditLogAvgOrderByAggregateInput
+    _max?: AuditLogMaxOrderByAggregateInput
+    _min?: AuditLogMinOrderByAggregateInput
+    _sum?: AuditLogSumOrderByAggregateInput
   }
 
-  export type WebhookLogScalarWhereWithAggregatesInput = {
-    AND?: WebhookLogScalarWhereWithAggregatesInput | WebhookLogScalarWhereWithAggregatesInput[]
-    OR?: WebhookLogScalarWhereWithAggregatesInput[]
-    NOT?: WebhookLogScalarWhereWithAggregatesInput | WebhookLogScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"WebhookLog"> | string
-    target?: StringWithAggregatesFilter<"WebhookLog"> | string
-    payload?: JsonWithAggregatesFilter<"WebhookLog">
-    statusCode?: IntWithAggregatesFilter<"WebhookLog"> | number
-    createdAt?: DateTimeWithAggregatesFilter<"WebhookLog"> | Date | string
+  export type AuditLogScalarWhereWithAggregatesInput = {
+    AND?: AuditLogScalarWhereWithAggregatesInput | AuditLogScalarWhereWithAggregatesInput[]
+    OR?: AuditLogScalarWhereWithAggregatesInput[]
+    NOT?: AuditLogScalarWhereWithAggregatesInput | AuditLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AuditLog"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"AuditLog"> | Date | string
+    event?: StringWithAggregatesFilter<"AuditLog"> | string
+    severity?: EnumSeverityWithAggregatesFilter<"AuditLog"> | $Enums.Severity
+    message?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+    data?: JsonNullableWithAggregatesFilter<"AuditLog">
+    correlationId?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+    ip?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+    ua?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+    actorType?: EnumActorTypeWithAggregatesFilter<"AuditLog"> | $Enums.ActorType
+    actorId?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+    whmcsClientId?: IntNullableWithAggregatesFilter<"AuditLog"> | number | null
+    applicantId?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+    sessionId?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+  }
+
+  export type OutboundWebhookLogWhereInput = {
+    AND?: OutboundWebhookLogWhereInput | OutboundWebhookLogWhereInput[]
+    OR?: OutboundWebhookLogWhereInput[]
+    NOT?: OutboundWebhookLogWhereInput | OutboundWebhookLogWhereInput[]
+    id?: StringFilter<"OutboundWebhookLog"> | string
+    createdAt?: DateTimeFilter<"OutboundWebhookLog"> | Date | string
+    kind?: StringFilter<"OutboundWebhookLog"> | string
+    targetUrl?: StringFilter<"OutboundWebhookLog"> | string
+    event?: StringFilter<"OutboundWebhookLog"> | string
+    payload?: JsonFilter<"OutboundWebhookLog">
+    statusCode?: IntNullableFilter<"OutboundWebhookLog"> | number | null
+    responseBody?: StringNullableFilter<"OutboundWebhookLog"> | string | null
+    error?: StringNullableFilter<"OutboundWebhookLog"> | string | null
+    attempt?: IntFilter<"OutboundWebhookLog"> | number
+    maxAttempts?: IntFilter<"OutboundWebhookLog"> | number
+    nextAttemptAt?: DateTimeNullableFilter<"OutboundWebhookLog"> | Date | string | null
+  }
+
+  export type OutboundWebhookLogOrderByWithRelationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    kind?: SortOrder
+    targetUrl?: SortOrder
+    event?: SortOrder
+    payload?: SortOrder
+    statusCode?: SortOrderInput | SortOrder
+    responseBody?: SortOrderInput | SortOrder
+    error?: SortOrderInput | SortOrder
+    attempt?: SortOrder
+    maxAttempts?: SortOrder
+    nextAttemptAt?: SortOrderInput | SortOrder
+  }
+
+  export type OutboundWebhookLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: OutboundWebhookLogWhereInput | OutboundWebhookLogWhereInput[]
+    OR?: OutboundWebhookLogWhereInput[]
+    NOT?: OutboundWebhookLogWhereInput | OutboundWebhookLogWhereInput[]
+    createdAt?: DateTimeFilter<"OutboundWebhookLog"> | Date | string
+    kind?: StringFilter<"OutboundWebhookLog"> | string
+    targetUrl?: StringFilter<"OutboundWebhookLog"> | string
+    event?: StringFilter<"OutboundWebhookLog"> | string
+    payload?: JsonFilter<"OutboundWebhookLog">
+    statusCode?: IntNullableFilter<"OutboundWebhookLog"> | number | null
+    responseBody?: StringNullableFilter<"OutboundWebhookLog"> | string | null
+    error?: StringNullableFilter<"OutboundWebhookLog"> | string | null
+    attempt?: IntFilter<"OutboundWebhookLog"> | number
+    maxAttempts?: IntFilter<"OutboundWebhookLog"> | number
+    nextAttemptAt?: DateTimeNullableFilter<"OutboundWebhookLog"> | Date | string | null
+  }, "id">
+
+  export type OutboundWebhookLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    kind?: SortOrder
+    targetUrl?: SortOrder
+    event?: SortOrder
+    payload?: SortOrder
+    statusCode?: SortOrderInput | SortOrder
+    responseBody?: SortOrderInput | SortOrder
+    error?: SortOrderInput | SortOrder
+    attempt?: SortOrder
+    maxAttempts?: SortOrder
+    nextAttemptAt?: SortOrderInput | SortOrder
+    _count?: OutboundWebhookLogCountOrderByAggregateInput
+    _avg?: OutboundWebhookLogAvgOrderByAggregateInput
+    _max?: OutboundWebhookLogMaxOrderByAggregateInput
+    _min?: OutboundWebhookLogMinOrderByAggregateInput
+    _sum?: OutboundWebhookLogSumOrderByAggregateInput
+  }
+
+  export type OutboundWebhookLogScalarWhereWithAggregatesInput = {
+    AND?: OutboundWebhookLogScalarWhereWithAggregatesInput | OutboundWebhookLogScalarWhereWithAggregatesInput[]
+    OR?: OutboundWebhookLogScalarWhereWithAggregatesInput[]
+    NOT?: OutboundWebhookLogScalarWhereWithAggregatesInput | OutboundWebhookLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"OutboundWebhookLog"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"OutboundWebhookLog"> | Date | string
+    kind?: StringWithAggregatesFilter<"OutboundWebhookLog"> | string
+    targetUrl?: StringWithAggregatesFilter<"OutboundWebhookLog"> | string
+    event?: StringWithAggregatesFilter<"OutboundWebhookLog"> | string
+    payload?: JsonWithAggregatesFilter<"OutboundWebhookLog">
+    statusCode?: IntNullableWithAggregatesFilter<"OutboundWebhookLog"> | number | null
+    responseBody?: StringNullableWithAggregatesFilter<"OutboundWebhookLog"> | string | null
+    error?: StringNullableWithAggregatesFilter<"OutboundWebhookLog"> | string | null
+    attempt?: IntWithAggregatesFilter<"OutboundWebhookLog"> | number
+    maxAttempts?: IntWithAggregatesFilter<"OutboundWebhookLog"> | number
+    nextAttemptAt?: DateTimeNullableWithAggregatesFilter<"OutboundWebhookLog"> | Date | string | null
   }
 
   export type ApplicantCreateInput = {
     id?: string
-    whmcsClientId: number
-    email: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    latestSessionId?: string | null
-    latestSession?: KycSessionCreateNestedOneWithoutApplicantInput
+    whmcsClientId: number
+    email: string
+    residency?: $Enums.Residency | null
+    latestSession?: KycSessionCreateNestedOneWithoutLatestForInput
+    sessions?: KycSessionCreateNestedManyWithoutApplicantInput
   }
 
   export type ApplicantUncheckedCreateInput = {
     id?: string
-    whmcsClientId: number
-    email: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    whmcsClientId: number
+    email: string
+    residency?: $Enums.Residency | null
     latestSessionId?: string | null
-    latestSession?: KycSessionUncheckedCreateNestedOneWithoutApplicantInput
+    sessions?: KycSessionUncheckedCreateNestedManyWithoutApplicantInput
   }
 
   export type ApplicantUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    whmcsClientId?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    latestSessionId?: NullableStringFieldUpdateOperationsInput | string | null
-    latestSession?: KycSessionUpdateOneWithoutApplicantNestedInput
+    whmcsClientId?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
+    latestSession?: KycSessionUpdateOneWithoutLatestForNestedInput
+    sessions?: KycSessionUpdateManyWithoutApplicantNestedInput
   }
 
   export type ApplicantUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    whmcsClientId?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    whmcsClientId?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
     latestSessionId?: NullableStringFieldUpdateOperationsInput | string | null
-    latestSession?: KycSessionUncheckedUpdateOneWithoutApplicantNestedInput
+    sessions?: KycSessionUncheckedUpdateManyWithoutApplicantNestedInput
   }
 
   export type ApplicantCreateManyInput = {
     id?: string
-    whmcsClientId: number
-    email: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    whmcsClientId: number
+    email: string
+    residency?: $Enums.Residency | null
     latestSessionId?: string | null
   }
 
   export type ApplicantUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    whmcsClientId?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    latestSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    whmcsClientId?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
   }
 
   export type ApplicantUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    whmcsClientId?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    whmcsClientId?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
     latestSessionId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type KycSessionCreateInput = {
     id?: string
-    status?: $Enums.KycStatus
-    residency?: $Enums.Residency | null
-    issuedAt?: Date | string
-    expiresAt: Date | string
-    consumedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     tokenSalt: string
     tokenHash: string
-    applicant: ApplicantCreateNestedOneWithoutLatestSessionInput
-    decision?: DecisionCreateNestedOneWithoutSessionInput
+    expiresAt: Date | string
+    consumedAt?: Date | string | null
+    status?: $Enums.KycStatus
+    residency?: $Enums.Residency | null
+    applicant: ApplicantCreateNestedOneWithoutSessionsInput
     documents?: DocumentCreateNestedManyWithoutSessionInput
+    decisions?: DecisionCreateNestedManyWithoutSessionInput
+    auditLogs?: AuditLogCreateNestedManyWithoutSessionInput
+    latestFor?: ApplicantCreateNestedOneWithoutLatestSessionInput
   }
 
   export type KycSessionUncheckedCreateInput = {
     id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     applicantId: string
-    status?: $Enums.KycStatus
-    residency?: $Enums.Residency | null
-    issuedAt?: Date | string
-    expiresAt: Date | string
-    consumedAt?: Date | string | null
     tokenSalt: string
     tokenHash: string
-    decision?: DecisionUncheckedCreateNestedOneWithoutSessionInput
+    expiresAt: Date | string
+    consumedAt?: Date | string | null
+    status?: $Enums.KycStatus
+    residency?: $Enums.Residency | null
     documents?: DocumentUncheckedCreateNestedManyWithoutSessionInput
+    decisions?: DecisionUncheckedCreateNestedManyWithoutSessionInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutSessionInput
+    latestFor?: ApplicantUncheckedCreateNestedOneWithoutLatestSessionInput
   }
 
   export type KycSessionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
-    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
-    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tokenSalt?: StringFieldUpdateOperationsInput | string
     tokenHash?: StringFieldUpdateOperationsInput | string
-    applicant?: ApplicantUpdateOneRequiredWithoutLatestSessionNestedInput
-    decision?: DecisionUpdateOneWithoutSessionNestedInput
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
+    applicant?: ApplicantUpdateOneRequiredWithoutSessionsNestedInput
     documents?: DocumentUpdateManyWithoutSessionNestedInput
+    decisions?: DecisionUpdateManyWithoutSessionNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutSessionNestedInput
+    latestFor?: ApplicantUpdateOneWithoutLatestSessionNestedInput
   }
 
   export type KycSessionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applicantId?: StringFieldUpdateOperationsInput | string
-    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
-    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
-    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tokenSalt?: StringFieldUpdateOperationsInput | string
     tokenHash?: StringFieldUpdateOperationsInput | string
-    decision?: DecisionUncheckedUpdateOneWithoutSessionNestedInput
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
     documents?: DocumentUncheckedUpdateManyWithoutSessionNestedInput
+    decisions?: DecisionUncheckedUpdateManyWithoutSessionNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutSessionNestedInput
+    latestFor?: ApplicantUncheckedUpdateOneWithoutLatestSessionNestedInput
   }
 
   export type KycSessionCreateManyInput = {
     id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     applicantId: string
-    status?: $Enums.KycStatus
-    residency?: $Enums.Residency | null
-    issuedAt?: Date | string
-    expiresAt: Date | string
-    consumedAt?: Date | string | null
     tokenSalt: string
     tokenHash: string
+    expiresAt: Date | string
+    consumedAt?: Date | string | null
+    status?: $Enums.KycStatus
+    residency?: $Enums.Residency | null
   }
 
   export type KycSessionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
-    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
-    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tokenSalt?: StringFieldUpdateOperationsInput | string
     tokenHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
   }
 
   export type KycSessionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applicantId?: StringFieldUpdateOperationsInput | string
-    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
-    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
-    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tokenSalt?: StringFieldUpdateOperationsInput | string
     tokenHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
   }
 
   export type DocumentCreateInput = {
     id?: string
+    uploadedAt?: Date | string
     type: $Enums.DocType
     objectKey: string
     mime: string
     bytes: number
     sha256: string
-    uploadedAt?: Date | string
     session: KycSessionCreateNestedOneWithoutDocumentsInput
   }
 
   export type DocumentUncheckedCreateInput = {
     id?: string
+    uploadedAt?: Date | string
     sessionId: string
     type: $Enums.DocType
     objectKey: string
     mime: string
     bytes: number
     sha256: string
-    uploadedAt?: Date | string
   }
 
   export type DocumentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumDocTypeFieldUpdateOperationsInput | $Enums.DocType
     objectKey?: StringFieldUpdateOperationsInput | string
     mime?: StringFieldUpdateOperationsInput | string
     bytes?: IntFieldUpdateOperationsInput | number
     sha256?: StringFieldUpdateOperationsInput | string
-    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     session?: KycSessionUpdateOneRequiredWithoutDocumentsNestedInput
   }
 
   export type DocumentUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionId?: StringFieldUpdateOperationsInput | string
     type?: EnumDocTypeFieldUpdateOperationsInput | $Enums.DocType
     objectKey?: StringFieldUpdateOperationsInput | string
     mime?: StringFieldUpdateOperationsInput | string
     bytes?: IntFieldUpdateOperationsInput | number
     sha256?: StringFieldUpdateOperationsInput | string
-    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DocumentCreateManyInput = {
     id?: string
+    uploadedAt?: Date | string
     sessionId: string
     type: $Enums.DocType
     objectKey: string
     mime: string
     bytes: number
     sha256: string
-    uploadedAt?: Date | string
   }
 
   export type DocumentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumDocTypeFieldUpdateOperationsInput | $Enums.DocType
     objectKey?: StringFieldUpdateOperationsInput | string
     mime?: StringFieldUpdateOperationsInput | string
     bytes?: IntFieldUpdateOperationsInput | number
     sha256?: StringFieldUpdateOperationsInput | string
-    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DocumentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionId?: StringFieldUpdateOperationsInput | string
     type?: EnumDocTypeFieldUpdateOperationsInput | $Enums.DocType
     objectKey?: StringFieldUpdateOperationsInput | string
     mime?: StringFieldUpdateOperationsInput | string
     bytes?: IntFieldUpdateOperationsInput | number
     sha256?: StringFieldUpdateOperationsInput | string
-    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DecisionCreateInput = {
     id?: string
+    createdAt?: Date | string
     status: $Enums.KycStatus
     reason?: string | null
-    decidedBy?: string | null
-    decidedAt?: Date | string
-    session: KycSessionCreateNestedOneWithoutDecisionInput
+    decidedBy: string
+    session: KycSessionCreateNestedOneWithoutDecisionsInput
   }
 
   export type DecisionUncheckedCreateInput = {
     id?: string
+    createdAt?: Date | string
     sessionId: string
     status: $Enums.KycStatus
     reason?: string | null
-    decidedBy?: string | null
-    decidedAt?: Date | string
+    decidedBy: string
   }
 
   export type DecisionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
     reason?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    session?: KycSessionUpdateOneRequiredWithoutDecisionNestedInput
+    decidedBy?: StringFieldUpdateOperationsInput | string
+    session?: KycSessionUpdateOneRequiredWithoutDecisionsNestedInput
   }
 
   export type DecisionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionId?: StringFieldUpdateOperationsInput | string
     status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
     reason?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    decidedBy?: StringFieldUpdateOperationsInput | string
   }
 
   export type DecisionCreateManyInput = {
     id?: string
+    createdAt?: Date | string
     sessionId: string
     status: $Enums.KycStatus
     reason?: string | null
-    decidedBy?: string | null
-    decidedAt?: Date | string
+    decidedBy: string
   }
 
   export type DecisionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
     reason?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    decidedBy?: StringFieldUpdateOperationsInput | string
   }
 
   export type DecisionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionId?: StringFieldUpdateOperationsInput | string
     status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
     reason?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    decidedBy?: StringFieldUpdateOperationsInput | string
   }
 
-  export type WebhookLogCreateInput = {
+  export type AuditLogCreateInput = {
     id?: string
-    target: string
-    payload: JsonNullValueInput | InputJsonValue
-    statusCode: number
     createdAt?: Date | string
+    event: string
+    severity?: $Enums.Severity
+    message?: string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    correlationId?: string | null
+    ip?: string | null
+    ua?: string | null
+    actorType?: $Enums.ActorType
+    actorId?: string | null
+    whmcsClientId?: number | null
+    applicantId?: string | null
+    session?: KycSessionCreateNestedOneWithoutAuditLogsInput
   }
 
-  export type WebhookLogUncheckedCreateInput = {
+  export type AuditLogUncheckedCreateInput = {
     id?: string
-    target: string
-    payload: JsonNullValueInput | InputJsonValue
-    statusCode: number
     createdAt?: Date | string
+    event: string
+    severity?: $Enums.Severity
+    message?: string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    correlationId?: string | null
+    ip?: string | null
+    ua?: string | null
+    actorType?: $Enums.ActorType
+    actorId?: string | null
+    whmcsClientId?: number | null
+    applicantId?: string | null
+    sessionId?: string | null
   }
 
-  export type WebhookLogUpdateInput = {
+  export type AuditLogUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    target?: StringFieldUpdateOperationsInput | string
-    payload?: JsonNullValueInput | InputJsonValue
-    statusCode?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: StringFieldUpdateOperationsInput | string
+    severity?: EnumSeverityFieldUpdateOperationsInput | $Enums.Severity
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    correlationId?: NullableStringFieldUpdateOperationsInput | string | null
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    ua?: NullableStringFieldUpdateOperationsInput | string | null
+    actorType?: EnumActorTypeFieldUpdateOperationsInput | $Enums.ActorType
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    whmcsClientId?: NullableIntFieldUpdateOperationsInput | number | null
+    applicantId?: NullableStringFieldUpdateOperationsInput | string | null
+    session?: KycSessionUpdateOneWithoutAuditLogsNestedInput
   }
 
-  export type WebhookLogUncheckedUpdateInput = {
+  export type AuditLogUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    target?: StringFieldUpdateOperationsInput | string
-    payload?: JsonNullValueInput | InputJsonValue
-    statusCode?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: StringFieldUpdateOperationsInput | string
+    severity?: EnumSeverityFieldUpdateOperationsInput | $Enums.Severity
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    correlationId?: NullableStringFieldUpdateOperationsInput | string | null
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    ua?: NullableStringFieldUpdateOperationsInput | string | null
+    actorType?: EnumActorTypeFieldUpdateOperationsInput | $Enums.ActorType
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    whmcsClientId?: NullableIntFieldUpdateOperationsInput | number | null
+    applicantId?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type WebhookLogCreateManyInput = {
+  export type AuditLogCreateManyInput = {
     id?: string
-    target: string
-    payload: JsonNullValueInput | InputJsonValue
-    statusCode: number
     createdAt?: Date | string
+    event: string
+    severity?: $Enums.Severity
+    message?: string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    correlationId?: string | null
+    ip?: string | null
+    ua?: string | null
+    actorType?: $Enums.ActorType
+    actorId?: string | null
+    whmcsClientId?: number | null
+    applicantId?: string | null
+    sessionId?: string | null
   }
 
-  export type WebhookLogUpdateManyMutationInput = {
+  export type AuditLogUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    target?: StringFieldUpdateOperationsInput | string
-    payload?: JsonNullValueInput | InputJsonValue
-    statusCode?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: StringFieldUpdateOperationsInput | string
+    severity?: EnumSeverityFieldUpdateOperationsInput | $Enums.Severity
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    correlationId?: NullableStringFieldUpdateOperationsInput | string | null
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    ua?: NullableStringFieldUpdateOperationsInput | string | null
+    actorType?: EnumActorTypeFieldUpdateOperationsInput | $Enums.ActorType
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    whmcsClientId?: NullableIntFieldUpdateOperationsInput | number | null
+    applicantId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type WebhookLogUncheckedUpdateManyInput = {
+  export type AuditLogUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    target?: StringFieldUpdateOperationsInput | string
-    payload?: JsonNullValueInput | InputJsonValue
-    statusCode?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: StringFieldUpdateOperationsInput | string
+    severity?: EnumSeverityFieldUpdateOperationsInput | $Enums.Severity
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    correlationId?: NullableStringFieldUpdateOperationsInput | string | null
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    ua?: NullableStringFieldUpdateOperationsInput | string | null
+    actorType?: EnumActorTypeFieldUpdateOperationsInput | $Enums.ActorType
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    whmcsClientId?: NullableIntFieldUpdateOperationsInput | number | null
+    applicantId?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type OutboundWebhookLogCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    kind: string
+    targetUrl: string
+    event: string
+    payload: JsonNullValueInput | InputJsonValue
+    statusCode?: number | null
+    responseBody?: string | null
+    error?: string | null
+    attempt?: number
+    maxAttempts?: number
+    nextAttemptAt?: Date | string | null
+  }
+
+  export type OutboundWebhookLogUncheckedCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    kind: string
+    targetUrl: string
+    event: string
+    payload: JsonNullValueInput | InputJsonValue
+    statusCode?: number | null
+    responseBody?: string | null
+    error?: string | null
+    attempt?: number
+    maxAttempts?: number
+    nextAttemptAt?: Date | string | null
+  }
+
+  export type OutboundWebhookLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    kind?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    payload?: JsonNullValueInput | InputJsonValue
+    statusCode?: NullableIntFieldUpdateOperationsInput | number | null
+    responseBody?: NullableStringFieldUpdateOperationsInput | string | null
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    attempt?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    nextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type OutboundWebhookLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    kind?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    payload?: JsonNullValueInput | InputJsonValue
+    statusCode?: NullableIntFieldUpdateOperationsInput | number | null
+    responseBody?: NullableStringFieldUpdateOperationsInput | string | null
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    attempt?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    nextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type OutboundWebhookLogCreateManyInput = {
+    id?: string
+    createdAt?: Date | string
+    kind: string
+    targetUrl: string
+    event: string
+    payload: JsonNullValueInput | InputJsonValue
+    statusCode?: number | null
+    responseBody?: string | null
+    error?: string | null
+    attempt?: number
+    maxAttempts?: number
+    nextAttemptAt?: Date | string | null
+  }
+
+  export type OutboundWebhookLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    kind?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    payload?: JsonNullValueInput | InputJsonValue
+    statusCode?: NullableIntFieldUpdateOperationsInput | number | null
+    responseBody?: NullableStringFieldUpdateOperationsInput | string | null
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    attempt?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    nextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type OutboundWebhookLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    kind?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    payload?: JsonNullValueInput | InputJsonValue
+    statusCode?: NullableIntFieldUpdateOperationsInput | number | null
+    responseBody?: NullableStringFieldUpdateOperationsInput | string | null
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    attempt?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    nextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -7736,6 +9761,17 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -7747,15 +9783,11 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  export type EnumResidencyNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Residency | EnumResidencyFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Residency[] | ListEnumResidencyFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Residency[] | ListEnumResidencyFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumResidencyNullableFilter<$PrismaModel> | $Enums.Residency | null
   }
 
   export type StringNullableFilter<$PrismaModel = never> = {
@@ -7778,17 +9810,28 @@ export namespace Prisma {
     isNot?: KycSessionWhereInput | null
   }
 
+  export type KycSessionListRelationFilter = {
+    every?: KycSessionWhereInput
+    some?: KycSessionWhereInput
+    none?: KycSessionWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
   }
 
+  export type KycSessionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ApplicantCountOrderByAggregateInput = {
     id?: SortOrder
-    whmcsClientId?: SortOrder
-    email?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    whmcsClientId?: SortOrder
+    email?: SortOrder
+    residency?: SortOrder
     latestSessionId?: SortOrder
   }
 
@@ -7798,19 +9841,21 @@ export namespace Prisma {
 
   export type ApplicantMaxOrderByAggregateInput = {
     id?: SortOrder
-    whmcsClientId?: SortOrder
-    email?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    whmcsClientId?: SortOrder
+    email?: SortOrder
+    residency?: SortOrder
     latestSessionId?: SortOrder
   }
 
   export type ApplicantMinOrderByAggregateInput = {
     id?: SortOrder
-    whmcsClientId?: SortOrder
-    email?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    whmcsClientId?: SortOrder
+    email?: SortOrder
+    residency?: SortOrder
     latestSessionId?: SortOrder
   }
 
@@ -7836,6 +9881,20 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -7852,18 +9911,14 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
+  export type EnumResidencyNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Residency | EnumResidencyFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Residency[] | ListEnumResidencyFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Residency[] | ListEnumResidencyFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumResidencyNullableWithAggregatesFilter<$PrismaModel> | $Enums.Residency | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumResidencyNullableFilter<$PrismaModel>
+    _max?: NestedEnumResidencyNullableFilter<$PrismaModel>
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -7884,20 +9939,6 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type EnumKycStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.KycStatus | EnumKycStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.KycStatus[] | ListEnumKycStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.KycStatus[] | ListEnumKycStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumKycStatusFilter<$PrismaModel> | $Enums.KycStatus
-  }
-
-  export type EnumResidencyNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.Residency | EnumResidencyFieldRefInput<$PrismaModel> | null
-    in?: $Enums.Residency[] | ListEnumResidencyFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.Residency[] | ListEnumResidencyFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumResidencyNullableFilter<$PrismaModel> | $Enums.Residency | null
-  }
-
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -7909,14 +9950,16 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type EnumKycStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.KycStatus | EnumKycStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.KycStatus[] | ListEnumKycStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.KycStatus[] | ListEnumKycStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumKycStatusFilter<$PrismaModel> | $Enums.KycStatus
+  }
+
   export type ApplicantScalarRelationFilter = {
     is?: ApplicantWhereInput
     isNot?: ApplicantWhereInput
-  }
-
-  export type DecisionNullableScalarRelationFilter = {
-    is?: DecisionWhereInput | null
-    isNot?: DecisionWhereInput | null
   }
 
   export type DocumentListRelationFilter = {
@@ -7925,64 +9968,72 @@ export namespace Prisma {
     none?: DocumentWhereInput
   }
 
+  export type DecisionListRelationFilter = {
+    every?: DecisionWhereInput
+    some?: DecisionWhereInput
+    none?: DecisionWhereInput
+  }
+
+  export type AuditLogListRelationFilter = {
+    every?: AuditLogWhereInput
+    some?: AuditLogWhereInput
+    none?: AuditLogWhereInput
+  }
+
+  export type ApplicantNullableScalarRelationFilter = {
+    is?: ApplicantWhereInput | null
+    isNot?: ApplicantWhereInput | null
+  }
+
   export type DocumentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DecisionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AuditLogOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type KycSessionCountOrderByAggregateInput = {
     id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     applicantId?: SortOrder
-    status?: SortOrder
-    residency?: SortOrder
-    issuedAt?: SortOrder
-    expiresAt?: SortOrder
-    consumedAt?: SortOrder
     tokenSalt?: SortOrder
     tokenHash?: SortOrder
+    expiresAt?: SortOrder
+    consumedAt?: SortOrder
+    status?: SortOrder
+    residency?: SortOrder
   }
 
   export type KycSessionMaxOrderByAggregateInput = {
     id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     applicantId?: SortOrder
-    status?: SortOrder
-    residency?: SortOrder
-    issuedAt?: SortOrder
-    expiresAt?: SortOrder
-    consumedAt?: SortOrder
     tokenSalt?: SortOrder
     tokenHash?: SortOrder
+    expiresAt?: SortOrder
+    consumedAt?: SortOrder
+    status?: SortOrder
+    residency?: SortOrder
   }
 
   export type KycSessionMinOrderByAggregateInput = {
     id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     applicantId?: SortOrder
-    status?: SortOrder
-    residency?: SortOrder
-    issuedAt?: SortOrder
-    expiresAt?: SortOrder
-    consumedAt?: SortOrder
     tokenSalt?: SortOrder
     tokenHash?: SortOrder
-  }
-
-  export type EnumKycStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.KycStatus | EnumKycStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.KycStatus[] | ListEnumKycStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.KycStatus[] | ListEnumKycStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumKycStatusWithAggregatesFilter<$PrismaModel> | $Enums.KycStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumKycStatusFilter<$PrismaModel>
-    _max?: NestedEnumKycStatusFilter<$PrismaModel>
-  }
-
-  export type EnumResidencyNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Residency | EnumResidencyFieldRefInput<$PrismaModel> | null
-    in?: $Enums.Residency[] | ListEnumResidencyFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.Residency[] | ListEnumResidencyFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumResidencyNullableWithAggregatesFilter<$PrismaModel> | $Enums.Residency | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumResidencyNullableFilter<$PrismaModel>
-    _max?: NestedEnumResidencyNullableFilter<$PrismaModel>
+    expiresAt?: SortOrder
+    consumedAt?: SortOrder
+    status?: SortOrder
+    residency?: SortOrder
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -7999,6 +10050,16 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type EnumKycStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.KycStatus | EnumKycStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.KycStatus[] | ListEnumKycStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.KycStatus[] | ListEnumKycStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumKycStatusWithAggregatesFilter<$PrismaModel> | $Enums.KycStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumKycStatusFilter<$PrismaModel>
+    _max?: NestedEnumKycStatusFilter<$PrismaModel>
+  }
+
   export type EnumDocTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.DocType | EnumDocTypeFieldRefInput<$PrismaModel>
     in?: $Enums.DocType[] | ListEnumDocTypeFieldRefInput<$PrismaModel>
@@ -8013,13 +10074,13 @@ export namespace Prisma {
 
   export type DocumentCountOrderByAggregateInput = {
     id?: SortOrder
+    uploadedAt?: SortOrder
     sessionId?: SortOrder
     type?: SortOrder
     objectKey?: SortOrder
     mime?: SortOrder
     bytes?: SortOrder
     sha256?: SortOrder
-    uploadedAt?: SortOrder
   }
 
   export type DocumentAvgOrderByAggregateInput = {
@@ -8028,24 +10089,24 @@ export namespace Prisma {
 
   export type DocumentMaxOrderByAggregateInput = {
     id?: SortOrder
+    uploadedAt?: SortOrder
     sessionId?: SortOrder
     type?: SortOrder
     objectKey?: SortOrder
     mime?: SortOrder
     bytes?: SortOrder
     sha256?: SortOrder
-    uploadedAt?: SortOrder
   }
 
   export type DocumentMinOrderByAggregateInput = {
     id?: SortOrder
+    uploadedAt?: SortOrder
     sessionId?: SortOrder
     type?: SortOrder
     objectKey?: SortOrder
     mime?: SortOrder
     bytes?: SortOrder
     sha256?: SortOrder
-    uploadedAt?: SortOrder
   }
 
   export type DocumentSumOrderByAggregateInput = {
@@ -8064,29 +10125,196 @@ export namespace Prisma {
 
   export type DecisionCountOrderByAggregateInput = {
     id?: SortOrder
+    createdAt?: SortOrder
     sessionId?: SortOrder
     status?: SortOrder
     reason?: SortOrder
     decidedBy?: SortOrder
-    decidedAt?: SortOrder
   }
 
   export type DecisionMaxOrderByAggregateInput = {
     id?: SortOrder
+    createdAt?: SortOrder
     sessionId?: SortOrder
     status?: SortOrder
     reason?: SortOrder
     decidedBy?: SortOrder
-    decidedAt?: SortOrder
   }
 
   export type DecisionMinOrderByAggregateInput = {
     id?: SortOrder
+    createdAt?: SortOrder
     sessionId?: SortOrder
     status?: SortOrder
     reason?: SortOrder
     decidedBy?: SortOrder
-    decidedAt?: SortOrder
+  }
+
+  export type EnumSeverityFilter<$PrismaModel = never> = {
+    equals?: $Enums.Severity | EnumSeverityFieldRefInput<$PrismaModel>
+    in?: $Enums.Severity[] | ListEnumSeverityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Severity[] | ListEnumSeverityFieldRefInput<$PrismaModel>
+    not?: NestedEnumSeverityFilter<$PrismaModel> | $Enums.Severity
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type EnumActorTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ActorType | EnumActorTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ActorType[] | ListEnumActorTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ActorType[] | ListEnumActorTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumActorTypeFilter<$PrismaModel> | $Enums.ActorType
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type AuditLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    event?: SortOrder
+    severity?: SortOrder
+    message?: SortOrder
+    data?: SortOrder
+    correlationId?: SortOrder
+    ip?: SortOrder
+    ua?: SortOrder
+    actorType?: SortOrder
+    actorId?: SortOrder
+    whmcsClientId?: SortOrder
+    applicantId?: SortOrder
+    sessionId?: SortOrder
+  }
+
+  export type AuditLogAvgOrderByAggregateInput = {
+    whmcsClientId?: SortOrder
+  }
+
+  export type AuditLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    event?: SortOrder
+    severity?: SortOrder
+    message?: SortOrder
+    correlationId?: SortOrder
+    ip?: SortOrder
+    ua?: SortOrder
+    actorType?: SortOrder
+    actorId?: SortOrder
+    whmcsClientId?: SortOrder
+    applicantId?: SortOrder
+    sessionId?: SortOrder
+  }
+
+  export type AuditLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    event?: SortOrder
+    severity?: SortOrder
+    message?: SortOrder
+    correlationId?: SortOrder
+    ip?: SortOrder
+    ua?: SortOrder
+    actorType?: SortOrder
+    actorId?: SortOrder
+    whmcsClientId?: SortOrder
+    applicantId?: SortOrder
+    sessionId?: SortOrder
+  }
+
+  export type AuditLogSumOrderByAggregateInput = {
+    whmcsClientId?: SortOrder
+  }
+
+  export type EnumSeverityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Severity | EnumSeverityFieldRefInput<$PrismaModel>
+    in?: $Enums.Severity[] | ListEnumSeverityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Severity[] | ListEnumSeverityFieldRefInput<$PrismaModel>
+    not?: NestedEnumSeverityWithAggregatesFilter<$PrismaModel> | $Enums.Severity
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSeverityFilter<$PrismaModel>
+    _max?: NestedEnumSeverityFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type EnumActorTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ActorType | EnumActorTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ActorType[] | ListEnumActorTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ActorType[] | ListEnumActorTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumActorTypeWithAggregatesFilter<$PrismaModel> | $Enums.ActorType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumActorTypeFilter<$PrismaModel>
+    _max?: NestedEnumActorTypeFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
   export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -8112,34 +10340,59 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type WebhookLogCountOrderByAggregateInput = {
+  export type OutboundWebhookLogCountOrderByAggregateInput = {
     id?: SortOrder
-    target?: SortOrder
+    createdAt?: SortOrder
+    kind?: SortOrder
+    targetUrl?: SortOrder
+    event?: SortOrder
     payload?: SortOrder
     statusCode?: SortOrder
-    createdAt?: SortOrder
+    responseBody?: SortOrder
+    error?: SortOrder
+    attempt?: SortOrder
+    maxAttempts?: SortOrder
+    nextAttemptAt?: SortOrder
   }
 
-  export type WebhookLogAvgOrderByAggregateInput = {
+  export type OutboundWebhookLogAvgOrderByAggregateInput = {
     statusCode?: SortOrder
+    attempt?: SortOrder
+    maxAttempts?: SortOrder
   }
 
-  export type WebhookLogMaxOrderByAggregateInput = {
+  export type OutboundWebhookLogMaxOrderByAggregateInput = {
     id?: SortOrder
-    target?: SortOrder
-    statusCode?: SortOrder
     createdAt?: SortOrder
+    kind?: SortOrder
+    targetUrl?: SortOrder
+    event?: SortOrder
+    statusCode?: SortOrder
+    responseBody?: SortOrder
+    error?: SortOrder
+    attempt?: SortOrder
+    maxAttempts?: SortOrder
+    nextAttemptAt?: SortOrder
   }
 
-  export type WebhookLogMinOrderByAggregateInput = {
+  export type OutboundWebhookLogMinOrderByAggregateInput = {
     id?: SortOrder
-    target?: SortOrder
-    statusCode?: SortOrder
     createdAt?: SortOrder
+    kind?: SortOrder
+    targetUrl?: SortOrder
+    event?: SortOrder
+    statusCode?: SortOrder
+    responseBody?: SortOrder
+    error?: SortOrder
+    attempt?: SortOrder
+    maxAttempts?: SortOrder
+    nextAttemptAt?: SortOrder
   }
 
-  export type WebhookLogSumOrderByAggregateInput = {
+  export type OutboundWebhookLogSumOrderByAggregateInput = {
     statusCode?: SortOrder
+    attempt?: SortOrder
+    maxAttempts?: SortOrder
   }
   export type JsonWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -8168,20 +10421,32 @@ export namespace Prisma {
     _max?: NestedJsonFilter<$PrismaModel>
   }
 
-  export type KycSessionCreateNestedOneWithoutApplicantInput = {
-    create?: XOR<KycSessionCreateWithoutApplicantInput, KycSessionUncheckedCreateWithoutApplicantInput>
-    connectOrCreate?: KycSessionCreateOrConnectWithoutApplicantInput
+  export type KycSessionCreateNestedOneWithoutLatestForInput = {
+    create?: XOR<KycSessionCreateWithoutLatestForInput, KycSessionUncheckedCreateWithoutLatestForInput>
+    connectOrCreate?: KycSessionCreateOrConnectWithoutLatestForInput
     connect?: KycSessionWhereUniqueInput
   }
 
-  export type KycSessionUncheckedCreateNestedOneWithoutApplicantInput = {
-    create?: XOR<KycSessionCreateWithoutApplicantInput, KycSessionUncheckedCreateWithoutApplicantInput>
-    connectOrCreate?: KycSessionCreateOrConnectWithoutApplicantInput
-    connect?: KycSessionWhereUniqueInput
+  export type KycSessionCreateNestedManyWithoutApplicantInput = {
+    create?: XOR<KycSessionCreateWithoutApplicantInput, KycSessionUncheckedCreateWithoutApplicantInput> | KycSessionCreateWithoutApplicantInput[] | KycSessionUncheckedCreateWithoutApplicantInput[]
+    connectOrCreate?: KycSessionCreateOrConnectWithoutApplicantInput | KycSessionCreateOrConnectWithoutApplicantInput[]
+    createMany?: KycSessionCreateManyApplicantInputEnvelope
+    connect?: KycSessionWhereUniqueInput | KycSessionWhereUniqueInput[]
+  }
+
+  export type KycSessionUncheckedCreateNestedManyWithoutApplicantInput = {
+    create?: XOR<KycSessionCreateWithoutApplicantInput, KycSessionUncheckedCreateWithoutApplicantInput> | KycSessionCreateWithoutApplicantInput[] | KycSessionUncheckedCreateWithoutApplicantInput[]
+    connectOrCreate?: KycSessionCreateOrConnectWithoutApplicantInput | KycSessionCreateOrConnectWithoutApplicantInput[]
+    createMany?: KycSessionCreateManyApplicantInputEnvelope
+    connect?: KycSessionWhereUniqueInput | KycSessionWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -8192,44 +10457,56 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
+  export type NullableEnumResidencyFieldUpdateOperationsInput = {
+    set?: $Enums.Residency | null
+  }
+
+  export type KycSessionUpdateOneWithoutLatestForNestedInput = {
+    create?: XOR<KycSessionCreateWithoutLatestForInput, KycSessionUncheckedCreateWithoutLatestForInput>
+    connectOrCreate?: KycSessionCreateOrConnectWithoutLatestForInput
+    upsert?: KycSessionUpsertWithoutLatestForInput
+    disconnect?: KycSessionWhereInput | boolean
+    delete?: KycSessionWhereInput | boolean
+    connect?: KycSessionWhereUniqueInput
+    update?: XOR<XOR<KycSessionUpdateToOneWithWhereWithoutLatestForInput, KycSessionUpdateWithoutLatestForInput>, KycSessionUncheckedUpdateWithoutLatestForInput>
+  }
+
+  export type KycSessionUpdateManyWithoutApplicantNestedInput = {
+    create?: XOR<KycSessionCreateWithoutApplicantInput, KycSessionUncheckedCreateWithoutApplicantInput> | KycSessionCreateWithoutApplicantInput[] | KycSessionUncheckedCreateWithoutApplicantInput[]
+    connectOrCreate?: KycSessionCreateOrConnectWithoutApplicantInput | KycSessionCreateOrConnectWithoutApplicantInput[]
+    upsert?: KycSessionUpsertWithWhereUniqueWithoutApplicantInput | KycSessionUpsertWithWhereUniqueWithoutApplicantInput[]
+    createMany?: KycSessionCreateManyApplicantInputEnvelope
+    set?: KycSessionWhereUniqueInput | KycSessionWhereUniqueInput[]
+    disconnect?: KycSessionWhereUniqueInput | KycSessionWhereUniqueInput[]
+    delete?: KycSessionWhereUniqueInput | KycSessionWhereUniqueInput[]
+    connect?: KycSessionWhereUniqueInput | KycSessionWhereUniqueInput[]
+    update?: KycSessionUpdateWithWhereUniqueWithoutApplicantInput | KycSessionUpdateWithWhereUniqueWithoutApplicantInput[]
+    updateMany?: KycSessionUpdateManyWithWhereWithoutApplicantInput | KycSessionUpdateManyWithWhereWithoutApplicantInput[]
+    deleteMany?: KycSessionScalarWhereInput | KycSessionScalarWhereInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
   }
 
-  export type KycSessionUpdateOneWithoutApplicantNestedInput = {
-    create?: XOR<KycSessionCreateWithoutApplicantInput, KycSessionUncheckedCreateWithoutApplicantInput>
-    connectOrCreate?: KycSessionCreateOrConnectWithoutApplicantInput
-    upsert?: KycSessionUpsertWithoutApplicantInput
-    disconnect?: KycSessionWhereInput | boolean
-    delete?: KycSessionWhereInput | boolean
-    connect?: KycSessionWhereUniqueInput
-    update?: XOR<XOR<KycSessionUpdateToOneWithWhereWithoutApplicantInput, KycSessionUpdateWithoutApplicantInput>, KycSessionUncheckedUpdateWithoutApplicantInput>
+  export type KycSessionUncheckedUpdateManyWithoutApplicantNestedInput = {
+    create?: XOR<KycSessionCreateWithoutApplicantInput, KycSessionUncheckedCreateWithoutApplicantInput> | KycSessionCreateWithoutApplicantInput[] | KycSessionUncheckedCreateWithoutApplicantInput[]
+    connectOrCreate?: KycSessionCreateOrConnectWithoutApplicantInput | KycSessionCreateOrConnectWithoutApplicantInput[]
+    upsert?: KycSessionUpsertWithWhereUniqueWithoutApplicantInput | KycSessionUpsertWithWhereUniqueWithoutApplicantInput[]
+    createMany?: KycSessionCreateManyApplicantInputEnvelope
+    set?: KycSessionWhereUniqueInput | KycSessionWhereUniqueInput[]
+    disconnect?: KycSessionWhereUniqueInput | KycSessionWhereUniqueInput[]
+    delete?: KycSessionWhereUniqueInput | KycSessionWhereUniqueInput[]
+    connect?: KycSessionWhereUniqueInput | KycSessionWhereUniqueInput[]
+    update?: KycSessionUpdateWithWhereUniqueWithoutApplicantInput | KycSessionUpdateWithWhereUniqueWithoutApplicantInput[]
+    updateMany?: KycSessionUpdateManyWithWhereWithoutApplicantInput | KycSessionUpdateManyWithWhereWithoutApplicantInput[]
+    deleteMany?: KycSessionScalarWhereInput | KycSessionScalarWhereInput[]
   }
 
-  export type KycSessionUncheckedUpdateOneWithoutApplicantNestedInput = {
-    create?: XOR<KycSessionCreateWithoutApplicantInput, KycSessionUncheckedCreateWithoutApplicantInput>
-    connectOrCreate?: KycSessionCreateOrConnectWithoutApplicantInput
-    upsert?: KycSessionUpsertWithoutApplicantInput
-    disconnect?: KycSessionWhereInput | boolean
-    delete?: KycSessionWhereInput | boolean
-    connect?: KycSessionWhereUniqueInput
-    update?: XOR<XOR<KycSessionUpdateToOneWithWhereWithoutApplicantInput, KycSessionUpdateWithoutApplicantInput>, KycSessionUncheckedUpdateWithoutApplicantInput>
-  }
-
-  export type ApplicantCreateNestedOneWithoutLatestSessionInput = {
-    create?: XOR<ApplicantCreateWithoutLatestSessionInput, ApplicantUncheckedCreateWithoutLatestSessionInput>
-    connectOrCreate?: ApplicantCreateOrConnectWithoutLatestSessionInput
+  export type ApplicantCreateNestedOneWithoutSessionsInput = {
+    create?: XOR<ApplicantCreateWithoutSessionsInput, ApplicantUncheckedCreateWithoutSessionsInput>
+    connectOrCreate?: ApplicantCreateOrConnectWithoutSessionsInput
     connect?: ApplicantWhereUniqueInput
-  }
-
-  export type DecisionCreateNestedOneWithoutSessionInput = {
-    create?: XOR<DecisionCreateWithoutSessionInput, DecisionUncheckedCreateWithoutSessionInput>
-    connectOrCreate?: DecisionCreateOrConnectWithoutSessionInput
-    connect?: DecisionWhereUniqueInput
   }
 
   export type DocumentCreateNestedManyWithoutSessionInput = {
@@ -8239,10 +10516,24 @@ export namespace Prisma {
     connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
   }
 
-  export type DecisionUncheckedCreateNestedOneWithoutSessionInput = {
-    create?: XOR<DecisionCreateWithoutSessionInput, DecisionUncheckedCreateWithoutSessionInput>
-    connectOrCreate?: DecisionCreateOrConnectWithoutSessionInput
-    connect?: DecisionWhereUniqueInput
+  export type DecisionCreateNestedManyWithoutSessionInput = {
+    create?: XOR<DecisionCreateWithoutSessionInput, DecisionUncheckedCreateWithoutSessionInput> | DecisionCreateWithoutSessionInput[] | DecisionUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: DecisionCreateOrConnectWithoutSessionInput | DecisionCreateOrConnectWithoutSessionInput[]
+    createMany?: DecisionCreateManySessionInputEnvelope
+    connect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
+  }
+
+  export type AuditLogCreateNestedManyWithoutSessionInput = {
+    create?: XOR<AuditLogCreateWithoutSessionInput, AuditLogUncheckedCreateWithoutSessionInput> | AuditLogCreateWithoutSessionInput[] | AuditLogUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: AuditLogCreateOrConnectWithoutSessionInput | AuditLogCreateOrConnectWithoutSessionInput[]
+    createMany?: AuditLogCreateManySessionInputEnvelope
+    connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+  }
+
+  export type ApplicantCreateNestedOneWithoutLatestSessionInput = {
+    create?: XOR<ApplicantCreateWithoutLatestSessionInput, ApplicantUncheckedCreateWithoutLatestSessionInput>
+    connectOrCreate?: ApplicantCreateOrConnectWithoutLatestSessionInput
+    connect?: ApplicantWhereUniqueInput
   }
 
   export type DocumentUncheckedCreateNestedManyWithoutSessionInput = {
@@ -8252,34 +10543,40 @@ export namespace Prisma {
     connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
   }
 
-  export type EnumKycStatusFieldUpdateOperationsInput = {
-    set?: $Enums.KycStatus
+  export type DecisionUncheckedCreateNestedManyWithoutSessionInput = {
+    create?: XOR<DecisionCreateWithoutSessionInput, DecisionUncheckedCreateWithoutSessionInput> | DecisionCreateWithoutSessionInput[] | DecisionUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: DecisionCreateOrConnectWithoutSessionInput | DecisionCreateOrConnectWithoutSessionInput[]
+    createMany?: DecisionCreateManySessionInputEnvelope
+    connect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
   }
 
-  export type NullableEnumResidencyFieldUpdateOperationsInput = {
-    set?: $Enums.Residency | null
+  export type AuditLogUncheckedCreateNestedManyWithoutSessionInput = {
+    create?: XOR<AuditLogCreateWithoutSessionInput, AuditLogUncheckedCreateWithoutSessionInput> | AuditLogCreateWithoutSessionInput[] | AuditLogUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: AuditLogCreateOrConnectWithoutSessionInput | AuditLogCreateOrConnectWithoutSessionInput[]
+    createMany?: AuditLogCreateManySessionInputEnvelope
+    connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+  }
+
+  export type ApplicantUncheckedCreateNestedOneWithoutLatestSessionInput = {
+    create?: XOR<ApplicantCreateWithoutLatestSessionInput, ApplicantUncheckedCreateWithoutLatestSessionInput>
+    connectOrCreate?: ApplicantCreateOrConnectWithoutLatestSessionInput
+    connect?: ApplicantWhereUniqueInput
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
   }
 
-  export type ApplicantUpdateOneRequiredWithoutLatestSessionNestedInput = {
-    create?: XOR<ApplicantCreateWithoutLatestSessionInput, ApplicantUncheckedCreateWithoutLatestSessionInput>
-    connectOrCreate?: ApplicantCreateOrConnectWithoutLatestSessionInput
-    upsert?: ApplicantUpsertWithoutLatestSessionInput
-    connect?: ApplicantWhereUniqueInput
-    update?: XOR<XOR<ApplicantUpdateToOneWithWhereWithoutLatestSessionInput, ApplicantUpdateWithoutLatestSessionInput>, ApplicantUncheckedUpdateWithoutLatestSessionInput>
+  export type EnumKycStatusFieldUpdateOperationsInput = {
+    set?: $Enums.KycStatus
   }
 
-  export type DecisionUpdateOneWithoutSessionNestedInput = {
-    create?: XOR<DecisionCreateWithoutSessionInput, DecisionUncheckedCreateWithoutSessionInput>
-    connectOrCreate?: DecisionCreateOrConnectWithoutSessionInput
-    upsert?: DecisionUpsertWithoutSessionInput
-    disconnect?: DecisionWhereInput | boolean
-    delete?: DecisionWhereInput | boolean
-    connect?: DecisionWhereUniqueInput
-    update?: XOR<XOR<DecisionUpdateToOneWithWhereWithoutSessionInput, DecisionUpdateWithoutSessionInput>, DecisionUncheckedUpdateWithoutSessionInput>
+  export type ApplicantUpdateOneRequiredWithoutSessionsNestedInput = {
+    create?: XOR<ApplicantCreateWithoutSessionsInput, ApplicantUncheckedCreateWithoutSessionsInput>
+    connectOrCreate?: ApplicantCreateOrConnectWithoutSessionsInput
+    upsert?: ApplicantUpsertWithoutSessionsInput
+    connect?: ApplicantWhereUniqueInput
+    update?: XOR<XOR<ApplicantUpdateToOneWithWhereWithoutSessionsInput, ApplicantUpdateWithoutSessionsInput>, ApplicantUncheckedUpdateWithoutSessionsInput>
   }
 
   export type DocumentUpdateManyWithoutSessionNestedInput = {
@@ -8296,14 +10593,42 @@ export namespace Prisma {
     deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
   }
 
-  export type DecisionUncheckedUpdateOneWithoutSessionNestedInput = {
-    create?: XOR<DecisionCreateWithoutSessionInput, DecisionUncheckedCreateWithoutSessionInput>
-    connectOrCreate?: DecisionCreateOrConnectWithoutSessionInput
-    upsert?: DecisionUpsertWithoutSessionInput
-    disconnect?: DecisionWhereInput | boolean
-    delete?: DecisionWhereInput | boolean
-    connect?: DecisionWhereUniqueInput
-    update?: XOR<XOR<DecisionUpdateToOneWithWhereWithoutSessionInput, DecisionUpdateWithoutSessionInput>, DecisionUncheckedUpdateWithoutSessionInput>
+  export type DecisionUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<DecisionCreateWithoutSessionInput, DecisionUncheckedCreateWithoutSessionInput> | DecisionCreateWithoutSessionInput[] | DecisionUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: DecisionCreateOrConnectWithoutSessionInput | DecisionCreateOrConnectWithoutSessionInput[]
+    upsert?: DecisionUpsertWithWhereUniqueWithoutSessionInput | DecisionUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: DecisionCreateManySessionInputEnvelope
+    set?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
+    disconnect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
+    delete?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
+    connect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
+    update?: DecisionUpdateWithWhereUniqueWithoutSessionInput | DecisionUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: DecisionUpdateManyWithWhereWithoutSessionInput | DecisionUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: DecisionScalarWhereInput | DecisionScalarWhereInput[]
+  }
+
+  export type AuditLogUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<AuditLogCreateWithoutSessionInput, AuditLogUncheckedCreateWithoutSessionInput> | AuditLogCreateWithoutSessionInput[] | AuditLogUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: AuditLogCreateOrConnectWithoutSessionInput | AuditLogCreateOrConnectWithoutSessionInput[]
+    upsert?: AuditLogUpsertWithWhereUniqueWithoutSessionInput | AuditLogUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: AuditLogCreateManySessionInputEnvelope
+    set?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    disconnect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    delete?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    update?: AuditLogUpdateWithWhereUniqueWithoutSessionInput | AuditLogUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: AuditLogUpdateManyWithWhereWithoutSessionInput | AuditLogUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
+  }
+
+  export type ApplicantUpdateOneWithoutLatestSessionNestedInput = {
+    create?: XOR<ApplicantCreateWithoutLatestSessionInput, ApplicantUncheckedCreateWithoutLatestSessionInput>
+    connectOrCreate?: ApplicantCreateOrConnectWithoutLatestSessionInput
+    upsert?: ApplicantUpsertWithoutLatestSessionInput
+    disconnect?: ApplicantWhereInput | boolean
+    delete?: ApplicantWhereInput | boolean
+    connect?: ApplicantWhereUniqueInput
+    update?: XOR<XOR<ApplicantUpdateToOneWithWhereWithoutLatestSessionInput, ApplicantUpdateWithoutLatestSessionInput>, ApplicantUncheckedUpdateWithoutLatestSessionInput>
   }
 
   export type DocumentUncheckedUpdateManyWithoutSessionNestedInput = {
@@ -8318,6 +10643,44 @@ export namespace Prisma {
     update?: DocumentUpdateWithWhereUniqueWithoutSessionInput | DocumentUpdateWithWhereUniqueWithoutSessionInput[]
     updateMany?: DocumentUpdateManyWithWhereWithoutSessionInput | DocumentUpdateManyWithWhereWithoutSessionInput[]
     deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+  }
+
+  export type DecisionUncheckedUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<DecisionCreateWithoutSessionInput, DecisionUncheckedCreateWithoutSessionInput> | DecisionCreateWithoutSessionInput[] | DecisionUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: DecisionCreateOrConnectWithoutSessionInput | DecisionCreateOrConnectWithoutSessionInput[]
+    upsert?: DecisionUpsertWithWhereUniqueWithoutSessionInput | DecisionUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: DecisionCreateManySessionInputEnvelope
+    set?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
+    disconnect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
+    delete?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
+    connect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
+    update?: DecisionUpdateWithWhereUniqueWithoutSessionInput | DecisionUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: DecisionUpdateManyWithWhereWithoutSessionInput | DecisionUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: DecisionScalarWhereInput | DecisionScalarWhereInput[]
+  }
+
+  export type AuditLogUncheckedUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<AuditLogCreateWithoutSessionInput, AuditLogUncheckedCreateWithoutSessionInput> | AuditLogCreateWithoutSessionInput[] | AuditLogUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: AuditLogCreateOrConnectWithoutSessionInput | AuditLogCreateOrConnectWithoutSessionInput[]
+    upsert?: AuditLogUpsertWithWhereUniqueWithoutSessionInput | AuditLogUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: AuditLogCreateManySessionInputEnvelope
+    set?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    disconnect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    delete?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    update?: AuditLogUpdateWithWhereUniqueWithoutSessionInput | AuditLogUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: AuditLogUpdateManyWithWhereWithoutSessionInput | AuditLogUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
+  }
+
+  export type ApplicantUncheckedUpdateOneWithoutLatestSessionNestedInput = {
+    create?: XOR<ApplicantCreateWithoutLatestSessionInput, ApplicantUncheckedCreateWithoutLatestSessionInput>
+    connectOrCreate?: ApplicantCreateOrConnectWithoutLatestSessionInput
+    upsert?: ApplicantUpsertWithoutLatestSessionInput
+    disconnect?: ApplicantWhereInput | boolean
+    delete?: ApplicantWhereInput | boolean
+    connect?: ApplicantWhereUniqueInput
+    update?: XOR<XOR<ApplicantUpdateToOneWithWhereWithoutLatestSessionInput, ApplicantUpdateWithoutLatestSessionInput>, ApplicantUncheckedUpdateWithoutLatestSessionInput>
   }
 
   export type KycSessionCreateNestedOneWithoutDocumentsInput = {
@@ -8338,18 +10701,50 @@ export namespace Prisma {
     update?: XOR<XOR<KycSessionUpdateToOneWithWhereWithoutDocumentsInput, KycSessionUpdateWithoutDocumentsInput>, KycSessionUncheckedUpdateWithoutDocumentsInput>
   }
 
-  export type KycSessionCreateNestedOneWithoutDecisionInput = {
-    create?: XOR<KycSessionCreateWithoutDecisionInput, KycSessionUncheckedCreateWithoutDecisionInput>
-    connectOrCreate?: KycSessionCreateOrConnectWithoutDecisionInput
+  export type KycSessionCreateNestedOneWithoutDecisionsInput = {
+    create?: XOR<KycSessionCreateWithoutDecisionsInput, KycSessionUncheckedCreateWithoutDecisionsInput>
+    connectOrCreate?: KycSessionCreateOrConnectWithoutDecisionsInput
     connect?: KycSessionWhereUniqueInput
   }
 
-  export type KycSessionUpdateOneRequiredWithoutDecisionNestedInput = {
-    create?: XOR<KycSessionCreateWithoutDecisionInput, KycSessionUncheckedCreateWithoutDecisionInput>
-    connectOrCreate?: KycSessionCreateOrConnectWithoutDecisionInput
-    upsert?: KycSessionUpsertWithoutDecisionInput
+  export type KycSessionUpdateOneRequiredWithoutDecisionsNestedInput = {
+    create?: XOR<KycSessionCreateWithoutDecisionsInput, KycSessionUncheckedCreateWithoutDecisionsInput>
+    connectOrCreate?: KycSessionCreateOrConnectWithoutDecisionsInput
+    upsert?: KycSessionUpsertWithoutDecisionsInput
     connect?: KycSessionWhereUniqueInput
-    update?: XOR<XOR<KycSessionUpdateToOneWithWhereWithoutDecisionInput, KycSessionUpdateWithoutDecisionInput>, KycSessionUncheckedUpdateWithoutDecisionInput>
+    update?: XOR<XOR<KycSessionUpdateToOneWithWhereWithoutDecisionsInput, KycSessionUpdateWithoutDecisionsInput>, KycSessionUncheckedUpdateWithoutDecisionsInput>
+  }
+
+  export type KycSessionCreateNestedOneWithoutAuditLogsInput = {
+    create?: XOR<KycSessionCreateWithoutAuditLogsInput, KycSessionUncheckedCreateWithoutAuditLogsInput>
+    connectOrCreate?: KycSessionCreateOrConnectWithoutAuditLogsInput
+    connect?: KycSessionWhereUniqueInput
+  }
+
+  export type EnumSeverityFieldUpdateOperationsInput = {
+    set?: $Enums.Severity
+  }
+
+  export type EnumActorTypeFieldUpdateOperationsInput = {
+    set?: $Enums.ActorType
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type KycSessionUpdateOneWithoutAuditLogsNestedInput = {
+    create?: XOR<KycSessionCreateWithoutAuditLogsInput, KycSessionUncheckedCreateWithoutAuditLogsInput>
+    connectOrCreate?: KycSessionCreateOrConnectWithoutAuditLogsInput
+    upsert?: KycSessionUpsertWithoutAuditLogsInput
+    disconnect?: KycSessionWhereInput | boolean
+    delete?: KycSessionWhereInput | boolean
+    connect?: KycSessionWhereUniqueInput
+    update?: XOR<XOR<KycSessionUpdateToOneWithWhereWithoutAuditLogsInput, KycSessionUpdateWithoutAuditLogsInput>, KycSessionUncheckedUpdateWithoutAuditLogsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -8366,6 +10761,17 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -8377,15 +10783,11 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  export type NestedEnumResidencyNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Residency | EnumResidencyFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Residency[] | ListEnumResidencyFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Residency[] | ListEnumResidencyFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumResidencyNullableFilter<$PrismaModel> | $Enums.Residency | null
   }
 
   export type NestedStringNullableFilter<$PrismaModel = never> = {
@@ -8419,6 +10821,20 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -8446,18 +10862,25 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
+  export type NestedEnumResidencyNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Residency | EnumResidencyFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Residency[] | ListEnumResidencyFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Residency[] | ListEnumResidencyFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumResidencyNullableWithAggregatesFilter<$PrismaModel> | $Enums.Residency | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumResidencyNullableFilter<$PrismaModel>
+    _max?: NestedEnumResidencyNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -8477,31 +10900,6 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedEnumKycStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.KycStatus | EnumKycStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.KycStatus[] | ListEnumKycStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.KycStatus[] | ListEnumKycStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumKycStatusFilter<$PrismaModel> | $Enums.KycStatus
-  }
-
-  export type NestedEnumResidencyNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.Residency | EnumResidencyFieldRefInput<$PrismaModel> | null
-    in?: $Enums.Residency[] | ListEnumResidencyFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.Residency[] | ListEnumResidencyFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumResidencyNullableFilter<$PrismaModel> | $Enums.Residency | null
-  }
-
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -8513,24 +10911,11 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type NestedEnumKycStatusWithAggregatesFilter<$PrismaModel = never> = {
+  export type NestedEnumKycStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.KycStatus | EnumKycStatusFieldRefInput<$PrismaModel>
     in?: $Enums.KycStatus[] | ListEnumKycStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.KycStatus[] | ListEnumKycStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumKycStatusWithAggregatesFilter<$PrismaModel> | $Enums.KycStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumKycStatusFilter<$PrismaModel>
-    _max?: NestedEnumKycStatusFilter<$PrismaModel>
-  }
-
-  export type NestedEnumResidencyNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Residency | EnumResidencyFieldRefInput<$PrismaModel> | null
-    in?: $Enums.Residency[] | ListEnumResidencyFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.Residency[] | ListEnumResidencyFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumResidencyNullableWithAggregatesFilter<$PrismaModel> | $Enums.Residency | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumResidencyNullableFilter<$PrismaModel>
-    _max?: NestedEnumResidencyNullableFilter<$PrismaModel>
+    not?: NestedEnumKycStatusFilter<$PrismaModel> | $Enums.KycStatus
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -8545,6 +10930,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumKycStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.KycStatus | EnumKycStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.KycStatus[] | ListEnumKycStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.KycStatus[] | ListEnumKycStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumKycStatusWithAggregatesFilter<$PrismaModel> | $Enums.KycStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumKycStatusFilter<$PrismaModel>
+    _max?: NestedEnumKycStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumDocTypeFilter<$PrismaModel = never> = {
@@ -8562,6 +10957,90 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumDocTypeFilter<$PrismaModel>
     _max?: NestedEnumDocTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSeverityFilter<$PrismaModel = never> = {
+    equals?: $Enums.Severity | EnumSeverityFieldRefInput<$PrismaModel>
+    in?: $Enums.Severity[] | ListEnumSeverityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Severity[] | ListEnumSeverityFieldRefInput<$PrismaModel>
+    not?: NestedEnumSeverityFilter<$PrismaModel> | $Enums.Severity
+  }
+
+  export type NestedEnumActorTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ActorType | EnumActorTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ActorType[] | ListEnumActorTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ActorType[] | ListEnumActorTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumActorTypeFilter<$PrismaModel> | $Enums.ActorType
+  }
+
+  export type NestedEnumSeverityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Severity | EnumSeverityFieldRefInput<$PrismaModel>
+    in?: $Enums.Severity[] | ListEnumSeverityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Severity[] | ListEnumSeverityFieldRefInput<$PrismaModel>
+    not?: NestedEnumSeverityWithAggregatesFilter<$PrismaModel> | $Enums.Severity
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSeverityFilter<$PrismaModel>
+    _max?: NestedEnumSeverityFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedEnumActorTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ActorType | EnumActorTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ActorType[] | ListEnumActorTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ActorType[] | ListEnumActorTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumActorTypeWithAggregatesFilter<$PrismaModel> | $Enums.ActorType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumActorTypeFilter<$PrismaModel>
+    _max?: NestedEnumActorTypeFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
   export type NestedJsonFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -8587,30 +11066,73 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type KycSessionCreateWithoutApplicantInput = {
+  export type KycSessionCreateWithoutLatestForInput = {
     id?: string
-    status?: $Enums.KycStatus
-    residency?: $Enums.Residency | null
-    issuedAt?: Date | string
-    expiresAt: Date | string
-    consumedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     tokenSalt: string
     tokenHash: string
-    decision?: DecisionCreateNestedOneWithoutSessionInput
+    expiresAt: Date | string
+    consumedAt?: Date | string | null
+    status?: $Enums.KycStatus
+    residency?: $Enums.Residency | null
+    applicant: ApplicantCreateNestedOneWithoutSessionsInput
     documents?: DocumentCreateNestedManyWithoutSessionInput
+    decisions?: DecisionCreateNestedManyWithoutSessionInput
+    auditLogs?: AuditLogCreateNestedManyWithoutSessionInput
+  }
+
+  export type KycSessionUncheckedCreateWithoutLatestForInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    applicantId: string
+    tokenSalt: string
+    tokenHash: string
+    expiresAt: Date | string
+    consumedAt?: Date | string | null
+    status?: $Enums.KycStatus
+    residency?: $Enums.Residency | null
+    documents?: DocumentUncheckedCreateNestedManyWithoutSessionInput
+    decisions?: DecisionUncheckedCreateNestedManyWithoutSessionInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutSessionInput
+  }
+
+  export type KycSessionCreateOrConnectWithoutLatestForInput = {
+    where: KycSessionWhereUniqueInput
+    create: XOR<KycSessionCreateWithoutLatestForInput, KycSessionUncheckedCreateWithoutLatestForInput>
+  }
+
+  export type KycSessionCreateWithoutApplicantInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tokenSalt: string
+    tokenHash: string
+    expiresAt: Date | string
+    consumedAt?: Date | string | null
+    status?: $Enums.KycStatus
+    residency?: $Enums.Residency | null
+    documents?: DocumentCreateNestedManyWithoutSessionInput
+    decisions?: DecisionCreateNestedManyWithoutSessionInput
+    auditLogs?: AuditLogCreateNestedManyWithoutSessionInput
+    latestFor?: ApplicantCreateNestedOneWithoutLatestSessionInput
   }
 
   export type KycSessionUncheckedCreateWithoutApplicantInput = {
     id?: string
-    status?: $Enums.KycStatus
-    residency?: $Enums.Residency | null
-    issuedAt?: Date | string
-    expiresAt: Date | string
-    consumedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     tokenSalt: string
     tokenHash: string
-    decision?: DecisionUncheckedCreateNestedOneWithoutSessionInput
+    expiresAt: Date | string
+    consumedAt?: Date | string | null
+    status?: $Enums.KycStatus
+    residency?: $Enums.Residency | null
     documents?: DocumentUncheckedCreateNestedManyWithoutSessionInput
+    decisions?: DecisionUncheckedCreateNestedManyWithoutSessionInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutSessionInput
+    latestFor?: ApplicantUncheckedCreateNestedOneWithoutLatestSessionInput
   }
 
   export type KycSessionCreateOrConnectWithoutApplicantInput = {
@@ -8618,105 +11140,129 @@ export namespace Prisma {
     create: XOR<KycSessionCreateWithoutApplicantInput, KycSessionUncheckedCreateWithoutApplicantInput>
   }
 
-  export type KycSessionUpsertWithoutApplicantInput = {
-    update: XOR<KycSessionUpdateWithoutApplicantInput, KycSessionUncheckedUpdateWithoutApplicantInput>
-    create: XOR<KycSessionCreateWithoutApplicantInput, KycSessionUncheckedCreateWithoutApplicantInput>
+  export type KycSessionCreateManyApplicantInputEnvelope = {
+    data: KycSessionCreateManyApplicantInput | KycSessionCreateManyApplicantInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type KycSessionUpsertWithoutLatestForInput = {
+    update: XOR<KycSessionUpdateWithoutLatestForInput, KycSessionUncheckedUpdateWithoutLatestForInput>
+    create: XOR<KycSessionCreateWithoutLatestForInput, KycSessionUncheckedCreateWithoutLatestForInput>
     where?: KycSessionWhereInput
   }
 
-  export type KycSessionUpdateToOneWithWhereWithoutApplicantInput = {
+  export type KycSessionUpdateToOneWithWhereWithoutLatestForInput = {
     where?: KycSessionWhereInput
+    data: XOR<KycSessionUpdateWithoutLatestForInput, KycSessionUncheckedUpdateWithoutLatestForInput>
+  }
+
+  export type KycSessionUpdateWithoutLatestForInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tokenSalt?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
+    applicant?: ApplicantUpdateOneRequiredWithoutSessionsNestedInput
+    documents?: DocumentUpdateManyWithoutSessionNestedInput
+    decisions?: DecisionUpdateManyWithoutSessionNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutSessionNestedInput
+  }
+
+  export type KycSessionUncheckedUpdateWithoutLatestForInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    applicantId?: StringFieldUpdateOperationsInput | string
+    tokenSalt?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
+    documents?: DocumentUncheckedUpdateManyWithoutSessionNestedInput
+    decisions?: DecisionUncheckedUpdateManyWithoutSessionNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutSessionNestedInput
+  }
+
+  export type KycSessionUpsertWithWhereUniqueWithoutApplicantInput = {
+    where: KycSessionWhereUniqueInput
+    update: XOR<KycSessionUpdateWithoutApplicantInput, KycSessionUncheckedUpdateWithoutApplicantInput>
+    create: XOR<KycSessionCreateWithoutApplicantInput, KycSessionUncheckedCreateWithoutApplicantInput>
+  }
+
+  export type KycSessionUpdateWithWhereUniqueWithoutApplicantInput = {
+    where: KycSessionWhereUniqueInput
     data: XOR<KycSessionUpdateWithoutApplicantInput, KycSessionUncheckedUpdateWithoutApplicantInput>
   }
 
-  export type KycSessionUpdateWithoutApplicantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
-    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
-    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    tokenSalt?: StringFieldUpdateOperationsInput | string
-    tokenHash?: StringFieldUpdateOperationsInput | string
-    decision?: DecisionUpdateOneWithoutSessionNestedInput
-    documents?: DocumentUpdateManyWithoutSessionNestedInput
+  export type KycSessionUpdateManyWithWhereWithoutApplicantInput = {
+    where: KycSessionScalarWhereInput
+    data: XOR<KycSessionUpdateManyMutationInput, KycSessionUncheckedUpdateManyWithoutApplicantInput>
   }
 
-  export type KycSessionUncheckedUpdateWithoutApplicantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
-    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
-    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    tokenSalt?: StringFieldUpdateOperationsInput | string
-    tokenHash?: StringFieldUpdateOperationsInput | string
-    decision?: DecisionUncheckedUpdateOneWithoutSessionNestedInput
-    documents?: DocumentUncheckedUpdateManyWithoutSessionNestedInput
+  export type KycSessionScalarWhereInput = {
+    AND?: KycSessionScalarWhereInput | KycSessionScalarWhereInput[]
+    OR?: KycSessionScalarWhereInput[]
+    NOT?: KycSessionScalarWhereInput | KycSessionScalarWhereInput[]
+    id?: StringFilter<"KycSession"> | string
+    createdAt?: DateTimeFilter<"KycSession"> | Date | string
+    updatedAt?: DateTimeFilter<"KycSession"> | Date | string
+    applicantId?: StringFilter<"KycSession"> | string
+    tokenSalt?: StringFilter<"KycSession"> | string
+    tokenHash?: StringFilter<"KycSession"> | string
+    expiresAt?: DateTimeFilter<"KycSession"> | Date | string
+    consumedAt?: DateTimeNullableFilter<"KycSession"> | Date | string | null
+    status?: EnumKycStatusFilter<"KycSession"> | $Enums.KycStatus
+    residency?: EnumResidencyNullableFilter<"KycSession"> | $Enums.Residency | null
   }
 
-  export type ApplicantCreateWithoutLatestSessionInput = {
+  export type ApplicantCreateWithoutSessionsInput = {
     id?: string
-    whmcsClientId: number
-    email: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    whmcsClientId: number
+    email: string
+    residency?: $Enums.Residency | null
+    latestSession?: KycSessionCreateNestedOneWithoutLatestForInput
+  }
+
+  export type ApplicantUncheckedCreateWithoutSessionsInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    whmcsClientId: number
+    email: string
+    residency?: $Enums.Residency | null
     latestSessionId?: string | null
   }
 
-  export type ApplicantUncheckedCreateWithoutLatestSessionInput = {
-    id?: string
-    whmcsClientId: number
-    email: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    latestSessionId?: string | null
-  }
-
-  export type ApplicantCreateOrConnectWithoutLatestSessionInput = {
+  export type ApplicantCreateOrConnectWithoutSessionsInput = {
     where: ApplicantWhereUniqueInput
-    create: XOR<ApplicantCreateWithoutLatestSessionInput, ApplicantUncheckedCreateWithoutLatestSessionInput>
-  }
-
-  export type DecisionCreateWithoutSessionInput = {
-    id?: string
-    status: $Enums.KycStatus
-    reason?: string | null
-    decidedBy?: string | null
-    decidedAt?: Date | string
-  }
-
-  export type DecisionUncheckedCreateWithoutSessionInput = {
-    id?: string
-    status: $Enums.KycStatus
-    reason?: string | null
-    decidedBy?: string | null
-    decidedAt?: Date | string
-  }
-
-  export type DecisionCreateOrConnectWithoutSessionInput = {
-    where: DecisionWhereUniqueInput
-    create: XOR<DecisionCreateWithoutSessionInput, DecisionUncheckedCreateWithoutSessionInput>
+    create: XOR<ApplicantCreateWithoutSessionsInput, ApplicantUncheckedCreateWithoutSessionsInput>
   }
 
   export type DocumentCreateWithoutSessionInput = {
     id?: string
+    uploadedAt?: Date | string
     type: $Enums.DocType
     objectKey: string
     mime: string
     bytes: number
     sha256: string
-    uploadedAt?: Date | string
   }
 
   export type DocumentUncheckedCreateWithoutSessionInput = {
     id?: string
+    uploadedAt?: Date | string
     type: $Enums.DocType
     objectKey: string
     mime: string
     bytes: number
     sha256: string
-    uploadedAt?: Date | string
   }
 
   export type DocumentCreateOrConnectWithoutSessionInput = {
@@ -8729,60 +11275,128 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ApplicantUpsertWithoutLatestSessionInput = {
-    update: XOR<ApplicantUpdateWithoutLatestSessionInput, ApplicantUncheckedUpdateWithoutLatestSessionInput>
-    create: XOR<ApplicantCreateWithoutLatestSessionInput, ApplicantUncheckedCreateWithoutLatestSessionInput>
-    where?: ApplicantWhereInput
+  export type DecisionCreateWithoutSessionInput = {
+    id?: string
+    createdAt?: Date | string
+    status: $Enums.KycStatus
+    reason?: string | null
+    decidedBy: string
   }
 
-  export type ApplicantUpdateToOneWithWhereWithoutLatestSessionInput = {
-    where?: ApplicantWhereInput
-    data: XOR<ApplicantUpdateWithoutLatestSessionInput, ApplicantUncheckedUpdateWithoutLatestSessionInput>
+  export type DecisionUncheckedCreateWithoutSessionInput = {
+    id?: string
+    createdAt?: Date | string
+    status: $Enums.KycStatus
+    reason?: string | null
+    decidedBy: string
   }
 
-  export type ApplicantUpdateWithoutLatestSessionInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    whmcsClientId?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    latestSessionId?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type ApplicantUncheckedUpdateWithoutLatestSessionInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    whmcsClientId?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    latestSessionId?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type DecisionUpsertWithoutSessionInput = {
-    update: XOR<DecisionUpdateWithoutSessionInput, DecisionUncheckedUpdateWithoutSessionInput>
+  export type DecisionCreateOrConnectWithoutSessionInput = {
+    where: DecisionWhereUniqueInput
     create: XOR<DecisionCreateWithoutSessionInput, DecisionUncheckedCreateWithoutSessionInput>
-    where?: DecisionWhereInput
   }
 
-  export type DecisionUpdateToOneWithWhereWithoutSessionInput = {
-    where?: DecisionWhereInput
-    data: XOR<DecisionUpdateWithoutSessionInput, DecisionUncheckedUpdateWithoutSessionInput>
+  export type DecisionCreateManySessionInputEnvelope = {
+    data: DecisionCreateManySessionInput | DecisionCreateManySessionInput[]
+    skipDuplicates?: boolean
   }
 
-  export type DecisionUpdateWithoutSessionInput = {
+  export type AuditLogCreateWithoutSessionInput = {
+    id?: string
+    createdAt?: Date | string
+    event: string
+    severity?: $Enums.Severity
+    message?: string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    correlationId?: string | null
+    ip?: string | null
+    ua?: string | null
+    actorType?: $Enums.ActorType
+    actorId?: string | null
+    whmcsClientId?: number | null
+    applicantId?: string | null
+  }
+
+  export type AuditLogUncheckedCreateWithoutSessionInput = {
+    id?: string
+    createdAt?: Date | string
+    event: string
+    severity?: $Enums.Severity
+    message?: string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    correlationId?: string | null
+    ip?: string | null
+    ua?: string | null
+    actorType?: $Enums.ActorType
+    actorId?: string | null
+    whmcsClientId?: number | null
+    applicantId?: string | null
+  }
+
+  export type AuditLogCreateOrConnectWithoutSessionInput = {
+    where: AuditLogWhereUniqueInput
+    create: XOR<AuditLogCreateWithoutSessionInput, AuditLogUncheckedCreateWithoutSessionInput>
+  }
+
+  export type AuditLogCreateManySessionInputEnvelope = {
+    data: AuditLogCreateManySessionInput | AuditLogCreateManySessionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ApplicantCreateWithoutLatestSessionInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    whmcsClientId: number
+    email: string
+    residency?: $Enums.Residency | null
+    sessions?: KycSessionCreateNestedManyWithoutApplicantInput
+  }
+
+  export type ApplicantUncheckedCreateWithoutLatestSessionInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    whmcsClientId: number
+    email: string
+    residency?: $Enums.Residency | null
+    sessions?: KycSessionUncheckedCreateNestedManyWithoutApplicantInput
+  }
+
+  export type ApplicantCreateOrConnectWithoutLatestSessionInput = {
+    where: ApplicantWhereUniqueInput
+    create: XOR<ApplicantCreateWithoutLatestSessionInput, ApplicantUncheckedCreateWithoutLatestSessionInput>
+  }
+
+  export type ApplicantUpsertWithoutSessionsInput = {
+    update: XOR<ApplicantUpdateWithoutSessionsInput, ApplicantUncheckedUpdateWithoutSessionsInput>
+    create: XOR<ApplicantCreateWithoutSessionsInput, ApplicantUncheckedCreateWithoutSessionsInput>
+    where?: ApplicantWhereInput
+  }
+
+  export type ApplicantUpdateToOneWithWhereWithoutSessionsInput = {
+    where?: ApplicantWhereInput
+    data: XOR<ApplicantUpdateWithoutSessionsInput, ApplicantUncheckedUpdateWithoutSessionsInput>
+  }
+
+  export type ApplicantUpdateWithoutSessionsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    whmcsClientId?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
+    latestSession?: KycSessionUpdateOneWithoutLatestForNestedInput
   }
 
-  export type DecisionUncheckedUpdateWithoutSessionInput = {
+  export type ApplicantUncheckedUpdateWithoutSessionsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    whmcsClientId?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
+    latestSessionId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type DocumentUpsertWithWhereUniqueWithoutSessionInput = {
@@ -8806,39 +11420,140 @@ export namespace Prisma {
     OR?: DocumentScalarWhereInput[]
     NOT?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
     id?: StringFilter<"Document"> | string
+    uploadedAt?: DateTimeFilter<"Document"> | Date | string
     sessionId?: StringFilter<"Document"> | string
     type?: EnumDocTypeFilter<"Document"> | $Enums.DocType
     objectKey?: StringFilter<"Document"> | string
     mime?: StringFilter<"Document"> | string
     bytes?: IntFilter<"Document"> | number
     sha256?: StringFilter<"Document"> | string
-    uploadedAt?: DateTimeFilter<"Document"> | Date | string
+  }
+
+  export type DecisionUpsertWithWhereUniqueWithoutSessionInput = {
+    where: DecisionWhereUniqueInput
+    update: XOR<DecisionUpdateWithoutSessionInput, DecisionUncheckedUpdateWithoutSessionInput>
+    create: XOR<DecisionCreateWithoutSessionInput, DecisionUncheckedCreateWithoutSessionInput>
+  }
+
+  export type DecisionUpdateWithWhereUniqueWithoutSessionInput = {
+    where: DecisionWhereUniqueInput
+    data: XOR<DecisionUpdateWithoutSessionInput, DecisionUncheckedUpdateWithoutSessionInput>
+  }
+
+  export type DecisionUpdateManyWithWhereWithoutSessionInput = {
+    where: DecisionScalarWhereInput
+    data: XOR<DecisionUpdateManyMutationInput, DecisionUncheckedUpdateManyWithoutSessionInput>
+  }
+
+  export type DecisionScalarWhereInput = {
+    AND?: DecisionScalarWhereInput | DecisionScalarWhereInput[]
+    OR?: DecisionScalarWhereInput[]
+    NOT?: DecisionScalarWhereInput | DecisionScalarWhereInput[]
+    id?: StringFilter<"Decision"> | string
+    createdAt?: DateTimeFilter<"Decision"> | Date | string
+    sessionId?: StringFilter<"Decision"> | string
+    status?: EnumKycStatusFilter<"Decision"> | $Enums.KycStatus
+    reason?: StringNullableFilter<"Decision"> | string | null
+    decidedBy?: StringFilter<"Decision"> | string
+  }
+
+  export type AuditLogUpsertWithWhereUniqueWithoutSessionInput = {
+    where: AuditLogWhereUniqueInput
+    update: XOR<AuditLogUpdateWithoutSessionInput, AuditLogUncheckedUpdateWithoutSessionInput>
+    create: XOR<AuditLogCreateWithoutSessionInput, AuditLogUncheckedCreateWithoutSessionInput>
+  }
+
+  export type AuditLogUpdateWithWhereUniqueWithoutSessionInput = {
+    where: AuditLogWhereUniqueInput
+    data: XOR<AuditLogUpdateWithoutSessionInput, AuditLogUncheckedUpdateWithoutSessionInput>
+  }
+
+  export type AuditLogUpdateManyWithWhereWithoutSessionInput = {
+    where: AuditLogScalarWhereInput
+    data: XOR<AuditLogUpdateManyMutationInput, AuditLogUncheckedUpdateManyWithoutSessionInput>
+  }
+
+  export type AuditLogScalarWhereInput = {
+    AND?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
+    OR?: AuditLogScalarWhereInput[]
+    NOT?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
+    id?: StringFilter<"AuditLog"> | string
+    createdAt?: DateTimeFilter<"AuditLog"> | Date | string
+    event?: StringFilter<"AuditLog"> | string
+    severity?: EnumSeverityFilter<"AuditLog"> | $Enums.Severity
+    message?: StringNullableFilter<"AuditLog"> | string | null
+    data?: JsonNullableFilter<"AuditLog">
+    correlationId?: StringNullableFilter<"AuditLog"> | string | null
+    ip?: StringNullableFilter<"AuditLog"> | string | null
+    ua?: StringNullableFilter<"AuditLog"> | string | null
+    actorType?: EnumActorTypeFilter<"AuditLog"> | $Enums.ActorType
+    actorId?: StringNullableFilter<"AuditLog"> | string | null
+    whmcsClientId?: IntNullableFilter<"AuditLog"> | number | null
+    applicantId?: StringNullableFilter<"AuditLog"> | string | null
+    sessionId?: StringNullableFilter<"AuditLog"> | string | null
+  }
+
+  export type ApplicantUpsertWithoutLatestSessionInput = {
+    update: XOR<ApplicantUpdateWithoutLatestSessionInput, ApplicantUncheckedUpdateWithoutLatestSessionInput>
+    create: XOR<ApplicantCreateWithoutLatestSessionInput, ApplicantUncheckedCreateWithoutLatestSessionInput>
+    where?: ApplicantWhereInput
+  }
+
+  export type ApplicantUpdateToOneWithWhereWithoutLatestSessionInput = {
+    where?: ApplicantWhereInput
+    data: XOR<ApplicantUpdateWithoutLatestSessionInput, ApplicantUncheckedUpdateWithoutLatestSessionInput>
+  }
+
+  export type ApplicantUpdateWithoutLatestSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    whmcsClientId?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
+    sessions?: KycSessionUpdateManyWithoutApplicantNestedInput
+  }
+
+  export type ApplicantUncheckedUpdateWithoutLatestSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    whmcsClientId?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
+    sessions?: KycSessionUncheckedUpdateManyWithoutApplicantNestedInput
   }
 
   export type KycSessionCreateWithoutDocumentsInput = {
     id?: string
-    status?: $Enums.KycStatus
-    residency?: $Enums.Residency | null
-    issuedAt?: Date | string
-    expiresAt: Date | string
-    consumedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     tokenSalt: string
     tokenHash: string
-    applicant: ApplicantCreateNestedOneWithoutLatestSessionInput
-    decision?: DecisionCreateNestedOneWithoutSessionInput
+    expiresAt: Date | string
+    consumedAt?: Date | string | null
+    status?: $Enums.KycStatus
+    residency?: $Enums.Residency | null
+    applicant: ApplicantCreateNestedOneWithoutSessionsInput
+    decisions?: DecisionCreateNestedManyWithoutSessionInput
+    auditLogs?: AuditLogCreateNestedManyWithoutSessionInput
+    latestFor?: ApplicantCreateNestedOneWithoutLatestSessionInput
   }
 
   export type KycSessionUncheckedCreateWithoutDocumentsInput = {
     id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     applicantId: string
-    status?: $Enums.KycStatus
-    residency?: $Enums.Residency | null
-    issuedAt?: Date | string
-    expiresAt: Date | string
-    consumedAt?: Date | string | null
     tokenSalt: string
     tokenHash: string
-    decision?: DecisionUncheckedCreateNestedOneWithoutSessionInput
+    expiresAt: Date | string
+    consumedAt?: Date | string | null
+    status?: $Enums.KycStatus
+    residency?: $Enums.Residency | null
+    decisions?: DecisionUncheckedCreateNestedManyWithoutSessionInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutSessionInput
+    latestFor?: ApplicantUncheckedCreateNestedOneWithoutLatestSessionInput
   }
 
   export type KycSessionCreateOrConnectWithoutDocumentsInput = {
@@ -8859,136 +11574,386 @@ export namespace Prisma {
 
   export type KycSessionUpdateWithoutDocumentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
-    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
-    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tokenSalt?: StringFieldUpdateOperationsInput | string
     tokenHash?: StringFieldUpdateOperationsInput | string
-    applicant?: ApplicantUpdateOneRequiredWithoutLatestSessionNestedInput
-    decision?: DecisionUpdateOneWithoutSessionNestedInput
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
+    applicant?: ApplicantUpdateOneRequiredWithoutSessionsNestedInput
+    decisions?: DecisionUpdateManyWithoutSessionNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutSessionNestedInput
+    latestFor?: ApplicantUpdateOneWithoutLatestSessionNestedInput
   }
 
   export type KycSessionUncheckedUpdateWithoutDocumentsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applicantId?: StringFieldUpdateOperationsInput | string
-    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
-    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
-    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tokenSalt?: StringFieldUpdateOperationsInput | string
     tokenHash?: StringFieldUpdateOperationsInput | string
-    decision?: DecisionUncheckedUpdateOneWithoutSessionNestedInput
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
+    decisions?: DecisionUncheckedUpdateManyWithoutSessionNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutSessionNestedInput
+    latestFor?: ApplicantUncheckedUpdateOneWithoutLatestSessionNestedInput
   }
 
-  export type KycSessionCreateWithoutDecisionInput = {
+  export type KycSessionCreateWithoutDecisionsInput = {
     id?: string
-    status?: $Enums.KycStatus
-    residency?: $Enums.Residency | null
-    issuedAt?: Date | string
-    expiresAt: Date | string
-    consumedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     tokenSalt: string
     tokenHash: string
-    applicant: ApplicantCreateNestedOneWithoutLatestSessionInput
+    expiresAt: Date | string
+    consumedAt?: Date | string | null
+    status?: $Enums.KycStatus
+    residency?: $Enums.Residency | null
+    applicant: ApplicantCreateNestedOneWithoutSessionsInput
     documents?: DocumentCreateNestedManyWithoutSessionInput
+    auditLogs?: AuditLogCreateNestedManyWithoutSessionInput
+    latestFor?: ApplicantCreateNestedOneWithoutLatestSessionInput
   }
 
-  export type KycSessionUncheckedCreateWithoutDecisionInput = {
+  export type KycSessionUncheckedCreateWithoutDecisionsInput = {
     id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     applicantId: string
-    status?: $Enums.KycStatus
-    residency?: $Enums.Residency | null
-    issuedAt?: Date | string
-    expiresAt: Date | string
-    consumedAt?: Date | string | null
     tokenSalt: string
     tokenHash: string
+    expiresAt: Date | string
+    consumedAt?: Date | string | null
+    status?: $Enums.KycStatus
+    residency?: $Enums.Residency | null
     documents?: DocumentUncheckedCreateNestedManyWithoutSessionInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutSessionInput
+    latestFor?: ApplicantUncheckedCreateNestedOneWithoutLatestSessionInput
   }
 
-  export type KycSessionCreateOrConnectWithoutDecisionInput = {
+  export type KycSessionCreateOrConnectWithoutDecisionsInput = {
     where: KycSessionWhereUniqueInput
-    create: XOR<KycSessionCreateWithoutDecisionInput, KycSessionUncheckedCreateWithoutDecisionInput>
+    create: XOR<KycSessionCreateWithoutDecisionsInput, KycSessionUncheckedCreateWithoutDecisionsInput>
   }
 
-  export type KycSessionUpsertWithoutDecisionInput = {
-    update: XOR<KycSessionUpdateWithoutDecisionInput, KycSessionUncheckedUpdateWithoutDecisionInput>
-    create: XOR<KycSessionCreateWithoutDecisionInput, KycSessionUncheckedCreateWithoutDecisionInput>
+  export type KycSessionUpsertWithoutDecisionsInput = {
+    update: XOR<KycSessionUpdateWithoutDecisionsInput, KycSessionUncheckedUpdateWithoutDecisionsInput>
+    create: XOR<KycSessionCreateWithoutDecisionsInput, KycSessionUncheckedCreateWithoutDecisionsInput>
     where?: KycSessionWhereInput
   }
 
-  export type KycSessionUpdateToOneWithWhereWithoutDecisionInput = {
+  export type KycSessionUpdateToOneWithWhereWithoutDecisionsInput = {
     where?: KycSessionWhereInput
-    data: XOR<KycSessionUpdateWithoutDecisionInput, KycSessionUncheckedUpdateWithoutDecisionInput>
+    data: XOR<KycSessionUpdateWithoutDecisionsInput, KycSessionUncheckedUpdateWithoutDecisionsInput>
   }
 
-  export type KycSessionUpdateWithoutDecisionInput = {
+  export type KycSessionUpdateWithoutDecisionsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
-    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
-    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tokenSalt?: StringFieldUpdateOperationsInput | string
     tokenHash?: StringFieldUpdateOperationsInput | string
-    applicant?: ApplicantUpdateOneRequiredWithoutLatestSessionNestedInput
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
+    applicant?: ApplicantUpdateOneRequiredWithoutSessionsNestedInput
     documents?: DocumentUpdateManyWithoutSessionNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutSessionNestedInput
+    latestFor?: ApplicantUpdateOneWithoutLatestSessionNestedInput
   }
 
-  export type KycSessionUncheckedUpdateWithoutDecisionInput = {
+  export type KycSessionUncheckedUpdateWithoutDecisionsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applicantId?: StringFieldUpdateOperationsInput | string
-    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
-    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
-    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tokenSalt?: StringFieldUpdateOperationsInput | string
     tokenHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
     documents?: DocumentUncheckedUpdateManyWithoutSessionNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutSessionNestedInput
+    latestFor?: ApplicantUncheckedUpdateOneWithoutLatestSessionNestedInput
+  }
+
+  export type KycSessionCreateWithoutAuditLogsInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tokenSalt: string
+    tokenHash: string
+    expiresAt: Date | string
+    consumedAt?: Date | string | null
+    status?: $Enums.KycStatus
+    residency?: $Enums.Residency | null
+    applicant: ApplicantCreateNestedOneWithoutSessionsInput
+    documents?: DocumentCreateNestedManyWithoutSessionInput
+    decisions?: DecisionCreateNestedManyWithoutSessionInput
+    latestFor?: ApplicantCreateNestedOneWithoutLatestSessionInput
+  }
+
+  export type KycSessionUncheckedCreateWithoutAuditLogsInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    applicantId: string
+    tokenSalt: string
+    tokenHash: string
+    expiresAt: Date | string
+    consumedAt?: Date | string | null
+    status?: $Enums.KycStatus
+    residency?: $Enums.Residency | null
+    documents?: DocumentUncheckedCreateNestedManyWithoutSessionInput
+    decisions?: DecisionUncheckedCreateNestedManyWithoutSessionInput
+    latestFor?: ApplicantUncheckedCreateNestedOneWithoutLatestSessionInput
+  }
+
+  export type KycSessionCreateOrConnectWithoutAuditLogsInput = {
+    where: KycSessionWhereUniqueInput
+    create: XOR<KycSessionCreateWithoutAuditLogsInput, KycSessionUncheckedCreateWithoutAuditLogsInput>
+  }
+
+  export type KycSessionUpsertWithoutAuditLogsInput = {
+    update: XOR<KycSessionUpdateWithoutAuditLogsInput, KycSessionUncheckedUpdateWithoutAuditLogsInput>
+    create: XOR<KycSessionCreateWithoutAuditLogsInput, KycSessionUncheckedCreateWithoutAuditLogsInput>
+    where?: KycSessionWhereInput
+  }
+
+  export type KycSessionUpdateToOneWithWhereWithoutAuditLogsInput = {
+    where?: KycSessionWhereInput
+    data: XOR<KycSessionUpdateWithoutAuditLogsInput, KycSessionUncheckedUpdateWithoutAuditLogsInput>
+  }
+
+  export type KycSessionUpdateWithoutAuditLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tokenSalt?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
+    applicant?: ApplicantUpdateOneRequiredWithoutSessionsNestedInput
+    documents?: DocumentUpdateManyWithoutSessionNestedInput
+    decisions?: DecisionUpdateManyWithoutSessionNestedInput
+    latestFor?: ApplicantUpdateOneWithoutLatestSessionNestedInput
+  }
+
+  export type KycSessionUncheckedUpdateWithoutAuditLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    applicantId?: StringFieldUpdateOperationsInput | string
+    tokenSalt?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
+    documents?: DocumentUncheckedUpdateManyWithoutSessionNestedInput
+    decisions?: DecisionUncheckedUpdateManyWithoutSessionNestedInput
+    latestFor?: ApplicantUncheckedUpdateOneWithoutLatestSessionNestedInput
+  }
+
+  export type KycSessionCreateManyApplicantInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tokenSalt: string
+    tokenHash: string
+    expiresAt: Date | string
+    consumedAt?: Date | string | null
+    status?: $Enums.KycStatus
+    residency?: $Enums.Residency | null
+  }
+
+  export type KycSessionUpdateWithoutApplicantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tokenSalt?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
+    documents?: DocumentUpdateManyWithoutSessionNestedInput
+    decisions?: DecisionUpdateManyWithoutSessionNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutSessionNestedInput
+    latestFor?: ApplicantUpdateOneWithoutLatestSessionNestedInput
+  }
+
+  export type KycSessionUncheckedUpdateWithoutApplicantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tokenSalt?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
+    documents?: DocumentUncheckedUpdateManyWithoutSessionNestedInput
+    decisions?: DecisionUncheckedUpdateManyWithoutSessionNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutSessionNestedInput
+    latestFor?: ApplicantUncheckedUpdateOneWithoutLatestSessionNestedInput
+  }
+
+  export type KycSessionUncheckedUpdateManyWithoutApplicantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tokenSalt?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    residency?: NullableEnumResidencyFieldUpdateOperationsInput | $Enums.Residency | null
   }
 
   export type DocumentCreateManySessionInput = {
     id?: string
+    uploadedAt?: Date | string
     type: $Enums.DocType
     objectKey: string
     mime: string
     bytes: number
     sha256: string
-    uploadedAt?: Date | string
+  }
+
+  export type DecisionCreateManySessionInput = {
+    id?: string
+    createdAt?: Date | string
+    status: $Enums.KycStatus
+    reason?: string | null
+    decidedBy: string
+  }
+
+  export type AuditLogCreateManySessionInput = {
+    id?: string
+    createdAt?: Date | string
+    event: string
+    severity?: $Enums.Severity
+    message?: string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    correlationId?: string | null
+    ip?: string | null
+    ua?: string | null
+    actorType?: $Enums.ActorType
+    actorId?: string | null
+    whmcsClientId?: number | null
+    applicantId?: string | null
   }
 
   export type DocumentUpdateWithoutSessionInput = {
     id?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumDocTypeFieldUpdateOperationsInput | $Enums.DocType
     objectKey?: StringFieldUpdateOperationsInput | string
     mime?: StringFieldUpdateOperationsInput | string
     bytes?: IntFieldUpdateOperationsInput | number
     sha256?: StringFieldUpdateOperationsInput | string
-    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DocumentUncheckedUpdateWithoutSessionInput = {
     id?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumDocTypeFieldUpdateOperationsInput | $Enums.DocType
     objectKey?: StringFieldUpdateOperationsInput | string
     mime?: StringFieldUpdateOperationsInput | string
     bytes?: IntFieldUpdateOperationsInput | number
     sha256?: StringFieldUpdateOperationsInput | string
-    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DocumentUncheckedUpdateManyWithoutSessionInput = {
     id?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumDocTypeFieldUpdateOperationsInput | $Enums.DocType
     objectKey?: StringFieldUpdateOperationsInput | string
     mime?: StringFieldUpdateOperationsInput | string
     bytes?: IntFieldUpdateOperationsInput | number
     sha256?: StringFieldUpdateOperationsInput | string
-    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DecisionUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    decidedBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DecisionUncheckedUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    decidedBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DecisionUncheckedUpdateManyWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    decidedBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AuditLogUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: StringFieldUpdateOperationsInput | string
+    severity?: EnumSeverityFieldUpdateOperationsInput | $Enums.Severity
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    correlationId?: NullableStringFieldUpdateOperationsInput | string | null
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    ua?: NullableStringFieldUpdateOperationsInput | string | null
+    actorType?: EnumActorTypeFieldUpdateOperationsInput | $Enums.ActorType
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    whmcsClientId?: NullableIntFieldUpdateOperationsInput | number | null
+    applicantId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AuditLogUncheckedUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: StringFieldUpdateOperationsInput | string
+    severity?: EnumSeverityFieldUpdateOperationsInput | $Enums.Severity
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    correlationId?: NullableStringFieldUpdateOperationsInput | string | null
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    ua?: NullableStringFieldUpdateOperationsInput | string | null
+    actorType?: EnumActorTypeFieldUpdateOperationsInput | $Enums.ActorType
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    whmcsClientId?: NullableIntFieldUpdateOperationsInput | number | null
+    applicantId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AuditLogUncheckedUpdateManyWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: StringFieldUpdateOperationsInput | string
+    severity?: EnumSeverityFieldUpdateOperationsInput | $Enums.Severity
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    correlationId?: NullableStringFieldUpdateOperationsInput | string | null
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    ua?: NullableStringFieldUpdateOperationsInput | string | null
+    actorType?: EnumActorTypeFieldUpdateOperationsInput | $Enums.ActorType
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    whmcsClientId?: NullableIntFieldUpdateOperationsInput | number | null
+    applicantId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 

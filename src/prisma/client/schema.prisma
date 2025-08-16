@@ -1,12 +1,22 @@
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
+// ─────────────────────────────────────────────────────────────
+// Lazco KYC — Prisma schema (PostgreSQL)
+// 與現有 Next.js API 程式碼完全對齊
+// ─────────────────────────────────────────────────────────────
 
 generator client {
   provider = "prisma-client-js"
+  // 若要把 client 產出到專案 src：取消下一行註解
   output   = "../src/prisma/client"
 }
+
+datasource db {
+  provider = "postgresql" // 若使用 MySQL → "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────────────────────
 
 enum Residency {
   TW
@@ -32,57 +42,159 @@ enum DocType {
   OTHER_PASSPORT
 }
 
+enum Severity {
+  INFO
+  WARN
+  ERROR
+  SECURITY
+}
+
+enum ActorType {
+  SYSTEM
+  USER
+  ADMIN
+  WHMCS
+  CRON
+}
+
+// ─────────────────────────────────────────────────────────────
+// Models
+// ─────────────────────────────────────────────────────────────
+
 model Applicant {
-  id              String      @id @default(cuid())
-  whmcsClientId   Int
-  email           String
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
-  latestSession   KycSession?
-  latestSessionId String?
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  whmcsClientId Int        @unique
+  email         String
+  residency     Residency?
+
+  // 方便快速取得最新一次的 KYC session
+  latestSessionId String?     @unique
+  latestSession   KycSession? @relation("LatestSession", fields: [latestSessionId], references: [id])
+
+  sessions KycSession[]
+
+  @@index([whmcsClientId])
+  @@index([email])
 }
 
 model KycSession {
-  id          String     @id @default(cuid())
-  applicant   Applicant  @relation(fields: [applicantId], references: [id])
-  applicantId String     @unique
-  status      KycStatus  @default(DRAFT)
-  residency   Residency?
-  issuedAt    DateTime   @default(now())
-  expiresAt   DateTime
-  consumedAt  DateTime?
-  tokenSalt   String
-  tokenHash   String // SHA-256(token + salt)
-  decision    Decision?
-  documents   Document[]
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  applicant   Applicant @relation(fields: [applicantId], references: [id])
+  applicantId String
+
+  // 一次性驗證連結：只存 salt+hash，不存明文 token
+  tokenSalt  String
+  tokenHash  String
+  expiresAt  DateTime
+  consumedAt DateTime?
+
+  status    KycStatus  @default(DRAFT)
+  residency Residency?
+
+  // 關聯
+  documents Document[]
+  decisions Decision[]
+  auditLogs AuditLog[]
+
+  // 被 Applicant.latestSession 指回（可為空）
+  latestFor Applicant? @relation("LatestSession")
+
+  @@index([applicantId, status])
+  @@index([expiresAt])
+  @@index([tokenHash])
 }
 
 model Document {
-  id         String     @id @default(cuid())
-  session    KycSession @relation(fields: [sessionId], references: [id])
-  sessionId  String
-  type       DocType
-  objectKey  String // S3/R2 路徑
-  mime       String
-  bytes      Int
-  sha256     String
-  uploadedAt DateTime   @default(now())
+  id         String   @id @default(cuid())
+  uploadedAt DateTime @default(now())
+
+  session   KycSession @relation(fields: [sessionId], references: [id])
+  sessionId String
+
+  // 與程式一致的欄位命名
+  type      DocType
+  objectKey String
+  mime      String
+  bytes     Int
+  sha256    String
+
+  @@index([sessionId])
+  @@index([type])
+  @@index([sha256])
 }
 
 model Decision {
-  id        String     @id @default(cuid())
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
   session   KycSession @relation(fields: [sessionId], references: [id])
-  sessionId String     @unique
+  sessionId String
+
   status    KycStatus
   reason    String?
-  decidedBy String? // admin user id/email
-  decidedAt DateTime   @default(now())
+  decidedBy String // 管理員識別（email 或 uid）
+
+  @@index([sessionId, status])
 }
 
-model WebhookLog {
-  id         String   @id @default(cuid())
-  target     String
-  payload    Json
-  statusCode Int
-  createdAt  DateTime @default(now())
+model AuditLog {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  event    String
+  severity Severity @default(INFO)
+  message  String?
+  data     Json?
+
+  // 跨系統追蹤
+  correlationId String?
+  ip            String?
+  ua            String?
+
+  // 行為者
+  actorType ActorType @default(SYSTEM)
+  actorId   String?
+
+  // 便利查詢欄位
+  whmcsClientId Int?
+  applicantId   String?
+  sessionId     String?
+
+  // 可選關聯（避免寫 log 失敗阻塞業務）
+  session KycSession? @relation(fields: [sessionId], references: [id])
+
+  @@index([createdAt])
+  @@index([event])
+  @@index([severity])
+  @@index([sessionId])
+  @@index([whmcsClientId])
+  @@index([applicantId])
+}
+
+model OutboundWebhookLog {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  kind      String // "DISCORD" | "WHMCS" | ...
+  targetUrl String
+  event     String
+  payload   Json
+
+  statusCode   Int?
+  responseBody String?
+  error        String?
+
+  attempt       Int       @default(1)
+  maxAttempts   Int       @default(3)
+  nextAttemptAt DateTime?
+
+  @@index([createdAt])
+  @@index([kind, event])
+  @@index([nextAttemptAt])
 }

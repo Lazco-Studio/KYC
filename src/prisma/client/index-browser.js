@@ -122,56 +122,87 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.ApplicantScalarFieldEnum = {
   id: 'id',
-  whmcsClientId: 'whmcsClientId',
-  email: 'email',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  whmcsClientId: 'whmcsClientId',
+  email: 'email',
+  residency: 'residency',
   latestSessionId: 'latestSessionId'
 };
 
 exports.Prisma.KycSessionScalarFieldEnum = {
   id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   applicantId: 'applicantId',
-  status: 'status',
-  residency: 'residency',
-  issuedAt: 'issuedAt',
+  tokenSalt: 'tokenSalt',
+  tokenHash: 'tokenHash',
   expiresAt: 'expiresAt',
   consumedAt: 'consumedAt',
-  tokenSalt: 'tokenSalt',
-  tokenHash: 'tokenHash'
+  status: 'status',
+  residency: 'residency'
 };
 
 exports.Prisma.DocumentScalarFieldEnum = {
   id: 'id',
+  uploadedAt: 'uploadedAt',
   sessionId: 'sessionId',
   type: 'type',
   objectKey: 'objectKey',
   mime: 'mime',
   bytes: 'bytes',
-  sha256: 'sha256',
-  uploadedAt: 'uploadedAt'
+  sha256: 'sha256'
 };
 
 exports.Prisma.DecisionScalarFieldEnum = {
   id: 'id',
+  createdAt: 'createdAt',
   sessionId: 'sessionId',
   status: 'status',
   reason: 'reason',
-  decidedBy: 'decidedBy',
-  decidedAt: 'decidedAt'
+  decidedBy: 'decidedBy'
 };
 
-exports.Prisma.WebhookLogScalarFieldEnum = {
+exports.Prisma.AuditLogScalarFieldEnum = {
   id: 'id',
-  target: 'target',
+  createdAt: 'createdAt',
+  event: 'event',
+  severity: 'severity',
+  message: 'message',
+  data: 'data',
+  correlationId: 'correlationId',
+  ip: 'ip',
+  ua: 'ua',
+  actorType: 'actorType',
+  actorId: 'actorId',
+  whmcsClientId: 'whmcsClientId',
+  applicantId: 'applicantId',
+  sessionId: 'sessionId'
+};
+
+exports.Prisma.OutboundWebhookLogScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  kind: 'kind',
+  targetUrl: 'targetUrl',
+  event: 'event',
   payload: 'payload',
   statusCode: 'statusCode',
-  createdAt: 'createdAt'
+  responseBody: 'responseBody',
+  error: 'error',
+  attempt: 'attempt',
+  maxAttempts: 'maxAttempts',
+  nextAttemptAt: 'nextAttemptAt'
 };
 
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.JsonNullValueInput = {
@@ -193,6 +224,11 @@ exports.Prisma.JsonNullValueFilter = {
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
 };
+exports.Residency = exports.$Enums.Residency = {
+  TW: 'TW',
+  OTHER: 'OTHER'
+};
+
 exports.KycStatus = exports.$Enums.KycStatus = {
   DRAFT: 'DRAFT',
   PENDING: 'PENDING',
@@ -200,11 +236,6 @@ exports.KycStatus = exports.$Enums.KycStatus = {
   REJECTED: 'REJECTED',
   NEEDS_MORE_INFO: 'NEEDS_MORE_INFO',
   EXPIRED: 'EXPIRED'
-};
-
-exports.Residency = exports.$Enums.Residency = {
-  TW: 'TW',
-  OTHER: 'OTHER'
 };
 
 exports.DocType = exports.$Enums.DocType = {
@@ -217,12 +248,28 @@ exports.DocType = exports.$Enums.DocType = {
   OTHER_PASSPORT: 'OTHER_PASSPORT'
 };
 
+exports.Severity = exports.$Enums.Severity = {
+  INFO: 'INFO',
+  WARN: 'WARN',
+  ERROR: 'ERROR',
+  SECURITY: 'SECURITY'
+};
+
+exports.ActorType = exports.$Enums.ActorType = {
+  SYSTEM: 'SYSTEM',
+  USER: 'USER',
+  ADMIN: 'ADMIN',
+  WHMCS: 'WHMCS',
+  CRON: 'CRON'
+};
+
 exports.Prisma.ModelName = {
   Applicant: 'Applicant',
   KycSession: 'KycSession',
   Document: 'Document',
   Decision: 'Decision',
-  WebhookLog: 'WebhookLog'
+  AuditLog: 'AuditLog',
+  OutboundWebhookLog: 'OutboundWebhookLog'
 };
 
 /**
