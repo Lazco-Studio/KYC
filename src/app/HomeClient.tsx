@@ -75,11 +75,11 @@ export default function HomeClient() {
       )}
 
       {/* 開始按鈕 */}
-      {!isLoading && !isVerified && (
+      {!isLoading && !isVerified && msg.includes('成功') && (
         <div className="space-y-4">
           <button
             onClick={handleStartKYC}
-            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-200 shadow-lg flex items-center justify-center space-x-2 group"
+            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-200 shadow-lg flex items-center justify-center space-x-2 group disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span>開始 KYC 驗證</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
