@@ -75,5 +75,9 @@ export async function POST(
   return NextResponse.json({ ok: true });
 }
 
-// 避免被快取
 export const dynamic = "force-dynamic";
+export const dynamicParams = false;
+export const revalidate = false;
+export const fetchCache = "auto";
+export const runtime = "nodejs";
+export const preferredRegion = "auto";

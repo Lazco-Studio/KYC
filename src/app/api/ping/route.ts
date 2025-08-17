@@ -8,3 +8,10 @@ export async function GET() {
     env: process.env.ENVIRONMENT || "unknown",
   });
 }
+
+export const dynamic = "force-dynamic";
+export const dynamicParams = false;
+export const revalidate = false;
+export const fetchCache = "auto";
+export const runtime = "nodejs";
+export const preferredRegion = "auto";

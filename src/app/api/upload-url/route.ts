@@ -44,3 +44,10 @@ export async function GET(req: NextRequest) {
     bucket: process.env.MINIO_BUCKET,
   });
 }
+
+export const dynamic = "force-dynamic";
+export const dynamicParams = false;
+export const revalidate = false;
+export const fetchCache = "auto";
+export const runtime = "nodejs";
+export const preferredRegion = "auto";
