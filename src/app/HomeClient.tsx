@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { CheckCircle, ArrowRight, Shield, AlertCircle, Loader } from 'lucide-react'
+import Link from 'next/link'
 
 export default function HomeClient() {
   const sp = useSearchParams()
@@ -119,9 +120,9 @@ export default function HomeClient() {
         <div className="text-center pt-4">
           <p className="text-sm text-gray-500">
             需要幫助？
-            <button className="text-blue-600 hover:text-blue-700 ml-1 underline transition-colors hover:cursor-pointer">
+            <Link className="text-blue-600 hover:text-blue-700 ml-1 underline transition-colors hover:cursor-pointer" href={'https://discord.gg/ZvwTZqXjYf'} target='_blank'>
               聯繫客服
-            </button>
+            </Link>
           </p>
         </div>
       )}
