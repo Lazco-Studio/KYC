@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { uploadToStorage } from "@/lib/storage"; // 需要新的直接上傳函數
+import { uploadToStorage } from "@/lib/storage";
 import { auditAndDiscord } from "@/lib/audit-discord";
+import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/session";
 import { randomUUID as uuid } from "crypto";
 
 const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "application/pdf"]);
@@ -13,19 +15,19 @@ export async function POST(req: NextRequest) {
     // 解析 FormData
     const formData = await req.formData();
     const file = formData.get("file") as File;
-    const sessionId = formData.get("sessionId") as string;
+    const sessionIdFromForm = formData.get("sessionId") as string;
     const docType = formData.get("docType") as string;
 
     // console.log("Upload parameters:", {
     //   fileName: file?.name,
     //   fileSize: file?.size,
     //   fileType: file?.type,
-    //   sessionId,
+    //   sessionIdFromForm,
     //   docType,
     // });
 
     // 參數驗證
-    if (!file || !sessionId || !docType) {
+    if (!file || !docType) {
       console.error("Missing required parameters");
       return NextResponse.json(
         {
@@ -35,6 +37,22 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    // 獲取當前 session（與其他 API 保持一致）
+    const session = await getSession();
+    if (!session) {
+      console.error("No valid session");
+      return NextResponse.json(
+        {
+          success: false,
+          error: "無效的 session",
+        },
+        { status: 401 }
+      );
+    }
+
+    const sessionId = session.id;
+    // console.log("Using session ID:", sessionId);
 
     // 文件類型驗證
     if (!ALLOWED_TYPES.has(file.type)) {
@@ -95,30 +113,20 @@ export async function POST(req: NextRequest) {
 
     // console.log("Upload result:", uploadResult);
 
-    // 調用 upload-complete API
-    // console.log("Calling upload-complete...");
-    const completeResponse = await fetch(
-      `${req.nextUrl.origin}/api/upload-complete`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sessionId,
-          type: docType,
-          objectKey,
-          mime: file.type,
-          bytes: file.size,
-          sha256,
-        }),
-      }
-    );
+    // 直接插入資料庫，而不是調用另一個 API
+    // console.log("Saving to database...");
+    const document = await prisma.document.create({
+      data: {
+        sessionId,
+        type: docType as any, // DocType enum
+        objectKey,
+        mime: file.type,
+        bytes: file.size,
+        sha256,
+      },
+    });
 
-    if (!completeResponse.ok) {
-      console.error("upload-complete failed:", await completeResponse.text());
-      throw new Error("完成通知失敗");
-    }
-
-    // console.log("upload-complete successful");
+    // console.log("Document saved:", document.id);
 
     // 審計日誌
     try {
