@@ -62,7 +62,7 @@ enum ActorType {
 // ─────────────────────────────────────────────────────────────
 
 model Applicant {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -81,7 +81,7 @@ model Applicant {
 }
 
 model KycSession {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -111,7 +111,7 @@ model KycSession {
 }
 
 model Document {
-  id         String   @id @default(cuid())
+  id         String   @id @default(uuid())
   uploadedAt DateTime @default(now())
 
   session   KycSession @relation(fields: [sessionId], references: [id])
@@ -130,7 +130,7 @@ model Document {
 }
 
 model Decision {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
 
   session   KycSession @relation(fields: [sessionId], references: [id])
@@ -144,7 +144,7 @@ model Decision {
 }
 
 model AuditLog {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
 
   event    String
@@ -178,7 +178,7 @@ model AuditLog {
 }
 
 model OutboundWebhookLog {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
 
   kind      String // "DISCORD" | "WHMCS" | ...

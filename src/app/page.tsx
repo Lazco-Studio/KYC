@@ -20,6 +20,18 @@ export default function HomePage() {
           </p>
         </header>
 
+        {/* Progress Steps */}
+        <div className="max-w-md mx-auto mb-8">
+          <div className="flex justify-center items-center gap-4 mb-4">
+            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">1</div>
+            <div className="w-8 h-1 bg-blue-500"></div>
+            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">2</div>
+            <div className="w-8 h-1 bg-blue-500"></div>
+            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">3</div>
+          </div>
+          <p className="text-center text-sm text-gray-600">步驟 1/3 - 獲取驗證連結</p>
+        </div>
+
         {/* Main Content Card */}
         <div className="max-w-md mx-auto">
           <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
@@ -31,7 +43,7 @@ export default function HomePage() {
                   請至商城網站獲取您的身份驗證連結
                 </p>
                 <p className="text-blue-600">
-                  <Link href="https://store.lazco.com/" className='hover:cursor-pointer hover:underline'>https://store.lazco.com/</Link>
+                  <Link href="https://store.lazco.dev/" className='hover:cursor-pointer hover:underline'>https://store.lazco.dev/</Link>
                 </p>
               </div>
             </div>
