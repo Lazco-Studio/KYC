@@ -8,9 +8,9 @@ export default async function UploadPage() {
 
   if (!session) {
     return (
-      <main>
+      <main className='h-full'>
         <div className="container mx-auto px-4 py-8">
-          <div className="max-w-md mx-auto">
+          <div className="max-w-md mx-auto my-auto">
             <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-6">
                 <FileText className="w-8 h-8 text-red-600" />

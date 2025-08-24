@@ -51,15 +51,16 @@ export default function Review() {
           throw new Error('無法載入 session 資訊')
         }
       } catch (err) {
-        console.error('載入資料錯誤:', err)
+        // console.error('載入資料錯誤:', err)
         setError('無法載入 session 資訊')
+        router.push('/');
       } finally {
         setIsLoading(false)
       }
     }
 
     loadData()
-  }, [])
+  }, [router])
 
   async function submit() {
     if (!consent) {
@@ -142,6 +143,7 @@ export default function Review() {
     } catch (err: any) {
       console.error('送出過程發生錯誤:', err)
       setError('提交失敗：' + (err.message || '請重試'))
+      // 注意：這裡不設置 hasSessionError，因為這是提交錯誤，不是 session 錯誤
     } finally {
       setIsSubmitting(false)
     }
@@ -149,58 +151,49 @@ export default function Review() {
 
   const canSubmit = consent && (residency !== 'TW' || twId.trim())
 
-  return (
-    <main>
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <header className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-6">
-            <Eye className="w-8 h-8 text-white" />
+  // 如果正在載入，顯示全屏載入狀態
+  if (!isLoading && sessionId) {
+    return (
+      <main>
+        <div className="container mx-auto px-4 py-8">
+          {/* Header */}
+          <header className="text-center mb-12">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-6">
+              <Eye className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-4xl font-bold text-gray-800 mb-4">
+              確認並送出
+            </h1>
+            <p className="text-base text-gray-600 max-w-2xl mx-auto leading-relaxed">
+              請檢查您的資料並確認同意條款，然後送出您的 KYC 申請進行審核。
+            </p>
+          </header>
+
+          {/* Progress Steps */}
+          <div className="max-w-md mx-auto mb-8">
+            <div className="flex justify-center items-center gap-4 mb-4">
+              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">✓</div>
+              <div className="w-8 h-1 bg-green-500"></div>
+              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">✓</div>
+              <div className="w-8 h-1 bg-green-500"></div>
+              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">✓</div>
+            </div>
+            <p className="text-center text-sm text-gray-600">最終確認與送出</p>
           </div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            確認並送出
-          </h1>
-          <p className="text-base text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            請檢查您的資料並確認同意條款，然後送出您的 KYC 申請進行審核。
-          </p>
-        </header>
 
-        {/* Progress Steps */}
-        <div className="max-w-md mx-auto mb-8">
-          <div className="flex justify-center items-center gap-4 mb-4">
-            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">✓</div>
-            <div className="w-8 h-1 bg-green-500"></div>
-            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">✓</div>
-            <div className="w-8 h-1 bg-green-500"></div>
-            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">✓</div>
-          </div>
-          <p className="text-center text-sm text-gray-600">最終確認與送出</p>
-        </div>
+          {/* Main Content Card */}
+          <div className="max-w-lg mx-auto">
+            <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+              {/* Error State */}
+              {error && (
+                <div className="mb-6 p-4 bg-red-50 rounded-xl border border-red-200 flex items-start space-x-3">
+                  <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
+                  <div className="text-sm text-red-700">{error}</div>
+                </div>
+              )}
 
-        {/* Main Content Card */}
-        <div className="max-w-lg mx-auto">
-          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-
-            {/* Loading State */}
-            {isLoading && (
-              <div className="text-center py-8">
-                <Loader className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-                <p className="text-gray-600">載入中...</p>
-              </div>
-            )}
-
-            {/* Error State */}
-            {error && (
-              <div className="mb-6 p-4 bg-red-50 rounded-xl border border-red-200 flex items-start space-x-3">
-                <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
-                <div className="text-sm text-red-700">{error}</div>
-              </div>
-            )}
-
-            {/* Content */}
-            {!isLoading && (
+              {/* Content */}
               <div className="space-y-6">
-
                 {/* Session Info */}
                 <div className="bg-gray-50 rounded-xl p-4">
                   <div className="flex items-start space-x-3">
@@ -323,10 +316,14 @@ export default function Review() {
                   </div>
                 </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
-      </div>
-    </main>
-  )
+      </main>
+    )
+  } else {
+    return (
+      <main></main>
+    )
+  }
 }

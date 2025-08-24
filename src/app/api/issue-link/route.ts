@@ -5,16 +5,10 @@ import crypto from "crypto";
 import { auditAndDiscord } from "@/lib/audit-discord";
 
 export async function POST(req: NextRequest) {
-  // === API LOG START ===
-  // console.log("[API] /api/issue-link called");
   const raw = await req.text();
-  // console.log("[API] Raw body:", raw);
-  // 重新 parse JSON
   const { whmcsClientId, email } = JSON.parse(raw || "{}");
-  // === API LOG END ===
 
   if (req.headers.get("x-api-key") !== process.env.WHMCS_API_KEY) {
-    // console.log("[API] Unauthorized: bad API key");
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
@@ -24,19 +18,13 @@ export async function POST(req: NextRequest) {
   const expiresAt = new Date(Date.now() + 7 * 24 * 3600 * 1000);
 
   let applicant = await prisma.applicant.findFirst({
-    where: { whmcsClientId },
+    where: { whmcsClientId, email },
   });
+
   if (!applicant) {
     applicant = await prisma.applicant.create({
       data: { whmcsClientId, email },
     });
-    // console.log("[API] Applicant created:", applicant.id);
-  } else if (applicant.email !== email) {
-    applicant = await prisma.applicant.update({
-      where: { id: applicant.id },
-      data: { email },
-    });
-    // console.log("[API] Applicant updated:", applicant.id);
   }
 
   const session = await prisma.kycSession.create({
@@ -61,7 +49,6 @@ export async function POST(req: NextRequest) {
     { verifyUrl, expiresAt }
   );
 
-  // console.log("[API] Response:", { verifyUrl, expiresAt });
 
   return NextResponse.json({ verifyUrl, expiresAt });
 }

@@ -135,8 +135,6 @@ export default function Done() {
                   <p className="text-sm text-gray-600 mb-3 leading-relaxed">
                     審核結果將會自動呈現在商城您的客戶資料頁面
                     <br />
-                    請主動查看驗證狀態
-                    <br />
                     您也可以聯絡我們來獲得資訊更新
                   </p>
                 </div>
