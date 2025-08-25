@@ -7,6 +7,10 @@ export async function POST(req: NextRequest) {
   const s = await getSession();
   if (!s) return NextResponse.json({ error: "no_session" }, { status: 401 });
   await prisma.kycSession.update({ where: { id: s.id }, data: { residency } });
+  await prisma.applicant.update({
+    where: { id: s.applicantId },
+    data: { residency },
+  });
   await auditAndDiscord({
     event: "RESIDENCY_SELECTED",
     sessionId: s.id,
