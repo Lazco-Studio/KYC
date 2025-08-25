@@ -27,30 +27,64 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const session = await prisma.kycSession.create({
-    data: { applicantId: applicant.id, tokenHash, tokenSalt: salt, expiresAt },
+  let kycSession = await prisma.kycSession.findFirst({
+    where: { applicantId: applicant.id },
   });
 
-  await prisma.applicant.update({
-    where: { id: applicant.id },
-    data: { latestSessionId: session.id },
-  });
+  if (!kycSession) {
+    const session = await prisma.kycSession.create({
+      data: {
+        applicantId: applicant.id,
+        tokenHash,
+        tokenSalt: salt,
+        expiresAt,
+      },
+    });
 
-  const verifyUrl = `${process.env.PUBLIC_BASE_URL}?verify_token=${token}`;
+    await prisma.applicant.update({
+      where: { id: applicant.id },
+      data: { latestSessionId: session.id },
+    });
 
-  await auditAndDiscord(
-    {
-      event: "KYC_LINK_ISSUED",
-      sessionId: session.id,
-      applicantId: applicant.id,
-      whmcsClientId,
-      message: `to ${email}`,
-    },
-    { verifyUrl, expiresAt }
-  );
+    const verifyUrl = `${process.env.PUBLIC_BASE_URL}?verify_token=${token}`;
 
+    await auditAndDiscord(
+      {
+        event: "KYC_LINK_ISSUED",
+        sessionId: session.id,
+        applicantId: applicant.id,
+        whmcsClientId,
+        message: `to ${email}`,
+      },
+      { verifyUrl, expiresAt }
+    );
 
-  return NextResponse.json({ verifyUrl, expiresAt });
+    return NextResponse.json({ verifyUrl, expiresAt });
+  } else {
+    kycSession = await prisma.kycSession.update({
+      where: { id: kycSession.id },
+      data: {
+        tokenHash,
+        tokenSalt: salt,
+        expiresAt,
+        updatedAt: new Date(),
+      },
+    });
+
+    const verifyUrl = `${process.env.PUBLIC_BASE_URL}?verify_token=${token}`;
+
+    await auditAndDiscord(
+      {
+        event: "KYC_LINK_REISSUED",
+        sessionId: kycSession.id,
+        applicantId: applicant.id,
+        whmcsClientId,
+        message: `to ${email}`,
+      },
+      { verifyUrl, expiresAt }
+    );
+    return NextResponse.json({ verifyUrl, expiresAt });
+  }
 }
 
 export const dynamic = "force-dynamic";
